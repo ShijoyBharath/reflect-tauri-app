@@ -2,7 +2,7 @@ import React from "react";
 
 const StatCard = () => {
   return (
-    <div className="flex flex-col justify-between items-center m-4">
+    <div className="flex flex-col justify-between items-center m-4 p-9 rounded-lg bg-white">
       <div className="flex flex-col items-start">
         <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
           88%

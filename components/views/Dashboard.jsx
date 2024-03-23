@@ -2,6 +2,8 @@ import React from "react";
 import DailyQuote from "./DailyQuote";
 import StatCard from "./StatCard";
 import HabitsCard from "./HabitsCard";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+ 
 
 const Dashboard = () => {
   const habits = [
@@ -26,12 +28,13 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex flex-col gap-3 justify-between">
-      <div className="flex gap-4 items-center justify-between">
+    <div className="flex flex-col h-[900px] m-3 p-5 gap-3 justify-between bg-slate-200 rounded-lg">
+      <div className="flex justify-between items-center">
         <DailyQuote />
         <StatCard />
       </div>
-      <div className="flex flex-wrap gap-3 m-3">
+      <ScrollArea className="whitespace-nowrap rounded-md border">
+      <div className="flex gap-3 m-3">
         {habits.map((item) => {
           return (
             <HabitsCard
@@ -43,6 +46,8 @@ const Dashboard = () => {
           );
         })}
       </div>
+      <ScrollBar orientation="horizontal" />
+    </ScrollArea>
     </div>
   );
 };
