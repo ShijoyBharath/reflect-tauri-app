@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Settings,
@@ -17,17 +18,22 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const SideBar = () => {
+  const pathname = usePathname();
   return (
     <div className="flex flex-col justify-between items-center m-5 h-[900px] w-[30px]">
       <div className="flex flex-col gap-6">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost">
-                <LineChart />
-              </Button>
+              <Link href="/">
+                <Button variant={pathname === "/" ? "" : "ghost"}>
+                  <LineChart />
+                </Button>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">
               <p>Dashboard</p>
@@ -37,9 +43,11 @@ const SideBar = () => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost">
-                <Timer />
-              </Button>
+              <Link href="/timer">
+                <Button variant={pathname === "/timer" ? "" : "ghost"}>
+                  <Timer />
+                </Button>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">
               <p>Timer</p>
@@ -49,9 +57,11 @@ const SideBar = () => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost">
-                <CalendarDays />
-              </Button>
+              <Link href="/calendar">
+                <Button variant={pathname === "/calendar" ? "" : "ghost"}>
+                  <CalendarDays />
+                </Button>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">
               <p>Calendar</p>
@@ -61,9 +71,11 @@ const SideBar = () => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="ghost">
-                <Lightbulb />
-              </Button>
+              <Link href="/suggested">
+                <Button variant={pathname === "/suggested" ? "" : "ghost"}>
+                  <Lightbulb />
+                </Button>
+              </Link>
             </TooltipTrigger>
             <TooltipContent side="right">
               <p>Suggested</p>
