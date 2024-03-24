@@ -1,5 +1,5 @@
 import React from "react";
-import Dashboard from "./Dashboard";
+import Dashboard from "@/components/views/dashboard/Dashboard";
 import { Toaster } from "@/components/ui/sonner";
 
 const MainPage = () => {
