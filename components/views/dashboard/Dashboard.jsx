@@ -28,13 +28,13 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex flex-col h-[900px] m-3 p-5 gap-3 justify-between bg-slate-200 rounded-lg">
-      <div className="flex justify-between items-center">
+    <div className="flex flex-col m-3 p-5 gap-3 justify-between bg-slate-200 rounded-lg">
+      <div className="flex flex-wrap justify-between items-center">
         <DailyQuote />
         <StatCard />
       </div>
-      <ScrollArea className="whitespace-nowrap rounded-md border">
-      <div className="flex gap-3 m-3">
+      {/* <ScrollArea className="whitespace-nowrap rounded-md border"> */}
+      <div className="flex flex-wrap gap-3 m-3">
         {habits.map((item) => {
           return (
             <HabitsCard
@@ -46,8 +46,8 @@ const Dashboard = () => {
           );
         })}
       </div>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
+      {/* <ScrollBar orientation="horizontal" />
+    </ScrollArea> */}
     </div>
   );
 };

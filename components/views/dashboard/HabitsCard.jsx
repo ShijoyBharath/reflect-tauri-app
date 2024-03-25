@@ -78,7 +78,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
 
 
   return (
-    <Card className="w-[400px] h-[300px]">
+    <Card className="">
       <CardHeader>
         <div className="flex justify-between items-center gap-3">
           <SlideUpCard habit={habit} description={description} />

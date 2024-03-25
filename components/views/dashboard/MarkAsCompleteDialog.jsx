@@ -10,8 +10,14 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
 import { PartyPopper } from "lucide-react";
+// import Database from '@tauri-apps/plugin-sql';
 
-const MarkAsCompleteDialog = ({calendarId}) => {
+// const db = await Database.load('sqlite:test.db');
+// const create = async() => {
+//   let x = await db.execute('CREATE TABLE TEST (id INTEGER PRIMARY KEY, name TEXT)');
+// }
+
+const MarkAsCompleteDialog = ({ calendarId }) => {
   const [value, setValue] = useState(10);
 
   return (
@@ -24,7 +30,10 @@ const MarkAsCompleteDialog = ({calendarId}) => {
         <h1 className="pt-5 scroll-m-20 text-6xl font-extrabold tracking-tight lg:text-5xl">
           {value}/10
         </h1>
-        <p className="text-md text-muted-foreground"><PartyPopper />Perfect!</p>
+        <p className="text-md text-muted-foreground">
+          <PartyPopper />
+          Perfect!
+        </p>
       </div>
       <div className="p-7 m-5">
         <Slider
@@ -37,16 +46,15 @@ const MarkAsCompleteDialog = ({calendarId}) => {
       <DialogFooter>
         <Button
           type="submit"
-          onClick={() =>
-            [toast("Saved your progress!", {
+          onClick={() => [
+            toast("Saved your progress!", {
               description: "Sunday, December 03, 2023 at 9:00 AM",
               action: {
                 label: "Undo",
-                onClick: () => console.log("Yay!"),
+                onClick: () =>  console.log("Hi"),
               },
             }),
-          ]
-          }
+          ]}
         >
           Save Progress
         </Button>

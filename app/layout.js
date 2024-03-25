@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/views/layout/NavBar";
 import SideBar from "@/components/views/layout/SideBar";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,12 +14,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body className="flex flex-col h-screen w-screen">
         <NavBar />
-        <div className="flex">
+        <div className="flex flex-1 overflow-hidden">
           <SideBar />
-          <main className={inter.className}>{children}</main>
+          <main className={inter.className + " grow overflow-y-auto"}>{children}</main>
         </div>
+        <Toaster />
       </body>
     </html>
   );

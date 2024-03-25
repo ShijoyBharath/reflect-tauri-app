@@ -10,7 +10,7 @@ import {
 
 const NavBar = () => {
   return (
-    <div className="flex justify-between m-5">
+    <div className="flex justify-between m-7">
       <div className="flex items-center gap-3">
         <Circle />
         <h3 className="text-2xl font-semibold tracking-tight">Reflect</h3>
@@ -19,10 +19,10 @@ const NavBar = () => {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Badge className="p-3" variant="secondary">12Hr 18Min</Badge>
+              <Badge className="p-3" variant="">12Hr 18Min</Badge>
             </TooltipTrigger>
             <TooltipContent side="bottom">
-              <p>Time left for this day</p>
+              <p>Time left today</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

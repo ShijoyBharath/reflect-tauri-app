@@ -7,6 +7,7 @@ import {
   CalendarDays,
   Plus,
   Lightbulb,
+  ListTodo
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ import { usePathname } from "next/navigation";
 const SideBar = () => {
   const pathname = usePathname();
   return (
-    <div className="flex flex-col justify-between items-center m-5 h-[900px] w-[30px]">
+    <div className="flex flex-col gap-8 justify-between items-center m-5">
       <div className="flex flex-col gap-6">
         <TooltipProvider>
           <Tooltip>
@@ -82,9 +83,25 @@ const SideBar = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Link href="/goals">
+                <Button variant={pathname === "/goals" ? "" : "ghost"}>
+                  <ListTodo />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>Goals</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       <div className="flex flex-col items-center gap-6">
-        <Dialog>
+        {
+          pathname === "/" ?
+          <Dialog>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -103,6 +120,9 @@ const SideBar = () => {
             <CreateHabitDialog />
           </DialogContent>
         </Dialog>
+          :
+          ""
+        }
 
         <Button variant="ghost">
           <Avatar>
