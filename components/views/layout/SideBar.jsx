@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SettingsDialog from "./SettingsDialog";
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -130,18 +131,25 @@ const SideBar = () => {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </Button>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost">
-                <Settings />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              <p>Settings</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Dialog>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DialogTrigger asChild>
+                  <Button variant="ghost">
+                    <Settings />
+                  </Button>
+                </DialogTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>Settings</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <DialogContent>
+            <SettingsDialog />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
