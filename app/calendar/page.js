@@ -1,9 +1,9 @@
-import Timer from "@/components/views/timer/Timer";
+import CalendarPage from "@/components/views/calendar/CalendarPage";
 
 export default function Home() {
   return (
     <div>
-        <Timer/>
+        <CalendarPage/>
     </div>
   );
 }

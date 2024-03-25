@@ -1,9 +1,9 @@
-import Timer from "@/components/views/timer/Timer";
+import Suggested from "@/components/views/suggested/Suggested";
 
 export default function Home() {
   return (
     <div>
-        <Timer/>
+        <Suggested/>
     </div>
   );
 }

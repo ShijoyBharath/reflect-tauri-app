@@ -1,9 +1,9 @@
-import Timer from "@/components/views/timer/Timer";
+import Goals from "@/components/views/goals/Goals";
 
 export default function Home() {
   return (
     <div>
-        <Timer/>
+        <Goals/>
     </div>
   );
 }
