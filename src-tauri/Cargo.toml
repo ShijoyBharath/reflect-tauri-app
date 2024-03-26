@@ -26,5 +26,6 @@ tauri = { version = "1.6.1", features = [] }
 custom-protocol = [ "tauri/custom-protocol" ]
 
 [dependencies.tauri-plugin-sql]
-features = ["sqlite"] # or "postgres", or "mysql"
-version = "2.0.0-beta"
+git = "https://github.com/tauri-apps/plugins-workspace"
+branch = "v1"
+features = ["sqlite"]
