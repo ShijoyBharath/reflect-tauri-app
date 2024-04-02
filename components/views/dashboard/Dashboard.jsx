@@ -3,6 +3,7 @@ import DailyQuote from "./DailyQuote";
 import StatCard from "./StatCard";
 import HabitsCard from "./HabitsCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import GoalsWidget from "./GoalsWidget";
  
 
 const Dashboard = () => {
@@ -32,6 +33,7 @@ const Dashboard = () => {
       <div className="flex flex-wrap justify-between items-center">
         <DailyQuote />
         <StatCard />
+        <GoalsWidget/>
       </div>
       {/* <ScrollArea className="whitespace-nowrap rounded-md border"> */}
       <div className="flex flex-wrap gap-3 m-3">

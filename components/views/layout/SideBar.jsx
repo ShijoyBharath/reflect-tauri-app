@@ -26,7 +26,7 @@ import SettingsDialog from "./SettingsDialog";
 const SideBar = () => {
   const pathname = usePathname();
   return (
-    <div className="flex flex-col gap-8 justify-between items-center m-5">
+    <div className="flex flex-col gap-10 justify-between items-center m-5">
       <div className="flex flex-col gap-6">
         <TooltipProvider>
           <Tooltip>
@@ -56,7 +56,7 @@ const SideBar = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        <TooltipProvider>
+        {/* <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link href="/calendar">
@@ -83,7 +83,7 @@ const SideBar = () => {
               <p>Suggested</p>
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider>
+        </TooltipProvider> */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
