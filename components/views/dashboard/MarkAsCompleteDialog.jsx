@@ -10,12 +10,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useState } from "react";
 import { PartyPopper } from "lucide-react";
-// import Database from '@tauri-apps/plugin-sql';
 
-// const db = await Database.load('sqlite:test.db');
-// const create = async() => {
-//   let x = await db.execute('CREATE TABLE TEST (id INTEGER PRIMARY KEY, name TEXT)');
-// }
+import { invoke } from '@tauri-apps/api/tauri'
 
 const MarkAsCompleteDialog = ({ calendarId }) => {
   const [value, setValue] = useState(10);
@@ -51,9 +47,10 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
               description: "Sunday, December 03, 2023 at 9:00 AM",
               action: {
                 label: "Undo",
-                onClick: () =>  console.log("Hi"),
+                onClick: () =>  console.log("undo"),
               },
             }),
+            invoke('insert_data')
           ]}
         >
           Save Progress

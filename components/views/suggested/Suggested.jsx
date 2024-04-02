@@ -1,41 +1,16 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import Item from "./Item";
 
 const Suggested = () => {
   return (
-    <div className="flex m-3 p-5 gap-3 justify-between items-center bg-slate-200 rounded-lg">
-      <Card>
-        <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <CardDescription>Card Description</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <CardDescription>Card Description</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
-      </Card>
+    <div className="grid grid-cols-4 gap-4 m-3 p-5 bg-slate-200 rounded-lg">
+      <Item title="Ultralearning" description="Learn everything" content="Authors notes" link="ultralearning.com"/>
+      <Item title="Ultralearning" description="Learn everything" content="Authors notes" link="ultralearning.com"/>
+      <Item title="Ultralearning" description="Learn everything" content="Authors notes" link="ultralearning.com"/>
+      <Item title="Ultralearning" description="Learn everything" content="Authors notes" link="ultralearning.com"/>
+      <Item title="Ultralearning" description="Learn everything" content="Authors notes" link="ultralearning.com"/>
+      <Item title="Ultralearning" description="Learn everything" content="Authors notes" link="ultralearning.com"/>
+      <Item title="Ultralearning" description="Learn everything" content="Authors notes" link="ultralearning.com"/>
     </div>
   );
 };
