@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const TimeChartDashboard = () => {
+const FlowChart = () => {
   const options = {
     chart: {
       id: "area-chart",
@@ -29,7 +29,7 @@ const TimeChartDashboard = () => {
       curve: "smooth",
     },
     fill: {
-      type: "gradient",
+      type: "solid",
     },
     grid: {
       show: false,
@@ -46,11 +46,11 @@ const TimeChartDashboard = () => {
     <div className="app">
       <div className="row">
         <div className="mixed-chart">
-          <Chart options={options} series={series} type="area" width="500" />
+          <Chart options={options} series={series} type="bar" width="500" />
         </div>
       </div>
     </div>
   );
 };
 
-export default TimeChartDashboard;
+export default FlowChart;

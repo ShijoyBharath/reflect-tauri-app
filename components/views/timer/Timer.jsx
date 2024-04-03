@@ -3,6 +3,7 @@ import Flows from "./Flows";
 import CountdownTimer from "./CountdownTimer";
 import TimeSpentToday from "./TimeSpentToday";
 import TimeChart from "./TimeChart";
+import FlowChart from "./FlowChart";
 
 const Timer = () => {
   return (
@@ -13,8 +14,13 @@ const Timer = () => {
           <CountdownTimer />
           <Flows />
         </div>
-        <div className="">
-          <TimeChart/>
+        <div className="flex gap-4">
+          <div className="bg-white rounded-lg p-5">
+            <TimeChart />
+          </div>
+          <div className="bg-white rounded-lg p-5">
+            <FlowChart />
+          </div>
         </div>
       </div>
     </div>

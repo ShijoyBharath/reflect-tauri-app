@@ -30,6 +30,77 @@ impl Database {
         Ok(())
     }
 
+    pub fn create_habits_table(&self) -> Result<()> {
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS habits (
+                        id    INTEGER PRIMARY KEY,
+                        habit  TEXT NOT NULL,
+                        description  TEXT NOT NULL,
+                        created_at  TEXT NOT NULL,
+                        data  BLOB
+                    )",
+            (), // empty list of parameters.
+        )?;
+
+        Ok(())
+    }
+    pub fn create_habitsdata_table(&self) -> Result<()> {
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS habitsdata (
+                        id    INTEGER PRIMARY KEY,
+                        habit_id  INTEGER NOT NULL,
+                        date  TEXT NOT NULL,
+                        value  TEXT NOT NULL,
+                        goal TEXT NOT NULL,
+                        data  BLOB
+                    )",
+            (), // empty list of parameters.
+        )?;
+
+        Ok(())
+    }
+    pub fn create_dailygoals_table(&self) -> Result<()> {
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS dailygoals (
+                        id    INTEGER PRIMARY KEY,
+                        goal  TEXT NOT NULL,
+                        date  TEXT NOT NULL,
+                        data  BLOB
+                    )",
+            (), // empty list of parameters.
+        )?;
+
+        Ok(())
+    }
+    pub fn create_weeklygoals_table(&self) -> Result<()> {
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS weeklygoals (
+                        id    INTEGER PRIMARY KEY,
+                        goal  TEXT NOT NULL,
+                        date  TEXT NOT NULL,
+                        date_range TEXT NOT NULL,
+                        data  BLOB
+                    )",
+            (), // empty list of parameters.
+        )?;
+
+        Ok(())
+    }
+    pub fn create_timespent_table(&self) -> Result<()> {
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS timespent (
+                        id    INTEGER PRIMARY KEY,
+                        date  TEXT NOT NULL,
+                        total_time_spent  TEXT NOT NULL,
+                        flows TEXT NOT NULL,
+                        data  BLOB
+                    )",
+            (), // empty list of parameters.
+        )?;
+
+        Ok(())
+    }
+
     pub fn insert(&self) -> Result<()> {
         let me = Person {
             id: 0,

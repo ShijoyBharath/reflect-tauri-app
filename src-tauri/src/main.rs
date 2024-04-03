@@ -7,6 +7,11 @@ use database::Database;
 fn main() {
     let database = Database::new().expect("new");
     database.create().expect("create");
+    database.create_habits_table().expect("create");
+    database.create_habitsdata_table().expect("create");
+    database.create_dailygoals_table().expect("create");
+    database.create_weeklygoals_table().expect("create");
+    database.create_timespent_table().expect("create");
 
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![insert_data])
