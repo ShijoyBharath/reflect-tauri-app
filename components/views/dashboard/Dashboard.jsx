@@ -2,9 +2,8 @@ import React from "react";
 import DailyQuote from "./DailyQuote";
 import StatCard from "./StatCard";
 import HabitsCard from "./HabitsCard";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import GoalsWidget from "./GoalsWidget";
- 
 
 const Dashboard = () => {
   const habits = [
@@ -30,10 +29,14 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col m-3 p-5 gap-3 justify-between bg-slate-200 rounded-lg">
-      <div className="flex flex-wrap justify-between items-center">
-        <DailyQuote />
-        <StatCard />
-        <GoalsWidget/>
+      <div className="flex flex-wrap items-center">
+        <div className="flex flex-col">
+          <DailyQuote />
+          <GoalsWidget />
+        </div>
+        <div className="grow">
+          <StatCard />
+        </div>
       </div>
       {/* <ScrollArea className="whitespace-nowrap rounded-md border"> */}
       <div className="flex flex-wrap gap-3 m-3">

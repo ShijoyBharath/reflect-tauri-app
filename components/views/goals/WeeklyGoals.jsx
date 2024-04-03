@@ -1,9 +1,19 @@
+"use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
+import React, { useState } from "react";
 
 const WeeklyGoals = () => {
   const weeks = Array.from({ length: 12 }, (_, index) => `Week ${index + 1}`);
+
+  const [weeklygoals, setWeeklyGoals] = useState({});
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setWeeklyGoals((prevPlans) => ({
+      ...prevPlans,
+      [id]: value,
+    }));
+  };
 
   return (
     <div>
@@ -14,9 +24,17 @@ const WeeklyGoals = () => {
         </div>
         <div className="flex flex-col gap-4 p-4 pt-8">
           {weeks.map((week) => (
-            <div className="grid w-full max-w-sm items-center gap-1.5" key={week}>
+            <div
+              className="grid w-full max-w-sm items-center gap-1.5"
+              key={week}
+            >
               <Label htmlFor={week}>{week}</Label>
-              <Input type="text" id={week} placeholder={"Plans for " + week} />
+              <Input
+                type="text"
+                id={week}
+                placeholder={"Plans for " + week}
+                onChange={handleInputChange}
+              />
             </div>
           ))}
         </div>

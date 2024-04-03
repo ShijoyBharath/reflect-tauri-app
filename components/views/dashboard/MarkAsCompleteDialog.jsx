@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { PartyPopper } from "lucide-react";
 
-import { invoke } from '@tauri-apps/api/tauri'
+import { invoke } from '@tauri-apps/api/core'
 
 const MarkAsCompleteDialog = ({ calendarId }) => {
   const [value, setValue] = useState(10);

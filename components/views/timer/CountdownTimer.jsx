@@ -39,14 +39,14 @@ function CountdownTimer() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 p-10 m-4 bg-white rounded-lg w-[300px]">
-      <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+    <div className="flex flex-col justify-start gap-4 p-10 m-4 bg-white rounded-lg w-[300px]">
+      <h3 className="pl-4 scroll-m-20 text-2xl font-semibold tracking-tight">
         Flow
       </h3>
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+      <h1 className="pl-4 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
         {formatTime(time)}
       </h1>
-      <div className="flex gap-3 justify-between items-center">
+      <div className="flex gap-3 justify-start items-center">
         {isRunning || time <= 0 ? (
           <Button variant="ghost" onClick={stopTimer} disabled={!isRunning}>
             <Pause />
