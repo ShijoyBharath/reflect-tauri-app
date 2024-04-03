@@ -1,12 +1,12 @@
 import React from 'react'
-import Daily from './Daily'
-import Weekly from './Weekly'
+import DailyGoals from './DailyGoals'
+import WeeklyGoals from './WeeklyGoals'
 
 const Goals = () => {
   return (
     <div className="flex m-3 p-5 gap-3 justify-between items-center bg-slate-200 rounded-lg">
-        <Daily/>
-        <Weekly/>
+        <DailyGoals/>
+        <WeeklyGoals/>
     </div>
   )
 }
