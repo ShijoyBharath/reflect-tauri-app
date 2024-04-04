@@ -20,6 +20,12 @@ pub struct WeeklyGoals {
     end_date: String,
 }
 
+pub struct AppConfig {
+    id: Option<i32>,
+    start_date: String,
+    theme: String,
+}
+
 impl Database {
     pub fn new() -> Result<Self> {
         let conn = Connection::open("/Users/shijoybharath/Documents/test.sqlite")?;
@@ -108,6 +114,30 @@ impl Database {
 
         Ok(())
     }
+    pub fn create_appconfig_table(&self, start_date: String) -> Result<()> {
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS appconfig (
+                        id    INTEGER PRIMARY KEY,
+                        start_date  TEXT NOT NULL,
+                        theme  TEXT NOT NULL
+                    )",
+            (), // empty list of parameters.
+        )?;
+
+        // Check if a row already exists in the table
+        let count: i64 = self
+            .conn
+            .query_row("SELECT COUNT(*) FROM appconfig", [], |row| row.get(0))?;
+        if count == 0 {
+            // Insert a row with the current date as the installation date
+            self.conn.execute(
+                "INSERT OR REPLACE INTO appconfig (id, start_date, theme) VALUES (1, ?, ?)",
+                (start_date, "light"),
+            )?;
+        }
+
+        Ok(())
+    }
 
     pub fn insert(&self) -> Result<()> {
         let me = Person {
@@ -122,6 +152,16 @@ impl Database {
 
         Ok(())
     }
+
+    pub fn insert_appconfig_data(&self, theme_data: &String) -> Result<()> {
+        self.conn.execute(
+            "UPDATE appconfig SET theme = ? WHERE id = 1",
+            &[&theme_data],
+        )?;
+
+        Ok(())
+    }
+
     pub fn insert_weeklygoals(&self, goals_array: &str) -> Result<()> {
         // let me = WeeklyGoals {
         //     id: 0,

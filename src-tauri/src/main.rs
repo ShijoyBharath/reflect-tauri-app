@@ -18,7 +18,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             insert_data,
             insert_weeklygoals_data,
-            get_weeklygoals_data
+            get_weeklygoals_data,
+            init_appconfig_table
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -49,4 +50,11 @@ fn get_weeklygoals_data(start_date: String, end_date: String) -> String {
     let response = serde_json::to_string(&data).unwrap();
 
     response.into()
+}
+
+#[tauri::command(rename_all = "snake_case")]
+fn init_appconfig_table(start_date: String) {
+    let database = Database::new().expect("new");
+    database.create_appconfig_table(start_date).expect("create appconfig");
+    println!("Created appconfig!");
 }
