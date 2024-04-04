@@ -1,4 +1,7 @@
 use rusqlite::{Connection, Result};
+use serde::{Deserialize, Serialize};
+
+
 
 pub struct Database {
     conn: Connection,
@@ -10,12 +13,15 @@ struct Person {
     name: String,
     data: Option<Vec<u8>>,
 }
-struct WeeklyGoals {
+
+#[derive(Debug,Serialize, Deserialize)]
+pub struct WeeklyGoals {
     id: i32,
     goal: String,
     start_date: String,
     end_date: String,
 }
+
 
 impl Database {
     pub fn new() -> Result<Self> {
@@ -132,6 +138,25 @@ impl Database {
         )?;
 
         Ok(())
+    }
+    pub fn get_weeklygoals(&self) -> Result<Vec<WeeklyGoals>> {
+        let mut stmt = self
+            .conn
+            .prepare("SELECT id, goal, start_date, end_date FROM weeklygoals")?;
+        let data_iter = stmt.query_map([], |row| {
+            Ok(WeeklyGoals {
+                id: row.get(0)?,
+                goal: row.get(1)?,
+                start_date: row.get(2)?,
+                end_date: row.get(3)?,
+            })
+        })?;
+
+        let mut result = Vec::new();
+        for data in data_iter {
+            result.push(data?);
+        }
+        Ok(result)
     }
 
     pub fn get_all(&self) -> Result<()> {

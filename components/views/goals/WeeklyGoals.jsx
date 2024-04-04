@@ -1,9 +1,10 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { invoke } from "@tauri-apps/api/tauri";
+import { Button } from "@/components/ui/button";
 
 const WeeklyGoals = () => {
   const weeks = Array.from({ length: 12 }, (_, index) => `Week ${index + 1}`);
@@ -56,14 +57,27 @@ const WeeklyGoals = () => {
   // console.log(next12Weeks);
   // console.log(weeklygoals);
 
-  invoke("insert_weeklygoals_data");
+  const saveWeeklygoals = () => {
+
+    invoke("insert_weeklygoals_data", {
+      goal: "saveWeeklygoals man",
+      start_date: "2024-04-08",
+      end_date: "2024-04-09",
+    });
+  };
+
+  const [tuariget, setTauriget] = useState("")
+  useEffect(()=> {
+    invoke('get_weeklygoals_data').then((message) => setTauriget(message))
+  }, [])
 
   return (
     <div>
       <div className="flex flex-col gap-5 w-[500px] bg-slate-100 p-5 rounded-lg">
         <div className="flex justify-between gap-3">
           <h2>Weekly Goals</h2>
-          <h3>Week 1</h3>
+          <h1>{tuariget}</h1>
+          <Button onClick={() => saveWeeklygoals()}>Save</Button>
         </div>
         <div className="flex flex-col gap-4 p-4 pt-8">
           {Object.keys(next12Weeks).map((week) => (
