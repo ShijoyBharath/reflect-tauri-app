@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useEffect, useState } from "react";
 
-import { invoke } from "@tauri-apps/api/tauri";
 import { Button } from "@/components/ui/button";
 
 const WeeklyGoals = () => {
@@ -70,10 +69,7 @@ const WeeklyGoals = () => {
 
   const [tuariget, setTauriget] = useState("");
   useEffect(() => {
-    // invoke("get_weeklygoals_data", {
-    //   start_date: "2024-05-07",
-    //   end_date: "2024-05-18",
-    // }).then((message) => setTauriget(message));
+    
   }, []);
 
   return (

@@ -5,8 +5,8 @@ import NavBar from "@/components/views/layout/NavBar";
 import SideBar from "@/components/views/layout/SideBar";
 import { Toaster } from "@/components/ui/sonner";
 
-import { invoke } from "@tauri-apps/api/tauri";
 import { useEffect } from "react";
+import Database from "tauri-plugin-sql-api";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,6 +16,20 @@ const inter = Inter({ subsets: ["latin"] });
 // };
 
 export default function RootLayout({ children }) {
+
+  async function insert(today) {
+    try {
+      const db = await Database.load('sqlite:data.db');
+      const result = await db.execute("CREATE TABLE IF NOT EXISTS appconfig (id INTEGER PRIMARY KEY, start_date TEXT NOT NULL, theme TEXT NOT NULL)");
+      const select = await db.select("SELECT COUNT(*) AS COUNT FROM appconfig");
+      if (select[0].COUNT == 0) {
+        const insert = await db.execute("INSERT OR REPLACE INTO appconfig (id, start_date, theme) VALUES (1, ?, ?)", [today, "light"]);
+      }
+    } catch (error) {
+      console.log("error : ", error)
+    }
+  }
+
   useEffect(() => {
     const now = new Date();
     const year = now.getFullYear();
@@ -23,10 +37,7 @@ export default function RootLayout({ children }) {
     const day = String(now.getDate()).padStart(2, "0");
 
     const today = `${year}-${month}-${day}`;
-    // invoke("init_appconfig_table", {
-    //   start_date: today,
-    // });
-    // localStorage.setItem("start_date", `${year}-${month}-${day}`);
+    insert(today);
   }, []);
 
   return (

@@ -3,23 +3,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 
-import { invoke } from "@tauri-apps/api/tauri";
-
 import Database from "tauri-plugin-sql-api";
 
 const DailyGoals = () => {
 
-  async function loadDB() {
+  async function insert() {
     try {
-
-      const db = await Database.load('sqlite:test.db');
-      const result = await db.execute("CREATE TABLE IF NOT EXISTS person (id INTEGER PRIMARY KEY, name  TEXT NOT NULL)");
-      const insert = await db.execute("INSERT INTO person (name) VALUES (?)", ["shijoy"])
+      const db = await Database.load('sqlite:data.db');
+      const result = await db.execute("CREATE TABLE IF NOT EXISTS dailygoals (id INTEGER PRIMARY KEY, goal TEXT NOT NULL, date TEXT NOT NULL)");
+      const insert = await db.execute("INSERT INTO dailygoals (goal, date) VALUES (?, ?)", ["make something", "2024-04-04"])
     } catch (error) {
       console.log("error : ", error)
     }
   }
-  loadDB();
+  // insert();
 
   const [dailygoals, setDailyGoals] = useState({});
   const handleInputChange = (e) => {
