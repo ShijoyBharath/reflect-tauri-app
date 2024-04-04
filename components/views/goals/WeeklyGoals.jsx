@@ -7,14 +7,17 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { Button } from "@/components/ui/button";
 
 const WeeklyGoals = () => {
-  const weeks = Array.from({ length: 12 }, (_, index) => `Week ${index + 1}`);
-
   const [weeklygoals, setWeeklyGoals] = useState({});
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setWeeklyGoals((prevPlans) => ({
       ...prevPlans,
-      [id]: value,
+      [id]: {
+        goal: value,
+        start_date: next12Weeks[id][0],
+        end_date: next12Weeks[id][1],
+      },
     }));
   };
 
@@ -58,18 +61,20 @@ const WeeklyGoals = () => {
   // console.log(weeklygoals);
 
   const saveWeeklygoals = () => {
-
+    var dataArray = Object.keys(weeklygoals).map(key => weeklygoals[key]);
+    dataArray = JSON.stringify(dataArray)
     invoke("insert_weeklygoals_data", {
-      goal: "saveWeeklygoals man",
-      start_date: "2024-04-08",
-      end_date: "2024-04-09",
+      goals_array : dataArray
     });
   };
 
-  const [tuariget, setTauriget] = useState("")
-  useEffect(()=> {
-    invoke('get_weeklygoals_data').then((message) => setTauriget(message))
-  }, [])
+  const [tuariget, setTauriget] = useState("");
+  useEffect(() => {
+    invoke("get_weeklygoals_data", {
+      start_date: "2024-05-07",
+      end_date: "2024-05-18",
+    }).then((message) => setTauriget(message));
+  }, []);
 
   return (
     <div>

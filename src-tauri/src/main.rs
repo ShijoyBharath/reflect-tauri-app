@@ -32,19 +32,19 @@ fn insert_data() {
 }
 
 #[tauri::command(rename_all = "snake_case")]
-fn insert_weeklygoals_data(goal: String, start_date: String, end_date: String) {
+fn insert_weeklygoals_data(goals_array: &str) {
     let database = Database::new().expect("new");
-    database.insert_weeklygoals().expect("insert");
+    database.insert_weeklygoals(&goals_array).expect("insert");
     println!(
-        "Data inserted successfully! {} {} {}",
-        goal, start_date, end_date
+        "Data inserted successfully! {}",
+        goals_array
     );
 }
 
-#[tauri::command]
-fn get_weeklygoals_data() -> String {
+#[tauri::command(rename_all = "snake_case")]
+fn get_weeklygoals_data(start_date: String, end_date: String) -> String {
     let database = Database::new().expect("new");
-    let data = database.get_weeklygoals().expect("insert");
+    let data = database.get_weeklygoals(start_date, end_date).expect("insert");
 
     let response = serde_json::to_string(&data).unwrap();
 

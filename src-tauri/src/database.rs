@@ -1,8 +1,6 @@
 use rusqlite::{Connection, Result};
 use serde::{Deserialize, Serialize};
 
-
-
 pub struct Database {
     conn: Connection,
 }
@@ -14,14 +12,13 @@ struct Person {
     data: Option<Vec<u8>>,
 }
 
-#[derive(Debug,Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct WeeklyGoals {
-    id: i32,
+    id: Option<i32>,
     goal: String,
     start_date: String,
     end_date: String,
 }
-
 
 impl Database {
     pub fn new() -> Result<Self> {
@@ -125,25 +122,40 @@ impl Database {
 
         Ok(())
     }
-    pub fn insert_weeklygoals(&self) -> Result<()> {
-        let me = WeeklyGoals {
-            id: 0,
-            goal: "Complete reflect app".to_string(),
-            start_date: "2024-04-07".to_string(),
-            end_date: "2024-04-08".to_string(),
-        };
-        self.conn.execute(
-            "INSERT INTO weeklygoals (goal, start_date, end_date) VALUES (?1, ?2, ?3)",
-            (&me.goal, &me.start_date, &me.end_date),
-        )?;
+    pub fn insert_weeklygoals(&self, goals_array: &str) -> Result<()> {
+        // let me = WeeklyGoals {
+        //     id: 0,
+        //     goal: "Complete reflect app".to_string(),
+        //     start_date: "2024-05-07".to_string(),
+        //     end_date: "2024-05-15".to_string(),
+        // };
+        // self.conn.execute(
+        //     "INSERT INTO weeklygoals (goal, start_date, end_date) VALUES (?1, ?2, ?3)",
+        //     (&me.goal, &me.start_date, &me.end_date),
+        // )?;
+
+        let goals: Vec<WeeklyGoals> = serde_json::from_str(goals_array).unwrap();
+
+        let mut stmt = self
+            .conn
+            .prepare("INSERT INTO weeklygoals (goal, start_date, end_date) VALUES (?, ?, ?)")?;
+        for goal in goals {
+            stmt.execute(&[&goal.goal, &goal.start_date, &goal.end_date])?;
+        }
 
         Ok(())
     }
-    pub fn get_weeklygoals(&self) -> Result<Vec<WeeklyGoals>> {
-        let mut stmt = self
-            .conn
-            .prepare("SELECT id, goal, start_date, end_date FROM weeklygoals")?;
-        let data_iter = stmt.query_map([], |row| {
+    pub fn get_weeklygoals(
+        &self,
+        start_date: String,
+        end_date: String,
+    ) -> Result<Vec<WeeklyGoals>> {
+        let mut stmt = self.conn.prepare(
+            "SELECT *
+            FROM weeklygoals
+            WHERE DATE(start_date) BETWEEN DATE(?) AND DATE(?)",
+        )?;
+        let data_iter = stmt.query_map([start_date, end_date], |row| {
             Ok(WeeklyGoals {
                 id: row.get(0)?,
                 goal: row.get(1)?,
