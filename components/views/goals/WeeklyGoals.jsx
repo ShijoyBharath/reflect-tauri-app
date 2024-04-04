@@ -70,10 +70,10 @@ const WeeklyGoals = () => {
 
   const [tuariget, setTauriget] = useState("");
   useEffect(() => {
-    invoke("get_weeklygoals_data", {
-      start_date: "2024-05-07",
-      end_date: "2024-05-18",
-    }).then((message) => setTauriget(message));
+    // invoke("get_weeklygoals_data", {
+    //   start_date: "2024-05-07",
+    //   end_date: "2024-05-18",
+    // }).then((message) => setTauriget(message));
   }, []);
 
   return (

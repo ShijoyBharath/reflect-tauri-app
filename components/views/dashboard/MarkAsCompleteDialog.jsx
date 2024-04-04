@@ -50,7 +50,7 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
                 onClick: () => console.log("undo"),
               },
             }),
-            invoke("insert_data"),
+            // invoke("insert_data"),
           ]}
         >
           Save Progress

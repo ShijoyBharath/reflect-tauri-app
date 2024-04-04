@@ -23,9 +23,9 @@ export default function RootLayout({ children }) {
     const day = String(now.getDate()).padStart(2, "0");
 
     const today = `${year}-${month}-${day}`;
-    invoke("init_appconfig_table", {
-      start_date: today,
-    });
+    // invoke("init_appconfig_table", {
+    //   start_date: today,
+    // });
     // localStorage.setItem("start_date", `${year}-${month}-${day}`);
   }, []);
 

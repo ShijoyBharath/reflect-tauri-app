@@ -5,7 +5,22 @@ import React, { useState } from "react";
 
 import { invoke } from "@tauri-apps/api/tauri";
 
+import Database from "tauri-plugin-sql-api";
+
 const DailyGoals = () => {
+
+  async function loadDB() {
+    try {
+
+      const db = await Database.load('sqlite:test.db');
+      const result = await db.execute("CREATE TABLE IF NOT EXISTS person (id INTEGER PRIMARY KEY, name  TEXT NOT NULL)");
+      const insert = await db.execute("INSERT INTO person (name) VALUES (?)", ["shijoy"])
+    } catch (error) {
+      console.log("error : ", error)
+    }
+  }
+  loadDB();
+
   const [dailygoals, setDailyGoals] = useState({});
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -60,7 +75,7 @@ const DailyGoals = () => {
       <div className="flex flex-col gap-5 w-[500px] bg-slate-100 p-5 rounded-lg">
         <div className="flex justify-between gap-3">
           <h2>Daily Goals for Week 1</h2>
-          <h3>{today}</h3>
+          <h3>{"path"}</h3>
         </div>
         <div>
           <h6>These are your most impactful things you need to get done.</h6>
