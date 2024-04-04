@@ -14,7 +14,7 @@ fn main() {
     database.create_timespent_table().expect("create");
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![insert_data])
+        .invoke_handler(tauri::generate_handler![insert_data, insert_weeklygoals_data])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -23,5 +23,12 @@ fn main() {
 fn insert_data() {
     let database = Database::new().expect("new");
     database.insert().expect("insert");
+    println!("Data inserted successfully!");
+}
+
+#[tauri::command]
+fn insert_weeklygoals_data() {
+    let database = Database::new().expect("new");
+    database.insert_weeklygoals().expect("insert");
     println!("Data inserted successfully!");
 }

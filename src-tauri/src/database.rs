@@ -10,10 +10,16 @@ struct Person {
     name: String,
     data: Option<Vec<u8>>,
 }
+struct WeeklyGoals {
+    id: i32,
+    goal: String,
+    start_date: String,
+    end_date: String,
+}
 
 impl Database {
     pub fn new() -> Result<Self> {
-        let conn = Connection::open("test.sqlite")?;
+        let conn = Connection::open("/Users/shijoybharath/Documents/test.sqlite")?;
         Ok(Database { conn })
     }
 
@@ -77,9 +83,8 @@ impl Database {
             "CREATE TABLE IF NOT EXISTS weeklygoals (
                         id    INTEGER PRIMARY KEY,
                         goal  TEXT NOT NULL,
-                        date  TEXT NOT NULL,
-                        date_range TEXT NOT NULL,
-                        data  BLOB
+                        start_date TEXT NOT NULL,
+                        end_date TEXT NOT NULL
                     )",
             (), // empty list of parameters.
         )?;
@@ -110,6 +115,20 @@ impl Database {
         self.conn.execute(
             "INSERT INTO person (name, data) VALUES (?1, ?2)",
             (&me.name, &me.data),
+        )?;
+
+        Ok(())
+    }
+    pub fn insert_weeklygoals(&self) -> Result<()> {
+        let me = WeeklyGoals {
+            id: 0,
+            goal: "Complete reflect app".to_string(),
+            start_date: "2024-04-07".to_string(),
+            end_date: "2024-04-08".to_string(),
+        };
+        self.conn.execute(
+            "INSERT INTO weeklygoals (goal, start_date, end_date) VALUES (?1, ?2, ?3)",
+            (&me.goal, &me.start_date, &me.end_date),
         )?;
 
         Ok(())
