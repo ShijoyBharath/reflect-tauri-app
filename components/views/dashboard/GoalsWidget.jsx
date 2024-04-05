@@ -1,45 +1,86 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
+import Database from "tauri-plugin-sql-api";
 
 const GoalsWidget = () => {
-  function getDaysLeft(futureDate) {
-    // Get the current date
-    const currentDate = new Date();
 
-    // Convert futureDate to milliseconds
-    const futureDateMS = futureDate.getTime();
-
-    // Convert currentDate to milliseconds
-    const currentDateMS = currentDate.getTime();
-
-    // Calculate the difference in milliseconds
-    const differenceMS = futureDateMS - currentDateMS;
-
-    // Convert milliseconds to days
-    const differenceDays = Math.ceil(differenceMS / (1000 * 60 * 60 * 24));
-
-    return differenceDays;
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   }
-  
-  const futureDate = new Date("2024-05-01"); // Set the future date
-  const daysLeft = getDaysLeft(futureDate);
 
+  const getCurrent12Weeks = (startDate) => {
+    const today = new Date();
+    for (var d = new Date(startDate); d <= today; d.setDate(d.getDate() + 84)) {
+      var temp_date = new Date(d);
+      var week_start = new Date(d);
+      var week_end = new Date(temp_date.setDate(temp_date.getDate() + 83));
+
+      if (today >= week_start && today <= week_end) {
+        return [formatDate(week_start), formatDate(week_end)];
+      }
+    }
+  };
+
+  function calculateDaysLeft(startDateStr, endDateStr) {
+    // Convert the string dates to Date objects
+    const startDate = new Date(startDateStr);
+    const endDate = new Date(endDateStr);
+  
+    // Calculate the difference in milliseconds between the end date and the start date
+    const differenceInMilliseconds = endDate - startDate;
+  
+    // Convert the difference to days
+    const daysLeft = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+  
+    return daysLeft;
+  }
+
+  const [data, setData] = useState([]);
+  async function get_data() {
+    try {
+      const today = formatDate(new Date());
+      const db = await Database.load("sqlite:data.db");
+      const select_daily = await db.select(
+        "SELECT * FROM dailygoals WHERE date=?",
+        [today]
+      );
+      const select_weekly = await db.select(
+        "SELECT * FROM weeklygoals WHERE start_date<=? AND end_date>=?",
+        [today, today]
+      );
+
+      const start_date = await db.select("SELECT * FROM appconfig");
+      var current12week = getCurrent12Weeks(start_date[0].start_date)
+      var daysleft = calculateDaysLeft(today,current12week[1])
+
+      return [select_daily[0].goal, select_weekly[0].goal, daysleft];
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
+  useEffect(() => {
+    get_data().then((data) => setData(data));
+  }, []);
 
   return (
     <div className="flex flex-col gap-4 m-4 p-9 justify-between bg-white rounded-lg">
       <div>
         <div className="flex gap-4 justify-between">
           <p className="font-medium">Today</p>
-          <p>Integrate SQLite</p>
+          <p>{data[0]}</p>
         </div>
         <div className="flex gap-4 justify-between">
           <p className="font-medium">This week</p>
-          <p>Complete Tauri app</p>
+          <p>{data[1]}</p>
         </div>
       </div>
 
       <div className="flex items-end">
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-          {daysLeft} Days left
+          {data[2]} Days left
         </h3>
       </div>
     </div>
