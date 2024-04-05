@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import React, { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import Database from "tauri-plugin-sql-api";
 
 const WeeklyGoals = () => {
   const [weeklygoals, setWeeklyGoals] = useState({});
@@ -23,8 +24,32 @@ const WeeklyGoals = () => {
   function getNext12Weeks(startDate) {
     const next12Weeks = {};
 
+    // Convert the startDate to a Date object
+    startDate = new Date(startDate);
+    
+    // Get today's date
+    const today = new Date();
+    
+    // Calculate the difference in milliseconds between today and startDate
+    const differenceInMilliseconds = today - startDate;
+    
+    // Calculate the difference in days
+    const differenceInDays = Math.floor(differenceInMilliseconds / (1000 * 60 * 60 * 24));
+    
+    // Calculate the remainder when dividing the difference by 7
+    const remainder = differenceInDays % 7;
+    
+    // Calculate the number of days to subtract to get to the previous 7th multiple date
+    const daysToSubtract = remainder === 0 ? 0 : 7 - remainder;
+    
+    // Create a new date by subtracting the days
+    const previous7thMultipleDate = new Date(today);
+    previous7thMultipleDate.setDate(today.getDate() - daysToSubtract);
+    
+    // console.log(previous7thMultipleDate);
+
     // Clone the start date to avoid mutating it
-    const currentDate = new Date(startDate);
+    const currentDate = new Date(previous7thMultipleDate);
 
     // Iterate for the next 12 weeks
     for (let i = 1; i <= 12; i++) {
@@ -54,30 +79,81 @@ const WeeklyGoals = () => {
   }
 
   // Example usage:
-  const startDate = new Date(); // Example date (Friday)
+  const [startDate, setStartDate] = useState("") // Example date (Friday)
   const next12Weeks = getNext12Weeks(startDate);
+
+
+  const getCurrentWeek = (startDate) => {
+    const today = new Date();
+    for (var d = new Date(startDate); d <= today; d.setDate(d.getDate() + 7)) {
+      var temp_date = new Date(d)
+      var week_start = new Date(d)
+      var week_end = new Date(temp_date.setDate(temp_date.getDate() + 6))
+
+      if (today >= week_start && today <= week_end) {
+        return [formatDate(week_start), formatDate(week_end)]
+      }
+    }
+  }
+  console.log(getCurrentWeek(startDate));
+
   // console.log(next12Weeks);
   // console.log(weeklygoals);
 
   const saveWeeklygoals = () => {
     var dataArray = Object.keys(weeklygoals).map(key => weeklygoals[key]);
-    dataArray = JSON.stringify(dataArray)
-    invoke("insert_weeklygoals_data", {
-      goals_array : dataArray
-    });
+    dataArray.forEach((item)=> {
+      insert_data(item.goal, item.start_date, item.end_date)
+    })
+    console.log("saved weekly data")
   };
 
-  const [tuariget, setTauriget] = useState("");
   useEffect(() => {
-    
+    init_table().then((data)=>setStartDate(data))
+    // const weeklygoalsdata = get_data()
+    // console.log(weeklygoalsdata)
   }, []);
+
+  async function init_table() {
+    try {
+      const db = await Database.load('sqlite:data.db');
+      const result = await db.execute("CREATE TABLE IF NOT EXISTS weeklygoals (id INTEGER PRIMARY KEY, goal TEXT NOT NULL, start_date TEXT NOT NULL, end_date TEXT NOT NULL)");
+      const start_date = await db.select("SELECT * FROM appconfig")
+      return start_date[0].start_date
+    } catch (error) {
+      console.log("error : ", error)
+    }
+  }
+
+  async function insert_data(goal, start_date, end_date) {
+    try {
+      const db = await Database.load('sqlite:data.db');
+      const select = await db.select("SELECT * FROM weeklygoals WHERE start_date=? AND end_date=?", [start_date, end_date]);
+      if(select.length === 0) {
+        const insert = await db.execute("INSERT INTO weeklygoals (goal, start_date, end_date) VALUES (?, ?, ?)", [goal, start_date, end_date]);
+      } else {
+        const update = await db.execute("UPDATE weeklygoals SET goal=? WHERE start_date=? AND end_date=?", [goal, start_date, end_date]);
+      }
+    } catch (error) {
+      console.log("error : ", error)
+    }
+  }
+
+  async function get_data(start_date, end_date) {
+    try {
+      const db = await Database.load('sqlite:data.db');
+      const select = await db.select("SELECT * FROM weeklygoals WHERE DATE(start_date) BETWEEN DATE(?) AND DATE(?)", [start_date, end_date]);
+      return select
+    } catch (error) {
+      console.log("error : ", error)
+    }
+  }
 
   return (
     <div>
       <div className="flex flex-col gap-5 w-[500px] bg-slate-100 p-5 rounded-lg">
         <div className="flex justify-between gap-3">
           <h2>Weekly Goals</h2>
-          <h1>{tuariget}</h1>
           <Button onClick={() => saveWeeklygoals()}>Save</Button>
         </div>
         <div className="flex flex-col gap-4 p-4 pt-8">
