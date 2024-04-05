@@ -38,6 +38,55 @@ function CountdownTimer() {
       .padStart(2, "0")}`;
   };
 
+  async function init_table() {
+    try {
+      const db = await Database.load("sqlite:data.db");
+      const result = await db.execute(
+        "CREATE TABLE IF NOT EXISTS timer (id INTEGER PRIMARY KEY, timespent TEXT NOT NULL, flows INTEGER NOT NULL, date TEXT NOT NULL)"
+      );
+      const start_date = await db.select("SELECT * FROM appconfig");
+
+      // start_date[0].start_date;
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
+
+  async function insert_data(timespent, flows, date) {
+    try {
+      const db = await Database.load("sqlite:data.db");
+      const select = await db.select("SELECT * FROM timer WHERE date=?", [
+        date,
+      ]);
+      if (select.length === 0) {
+        const insert = await db.execute(
+          "INSERT INTO timer (timespent, flows, date) VALUES (?, ?, ?)",
+          [timespent, flows, date]
+        );
+      } else {
+        const update = await db.execute(
+          "UPDATE timer SET timespent=?, flows=? WHERE date=?",
+          [timespent, flows, date]
+        );
+      }
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
+
+  async function get_data(start_date, end_date) {
+    try {
+      const db = await Database.load("sqlite:data.db");
+      const select = await db.select(
+        "SELECT * FROM timer WHERE DATE(date) BETWEEN DATE(?) AND DATE(?)",
+        [start_date, end_date]
+      );
+      return select;
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
+
   return (
     <div className="flex flex-col justify-start gap-4 p-10 m-4 bg-white rounded-lg w-[300px]">
       <h3 className="pl-4 scroll-m-20 text-2xl font-semibold tracking-tight">

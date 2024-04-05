@@ -14,7 +14,7 @@ const WeeklyGoals = () => {
 
   useEffect(() => {
     init_table();
-  }, []);
+  }, [dbGoals]);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -181,7 +181,6 @@ const WeeklyGoals = () => {
                   placeholder={weeks[week][2].length===0 ?  "Plans for " + week : weeks[week][2]}
                   onChange={handleInputChange}
                 />
-                {/* {curWeek[0] == weeks[week][0] && curWeek[1] == weeks[week][1] ? "active" : ""} */}
               </div>
             </div>
           ))}

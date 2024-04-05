@@ -14,7 +14,7 @@ const DailyGoals = () => {
 
   useEffect(() => {
     init_table();
-  }, []);
+  }, [dbGoals]);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
