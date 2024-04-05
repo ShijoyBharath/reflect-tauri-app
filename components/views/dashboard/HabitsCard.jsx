@@ -49,7 +49,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
           height: 11,
           gutter: 4,
         },
-        itemSelector: "#" + calendarId,
+        itemSelector: "#" + "calendar-" + calendarId,
       },
       [
         [

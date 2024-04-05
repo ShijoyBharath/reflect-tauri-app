@@ -15,7 +15,7 @@ const Dashboard = () => {
     get_data().then((data)=> setHabits(data))
   }, [])
 
-  async function get_data(start_date, end_date) {
+  async function get_data() {
     try {
       const db = await Database.load("sqlite:data.db");
       const select = await db.select(
@@ -46,7 +46,7 @@ const Dashboard = () => {
               key={item.id}
               habit={item.habit}
               description={item.description}
-              calendarId={"calendar-" + item.uuid}
+              calendarId={item.uuid}
             />
           );
         })}
