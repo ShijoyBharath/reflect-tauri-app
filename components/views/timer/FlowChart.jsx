@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import dynamic from 'next/dynamic'
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import Database from "tauri-plugin-sql-api";
 
 const FlowChart = () => {
   const options = {
@@ -41,6 +42,21 @@ const FlowChart = () => {
       data: [30, 40, 45, 50, 49, 60, 70, 91],
     },
   ];
+
+
+
+  async function get_data(start_date, end_date) {
+    try {
+      const db = await Database.load("sqlite:data.db");
+      const select = await db.select(
+        "SELECT * FROM timer WHERE DATE(date) BETWEEN DATE(?) AND DATE(?)",
+        [start_date, end_date]
+      );
+      return select;
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
 
   return (
     <div className="app">

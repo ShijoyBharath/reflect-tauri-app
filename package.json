@@ -34,13 +34,15 @@
     "react-day-picker": "^8.10.0",
     "react-dom": "^18",
     "react-sortablejs": "^6.1.4",
+    "react-timer-hook": "^3.0.7",
     "sonner": "^1.4.41",
     "sortablejs": "^1.15.2",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql#v1",
     "uuid": "^9.0.1",
-    "vaul": "^0.9.0"
+    "vaul": "^0.9.0",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.5.11",

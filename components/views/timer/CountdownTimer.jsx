@@ -1,56 +1,11 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Database from "tauri-plugin-sql-api";
 
-function CountdownTimer() {
-  const TIMERVALUE = 2700;
+function CountdownTimer({ expiryTimestamp }) {
 
-  const [time, setTime] = useState(TIMERVALUE); // Initial countdown time in seconds
-  const [isRunning, setIsRunning] = useState(false);
-  const intervalRef = useRef(null);
-
-  const startTimer = () => {
-    if (!isRunning && time > 0) {
-      setIsRunning(true);
-      intervalRef.current = setInterval(() => {
-        setTime((prevTime) => prevTime - 1);
-      }, 1000);
-    }
-  };
-
-  const stopTimer = () => {
-    clearInterval(intervalRef.current);
-    setIsRunning(false);
-  };
-
-  const resetTimer = () => {
-    clearInterval(intervalRef.current);
-    setIsRunning(false);
-    setTime(TIMERVALUE); // Reset to initial countdown time
-  };
-
-  const formatTime = (timeInSeconds) => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
-    return `${minutes.toString().padStart(2, "0")}:${seconds
-      .toString()
-      .padStart(2, "0")}`;
-  };
-
-  async function init_table() {
-    try {
-      const db = await Database.load("sqlite:data.db");
-      const result = await db.execute(
-        "CREATE TABLE IF NOT EXISTS timer (id INTEGER PRIMARY KEY, timespent TEXT NOT NULL, flows INTEGER NOT NULL, date TEXT NOT NULL)"
-      );
-      const start_date = await db.select("SELECT * FROM appconfig");
-
-      // start_date[0].start_date;
-    } catch (error) {
-      console.log("error : ", error);
-    }
-  }
 
   async function insert_data(timespent, flows, date) {
     try {
@@ -74,43 +29,36 @@ function CountdownTimer() {
     }
   }
 
-  async function get_data(start_date, end_date) {
-    try {
-      const db = await Database.load("sqlite:data.db");
-      const select = await db.select(
-        "SELECT * FROM timer WHERE DATE(date) BETWEEN DATE(?) AND DATE(?)",
-        [start_date, end_date]
-      );
-      return select;
-    } catch (error) {
-      console.log("error : ", error);
-    }
-  }
-
   return (
     <div className="flex flex-col justify-start gap-4 p-10 m-4 bg-white rounded-lg w-[300px]">
       <h3 className="pl-4 scroll-m-20 text-2xl font-semibold tracking-tight">
         Flow
       </h3>
       <h1 className="pl-4 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        {formatTime(time)}
+        {hours < 10 ? "0" : ""}
+        {hours}:{minutes < 10 ? "0" : ""}
+        {minutes}:{seconds < 10 ? "0" : ""}
+        {seconds}
       </h1>
       <div className="flex gap-3 justify-start items-center">
-        {isRunning || time <= 0 ? (
-          <Button variant="ghost" onClick={stopTimer} disabled={!isRunning}>
+        {isRunning ? (
+          <Button variant="ghost" onClick={pause}>
             <Pause />
           </Button>
         ) : (
-          <Button
-            variant="ghost"
-            onClick={startTimer}
-            disabled={isRunning || time <= 0}
-          >
+          <Button variant="ghost" onClick={resume}>
             <Play />
           </Button>
         )}
 
-        <Button variant="ghost" onClick={resetTimer}>
+        <Button
+          variant="ghost"
+          onClick={() => {
+            const time = new Date();
+            time.setSeconds(time.getSeconds() + 5);
+            restart(time, false);
+          }}
+        >
           <RotateCcw />
         </Button>
       </div>

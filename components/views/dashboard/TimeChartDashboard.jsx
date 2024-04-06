@@ -44,7 +44,7 @@ const TimeChartDashboard = () => {
       var ser = data.map((item)=>item.value)
       var cat = data.map((item)=>item.date)
       setSeries([{
-        name : "series-1",
+        name : "Overall Score",
         data : ser
       }])
       setOptions({
