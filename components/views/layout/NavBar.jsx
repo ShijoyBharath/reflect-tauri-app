@@ -11,8 +11,9 @@ import {
 import { useTimer } from "react-timer-hook";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw } from "lucide-react";
+import Database from "tauri-plugin-sql-api";
 
-const NavBar = ({expiryTimestamp}) => {
+const NavBar = ({ expiryTimestamp }) => {
   const [remainingTime, setRemainingTime] = useState(getRemainingTime());
 
   useEffect(() => {
@@ -49,28 +50,6 @@ const NavBar = ({expiryTimestamp}) => {
     };
   }
 
-  const {
-    totalSeconds,
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
-    restart,
-  } = useTimer({
-    expiryTimestamp,
-    autoStart: false,
-    onExpire: () => {
-      console.warn("Timer expired");
-      const time = new Date();
-      time.setSeconds(time.getSeconds() + 10);
-      restart(time, false);
-    },
-  });
-
   var months = [
     "January",
     "February",
@@ -94,6 +73,86 @@ const NavBar = ({expiryTimestamp}) => {
     day = "0" + day;
   }
 
+  const {
+    totalSeconds,
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    resume,
+    restart,
+  } = useTimer({
+    expiryTimestamp,
+    autoStart: false,
+    onExpire: () => {
+      console.warn("Timer expired");
+      insert_data(100, formatDate(new Date()));
+      const time = new Date();
+      time.setSeconds(time.getSeconds() + 10);
+      restart(time, false);
+    },
+  });
+
+  const [flows, setFlows] = useState(0);
+  useEffect(() => {
+    get_data(formatDate(new Date()));
+  }, []);
+
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  async function get_data(date) {
+    try {
+      const db = await Database.load("sqlite:data.db");
+      const select = await db.select("SELECT * FROM timer WHERE date=?", [
+        date,
+      ]);
+      if (select.length === 0) {
+        setFlows(0);
+      } else {
+        setFlows(select[0].flows);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function insert_data(timespent, date) {
+    try {
+      const db = await Database.load("sqlite:data.db");
+      const result = await db.execute(
+        "CREATE TABLE IF NOT EXISTS timer (id INTEGER PRIMARY KEY, timespent_in_sec INTEGER NOT NULL, flows INTEGER NOT NULL, date TEXT NOT NULL)"
+      );
+      const select = await db.select("SELECT * FROM timer WHERE date=?", [
+        date,
+      ]);
+      if (select.length === 0) {
+        const insert = await db.execute(
+          "INSERT INTO timer (timespent_in_sec, flows, date) VALUES (?, ?, ?)",
+          [timespent, 1, date]
+        );
+        setFlows(1);
+      } else {
+        const updated_timespent = select[0].timespent_in_sec + timespent;
+        const updated_flows = select[0].flows + 1;
+        setFlows(updated_flows);
+        const update = await db.execute(
+          "UPDATE timer SET timespent_in_sec=?, flows=? WHERE date=?",
+          [updated_timespent, updated_flows, date]
+        );
+      }
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
+
   return (
     <div className="flex justify-between m-7">
       <div className="flex items-center gap-3">
@@ -101,6 +160,18 @@ const NavBar = ({expiryTimestamp}) => {
         <h3 className="text-2xl font-semibold tracking-tight">Reflect</h3>
       </div>
       <div className="flex gap-3">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <Badge className="p-3" variant="">
+                {remainingTime.hours}Hr {remainingTime.minutes}Min
+              </Badge>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">
+              <p>Time left today</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <div className="flex items-center border-gray-100 border-2 rounded-3xl bg-gray-100">
           <TooltipProvider>
             <Tooltip>
@@ -118,15 +189,15 @@ const NavBar = ({expiryTimestamp}) => {
                 </Badge>
               </TooltipTrigger>
               <TooltipContent side="bottom">
-                <p>1 Flows Today</p>
+                <p>{flows} Flows Today</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <div className="">
+          <div className="flex gap-3 items-center px-3">
             {isRunning ? (
               <Button
                 className="hover:rounded-full"
-                size="icon"
+                size={1}
                 variant="ghost"
                 onClick={pause}
               >
@@ -135,7 +206,7 @@ const NavBar = ({expiryTimestamp}) => {
             ) : (
               <Button
                 className="hover:rounded-full"
-                size="icon"
+                size={1}
                 variant="ghost"
                 onClick={resume}
               >
@@ -144,7 +215,7 @@ const NavBar = ({expiryTimestamp}) => {
             )}
             <Button
               className="hover:rounded-full"
-              size="icon"
+              size={1}
               variant="ghost"
               onClick={() => {
                 const time = new Date();
@@ -156,18 +227,7 @@ const NavBar = ({expiryTimestamp}) => {
             </Button>
           </div>
         </div>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Badge className="p-3" variant="">
-                {remainingTime.hours}Hr {remainingTime.minutes}Min
-              </Badge>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">
-              <p>Time left today</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+
         <Badge variant="secondary">{day + " " + monthName + " " + year}</Badge>
       </div>
     </div>

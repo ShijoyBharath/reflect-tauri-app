@@ -21,13 +21,13 @@ export default function RootLayout({ children }) {
     try {
       const db = await Database.load("sqlite:data.db");
       const result = await db.execute(
-        "CREATE TABLE IF NOT EXISTS appconfig (id INTEGER PRIMARY KEY, start_date TEXT NOT NULL, theme TEXT NOT NULL)"
+        "CREATE TABLE IF NOT EXISTS appconfig (id INTEGER PRIMARY KEY, start_date TEXT NOT NULL, theme TEXT NOT NULL, timer_in_sec INTEGER NOT NULL)"
       );
       const select = await db.select("SELECT COUNT(*) AS COUNT FROM appconfig");
       if (select[0].COUNT == 0) {
         const insert = await db.execute(
-          "INSERT OR REPLACE INTO appconfig (id, start_date, theme) VALUES (1, ?, ?)",
-          [today, "light"]
+          "INSERT OR REPLACE INTO appconfig (id, start_date, theme) VALUES (1, ?, ?, ?)",
+          [today, "light", 2700]
         );
       }
     } catch (error) {
@@ -47,7 +47,7 @@ export default function RootLayout({ children }) {
 
 
   const expiryTimestamp = new Date();
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 600); // 10 minutes timer
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 10); // 10 minutes timer
 
 
   return (
