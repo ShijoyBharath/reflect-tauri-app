@@ -14,8 +14,6 @@ import Database from "tauri-plugin-sql-api";
 
 const MarkAsCompleteDialog = ({ calendarId }) => {
   const [value, setValue] = useState(10);
-  const today = formatDate(new Date());
-  const toast_message = getFormattedDate();
 
   useEffect(() => {
     init_table();
@@ -57,9 +55,10 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
   async function insert_data(calendarId, value, date) {
     try {
       const db = await Database.load("sqlite:data.db");
-      const select = await db.select("SELECT * FROM habitsdata WHERE uuid=?", [
-        calendarId,
-      ]);
+      const select = await db.select(
+        "SELECT * FROM habitsdata WHERE uuid=? AND date=?",
+        [[calendarId, date]]
+      );
       if (select.length === 0) {
         const insert = await db.execute(
           "INSERT INTO habitsdata (uuid, value, date) VALUES (?, ?, ?)",
@@ -67,8 +66,8 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
         );
       } else {
         const update = await db.execute(
-          "UPDATE habitsdata SET value=? WHERE uuid=?",
-          [value, calendarId]
+          "UPDATE habitsdata SET value=? WHERE uuid=? AND date=?",
+          [value, calendarId, date]
         );
       }
     } catch (error) {
@@ -104,13 +103,13 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
           type="submit"
           onClick={() => [
             toast("Saved your progress!", {
-              description: toast_message,
-              action: {
-                label: "Undo",
-                onClick: () => console.log("undo"),
-              },
+              description: getFormattedDate(),
+              // action: {
+              //   label: "Undo",
+              //   onClick: () => console.log("undo"),
+              // },
             }),
-            insert_data(calendarId, value, today),
+            insert_data(calendarId, value, formatDate(new Date())),
           ]}
         >
           Save Progress

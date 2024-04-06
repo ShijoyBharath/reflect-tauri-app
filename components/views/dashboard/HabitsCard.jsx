@@ -13,69 +13,182 @@ import { Link, Sparkles, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MarkAsCompleteDialog from "./MarkAsCompleteDialog";
 import LegendLite from "cal-heatmap/plugins/LegendLite";
+import Legend from "cal-heatmap/plugins/Legend";
+import Tooltip from "cal-heatmap/plugins/Tooltip";
 import CalendarLabel from "cal-heatmap/plugins/CalendarLabel";
 import SlideUpCard from "./SlideUpCard";
 import dayjs from "dayjs";
-import * as localeData from 'dayjs/plugin/localeData';
+import * as localeData from "dayjs/plugin/localeData";
+import Database from "tauri-plugin-sql-api";
 
-
-dayjs.extend(localeData)
+dayjs.extend(localeData);
 
 const HabitsCard = ({ habit, description, calendarId }) => {
+  const [caldata, setCaldata] = useState([]);
+  var cal = new CalHeatmap();
+  const [start_date, setStart_date] = useState(formatDate(new Date()));
 
   useEffect(() => {
-    const cal = new CalHeatmap();
+    get_data().then(
+      (data) =>
+        cal.paint(
+          {
+            data: {
+              source: data,
+              type: "json",
+              x: "date",
+              y: "value",
+              groupY: "max",
+            },
+            date: { start: start_date },
+            range: 6,
+            scale: {
+              color: {
+                type: "threshold",
+                range: ["#14432a", "#166b34", "#37a446", "#4dd05a"],
+                domain: [10, 20, 30],
+              },
+            },
+            domain: {
+              type: "month",
+              gutter: 4,
+              label: { text: "MMM", textAlign: "start", position: "top" },
+            },
+            subDomain: {
+              type: "ghDay",
+              radius: 2,
+              width: 11,
+              height: 11,
+              gutter: 4,
+            },
+            itemSelector: "#" + "calendar-" + calendarId,
+          },
+          [
+            [
+              Tooltip,
+              {
+                text: function (date, value, dayjsDate) {
+                  return (
+                    (value ? value : "0") +
+                    "/10 on " +
+                    dayjsDate.format("dddd, MMMM D, YYYY")
+                  );
+                },
+              },
+            ],
+            [
+              LegendLite,
+              {
+                includeBlank: true,
+                itemSelector: "#ex-ghDay-legend",
+                radius: 2,
+                width: 11,
+                height: 11,
+                gutter: 4,
+              },
+            ],
+            [
+              CalendarLabel,
+              {
+                width: 30,
+                textAlign: "start",
+                text: () =>
+                  dayjs.weekdaysShort().map((d, i) => (i % 2 == 0 ? "" : d)),
+                padding: [25, 0, 0, 0],
+              },
+            ],
+          ]
+        )
 
-    cal.paint(
-      {
-        date: { start: new Date("2012-01-01") },
-        range: 5,
-        scale: {
-          color: {
-            type: "threshold",
-            range: ["#14432a", "#166b34", "#37a446", "#4dd05a"],
-            domain: [10, 20, 30],
-          },
-        },
-        domain: {
-          type: "month",
-          gutter: 4,
-          label: { text: "MMM", textAlign: "start", position: "top" },
-        },
-        subDomain: {
-          type: "ghDay",
-          radius: 2,
-          width: 11,
-          height: 11,
-          gutter: 4,
-        },
-        itemSelector: "#" + "calendar-" + calendarId,
-      },
-      [
-        [
-          LegendLite,
-          {
-            includeBlank: true,
-            itemSelector: "#ex-ghDay-legend",
-            radius: 2,
-            width: 11,
-            height: 11,
-            gutter: 4,
-          },
-        ],
-        [
-          CalendarLabel,
-          {
-            width: 30,
-            textAlign: "start",
-            text: () => dayjs().localeData().weekdaysMin(),
-            padding: [25, 0, 0, 0],
-          },
-        ],
-      ]
+      //   cal.paint(
+      //     {
+      //       data: {
+      //         source: data,
+      //         type: "json",
+      //         x: "date",
+      //         y: "value",
+      //         // groupY: 'max',
+      //       },
+      //       date: { start: new Date(start_date) },
+      //       range: 8,
+      //       scale: {
+      //         color: {
+      //           type: "quantize",
+      //           scheme: "Oranges",
+      //           domain: [0, 1, 2, 3, 4, 5, 6, 7],
+      //         },
+      //       },
+      //       domain: {
+      //         type: "month",
+      //       },
+      //       subDomain: { type: "day", radius: 2 },
+      //       itemSelector: "#" + "calendar-" + calendarId,
+      //     },
+      //     [
+      //       [
+      //         Tooltip,
+      //         {
+      //           text: function (date, value, dayjsDate) {
+      //             return (
+      //               (value ? value + "/10" : "0/10") +
+      //               " on " +
+      //               dayjsDate.format("LL")
+      //             );
+      //           },
+      //         },
+      //       ],
+      //       [
+      //         Legend,
+      //         {
+      //           tickSize: 0,
+      //           width: 100,
+      //           itemSelector: "#ex-wind-legend",
+      //           label: "Seattle wind (km/h)",
+      //         },
+      //       ],
+      //     ]
+      //   )
     );
-  }, [calendarId]);
+  }, []);
 
+  const getCurrent12Weeks = (startDate) => {
+    const today = new Date();
+    for (var d = new Date(startDate); d <= today; d.setDate(d.getDate() + 84)) {
+      var temp_date = new Date(d);
+      var week_start = new Date(d);
+      var week_end = new Date(temp_date.setDate(temp_date.getDate() + 83));
+
+      if (today >= week_start && today <= week_end) {
+        return [formatDate(week_start), formatDate(week_end)];
+      }
+    }
+  };
+
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  async function get_data() {
+    try {
+      const db = await Database.load("sqlite:data.db");
+      const select = await db.select("SELECT * FROM habitsdata WHERE uuid=?", [
+        calendarId,
+      ]);
+
+      const start_date = await db.select("SELECT * FROM appconfig");
+
+      var weekdates = getCurrent12Weeks(start_date[0].start_date);
+      setStart_date(weekdates[0]);
+      setCaldata(select);
+
+      return select;
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
 
   return (
     <Card className="">
@@ -84,7 +197,9 @@ const HabitsCard = ({ habit, description, calendarId }) => {
           <SlideUpCard habit={habit} description={description} />
           <Dialog>
             <DialogTrigger asChild>
-              <Button><Check /></Button>
+              <Button>
+                <Check />
+              </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <MarkAsCompleteDialog calendarId={calendarId} />
@@ -93,7 +208,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
         </div>
       </CardHeader>
       <CardContent>
-        <div id={calendarId}></div>
+        <div id={"calendar-" + calendarId}></div>
       </CardContent>
       <CardFooter>
         <div className="flex gap-4">
