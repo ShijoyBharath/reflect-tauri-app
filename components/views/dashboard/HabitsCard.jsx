@@ -24,9 +24,7 @@ import Database from "tauri-plugin-sql-api";
 dayjs.extend(localeData);
 
 const HabitsCard = ({ habit, description, calendarId }) => {
-  const [caldata, setCaldata] = useState([]);
   var cal = new CalHeatmap();
-  const [start_date, setStart_date] = useState(formatDate(new Date()));
 
   useEffect(() => {
     get_data().then(
@@ -34,13 +32,13 @@ const HabitsCard = ({ habit, description, calendarId }) => {
         cal.paint(
           {
             data: {
-              source: data,
+              source: data[0],
               type: "json",
               x: "date",
               y: "value",
               groupY: "max",
             },
-            date: { start: start_date },
+            date: { start: data[1] },
             range: 6,
             scale: {
               color: {
@@ -181,10 +179,8 @@ const HabitsCard = ({ habit, description, calendarId }) => {
       const start_date = await db.select("SELECT * FROM appconfig");
 
       var weekdates = getCurrent12Weeks(start_date[0].start_date);
-      setStart_date(weekdates[0]);
-      setCaldata(select);
 
-      return select;
+      return [select, weekdates[0]];
     } catch (error) {
       console.log("error : ", error);
     }
