@@ -65,7 +65,7 @@
     --ring: 216 12.2% 83.9%;
   }
 
-  .violetdark {
+  .violet {
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
     --card: 224 71.4% 4.1%;
@@ -87,7 +87,7 @@
     --ring: 263.4 70% 50.4%;
   }
 
-  .violetlight {
+  .dark .violet {
     --background: 0 0% 100%;
     --foreground: 224 71.4% 4.1%;
     --card: 0 0% 100%;
@@ -110,7 +110,7 @@
     --radius: 0.5rem;
   }
 
-  .redlight {
+  .red {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -133,7 +133,7 @@
     --radius: 0.5rem;
   }
 
-  .reddark {
+  .dark .red {
     --background: 20 14.3% 4.1%;
     --foreground: 0 0% 95%;
     --card: 24 9.8% 10%;
@@ -155,7 +155,7 @@
     --ring: 346.8 77.2% 49.8%;
   }
 
-  .bluelight {
+  .blue {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -178,7 +178,7 @@
     --radius: 0.5rem;
   }
 
-  .bluedark {
+  .dark .blue {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
@@ -200,7 +200,7 @@
     --ring: 224.3 76.3% 48%;
   }
 
-  .cobaltlight {
+  .cobalt {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -223,7 +223,7 @@
     --radius: 0.5rem;
   }
 
-  .cobaltdark {
+  .dark .cobalt {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
@@ -245,7 +245,7 @@
     --ring: 212.7 26.8% 83.9;
   }
 
-  .yellowlight {
+  .yellow {
     --background: 0 0% 100%;
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
@@ -268,7 +268,7 @@
     --radius: 0.5rem;
   }
 
-  .yellowdark {
+  .dark .yellow {
     --background: 20 14.3% 4.1%;
     --foreground: 60 9.1% 97.8%;
     --card: 20 14.3% 4.1%;

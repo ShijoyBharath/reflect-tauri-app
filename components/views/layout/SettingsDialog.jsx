@@ -9,25 +9,9 @@ const SettingsDialog = () => {
     <div className="flex flex-col py-4">
       <h2>Settings</h2>
       <div className="flex flex-col justitfy-around gap-4">
-        <div className="flex justify-between gap-4 p-3">
+        <div className="flex items-center justify-between gap-4 p-3">
           <h3>Dark Mode</h3>
           <ThemeSwitch/>
-        </div>
-        <div className="flex justify-between gap-4 p-3">
-          <h3>Dark Mode</h3>
-          <Switch />
-        </div>
-        <div className="flex justify-between gap-4 p-3">
-          <h3>Dark Mode</h3>
-          <Switch />
-        </div>
-        <div className="flex justify-between gap-4 p-3">
-          <h3>Dark Mode</h3>
-          <Switch />
-        </div>
-        <div className="flex justify-between gap-4 p-3">
-          <h3>Dark Mode</h3>
-          <Switch />
         </div>
       </div>
     </div>
