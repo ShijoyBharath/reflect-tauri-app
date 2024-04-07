@@ -6,6 +6,13 @@ import { Button } from "@/components/ui/button";
 import { formatDate, getCurrentWeek, getCurrent12Weeks } from "@/utils/utils";
 
 import Database from "tauri-plugin-sql-api";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const DailyGoals = () => {
   const [dailygoals, setDailyGoals] = useState({});
@@ -127,16 +134,20 @@ const DailyGoals = () => {
   }
 
   return (
-    <div>
-      <div className="flex flex-col gap-5 m-4 w-[500px] bg-background p-5 rounded-lg">
-        <div className="flex justify-between gap-3">
-          <h2>Daily Goals for Week 1</h2>
+    <Card className="border-0 m-4 h-fit">
+      <CardHeader>
+        <CardTitle className="flex justify-between gap-5">
+          <div className="flex flex-col">
+            Daily Goals
+            <CardDescription className="font-medium">
+              These are your most impactful things that you need to get done.
+            </CardDescription>
+          </div>
           <Button onClick={() => saveDailygoals()}>Save</Button>
-        </div>
-        <div>
-          <h6>These are your most impactful things you need to get done.</h6>
-        </div>
-        <div className="flex flex-col gap-4 p-4 pt-8">
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pb-4">
+        <div className="flex flex-col gap-4 pb-6">
           {Object.keys(days).map((day) => (
             <div
               key={day}
@@ -163,8 +174,8 @@ const DailyGoals = () => {
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

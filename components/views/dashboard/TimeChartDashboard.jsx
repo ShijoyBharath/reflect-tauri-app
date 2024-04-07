@@ -29,8 +29,8 @@ const TimeChartDashboard = () => {
       var ser = data.map((item) => item.value);
       var chart_data = data.map((item) => {
         return {
-          uv: item.value,
-          pv: item.value * 4,
+          value: item.value,
+          randomval: item.value * 4,
           amount: item.value,
         };
       });
@@ -97,8 +97,7 @@ const TimeChartDashboard = () => {
                               Average
                             </span>
                             <span className="font-bold text-muted-foreground">
-                              {/* {payload[0].value} */}
-                              43
+                              {payload[0].value}
                             </span>
                           </div>
                           <div className="flex flex-col">
@@ -106,8 +105,7 @@ const TimeChartDashboard = () => {
                               Today
                             </span>
                             <span className="font-bold">
-                              {/* {payload[1].value} */}
-                              52
+                              {payload[1].value}
                             </span>
                           </div>
                         </div>
@@ -120,7 +118,7 @@ const TimeChartDashboard = () => {
               />
               <Line
                 type="monotone"
-                dataKey="uv"
+                dataKey="value"
                 strokeWidth={2}
                 activeDot={{
                   r: 8,
@@ -138,7 +136,7 @@ const TimeChartDashboard = () => {
               <Line
                 type="monotone"
                 strokeWidth={2}
-                dataKey="pv"
+                dataKey="randomval"
                 activeDot={{
                   r: 6,
                   style: { fill: "var(--theme-primary)", opacity: 0.25 },

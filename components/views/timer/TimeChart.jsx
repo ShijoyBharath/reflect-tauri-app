@@ -79,8 +79,7 @@ const TimeChart = () => {
                               Average
                             </span>
                             <span className="font-bold text-muted-foreground">
-                              {/* {payload[0].value} */}
-                              43
+                              {(payload[0].value/360).toFixed(1)}
                             </span>
                           </div>
                           <div className="flex flex-col">
@@ -88,8 +87,7 @@ const TimeChart = () => {
                               Today
                             </span>
                             <span className="font-bold">
-                              {/* {payload[1].value} */}
-                              52
+                              {payload[0].value}
                             </span>
                           </div>
                         </div>
