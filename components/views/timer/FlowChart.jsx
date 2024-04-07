@@ -2,80 +2,30 @@
 import React, { Component, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Database from "tauri-plugin-sql-api";
-
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const FlowChart = () => {
-  const [series, setSeries] = useState([]);
-  const [options, setOptions] = useState({
-    chart: {
-      id: "area-chart",
-      toolbar: {
-        show: false,
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    xaxis: {
-      categories: ["0"],
-      axisTicks: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-    },
-    stroke: {
-      curve: "smooth",
-    },
-    fill: {
-      type: "gradient",
-    },
-    grid: {
-      show: false,
-    },
-  });
+  const [chartdata, setChartdata] = useState([]);
 
   useEffect(() => {
     get_data().then((data) => {
-      var ser = data.map((item) => item.value);
-      var cat = data.map((item) => item.date);
-      setSeries([
-        {
-          name: "Flows",
-          data: ser,
-        },
-      ]);
-      setOptions({
-        chart: {
-          id: "area-chart",
-          toolbar: {
-            show: false,
-          },
-        },
-        dataLabels: {
-          enabled: false,
-        },
-        xaxis: {
-          categories: cat,
-          axisTicks: {
-            show: false,
-          },
-          axisBorder: {
-            show: false,
-          },
-        },
-        stroke: {
-          curve: "smooth",
-        },
-        fill: {
-          type: "solid",
-        },
-        grid: {
-          show: false,
-        },
+      var chart_data = data.map((item) => {
+        return {
+          uv: item.value,
+          amt: item.date,
+        };
       });
+      setChartdata(chart_data);
     });
   }, []);
 
@@ -91,12 +41,10 @@ const FlowChart = () => {
   }
 
   return (
-    <div className="app m-4">
-      <div className="row">
-        <div className="mixed-chart">
-          <Chart options={options} series={series} type="bar" width="500" />
-        </div>
-      </div>
+    <div className="m-4">
+      <BarChart width={150} height={40} data={chartdata}>
+        <Bar dataKey="uv" fill="#8884d8" />
+      </BarChart>
     </div>
   );
 };
