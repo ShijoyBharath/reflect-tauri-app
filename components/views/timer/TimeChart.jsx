@@ -2,6 +2,7 @@
 import React, { Component, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Database from "tauri-plugin-sql-api";
+import { formatTime } from "@/utils/utils";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
@@ -43,7 +44,7 @@ const TimeChart = () => {
       var cat = data.map((item) => item.date);
       setSeries([
         {
-          name: "Overall Score",
+          name: "Time Spent",
           data: ser,
         },
       ]);

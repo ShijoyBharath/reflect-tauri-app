@@ -43,7 +43,7 @@ const FlowChart = () => {
       var cat = data.map((item) => item.date);
       setSeries([
         {
-          name: "Overall Score",
+          name: "Flows",
           data: ser,
         },
       ]);

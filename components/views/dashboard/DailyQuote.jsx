@@ -1,17 +1,18 @@
 "use client";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Quote } from "lucide-react";
-import quotes from './quotes.json';
+import quotes from "./quotes.json";
 
 const DailyQuote = () => {
-
-  const [quote, setQuote] = useState({quote : "", author: ""});
+  const [quote, setQuote] = useState({ quote: "", author: "" });
 
   useEffect(() => {
     // Select a random quote when the component mounts
     const today = new Date();
     // Calculate a unique index based on the current date
-    const index = Math.abs(today.getDate() * today.getMonth() * today.getFullYear()) % quotes.length;
+    const index =
+      Math.abs(today.getDate() * today.getMonth() * today.getFullYear()) %
+      quotes.length;
     // const randomIndex = Math.floor(Math.random() * quotes.length);
     const randomQuote = quotes[index];
     setQuote(randomQuote);

@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { PartyPopper } from "lucide-react";
 import Database from "tauri-plugin-sql-api";
+import { formatDate, getFormattedDate } from "@/utils/utils";
 
 const MarkAsCompleteDialog = ({ calendarId }) => {
   const [value, setValue] = useState(10);
@@ -18,28 +19,6 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
   useEffect(() => {
     init_table();
   }, []);
-
-  function formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
-
-  function getFormattedDate() {
-    const options = {
-      weekday: "long",
-      month: "long",
-      day: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    };
-
-    const today = new Date();
-    return today.toLocaleString("en-US", options);
-  }
 
   async function init_table() {
     try {

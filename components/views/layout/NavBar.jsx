@@ -12,6 +12,7 @@ import { useTimer } from "react-timer-hook";
 import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import Database from "tauri-plugin-sql-api";
+import { formatDate } from "@/utils/utils";
 
 const NavBar = ({ expiryTimestamp }) => {
   const [remainingTime, setRemainingTime] = useState(getRemainingTime());
@@ -100,13 +101,6 @@ const NavBar = ({ expiryTimestamp }) => {
   useEffect(() => {
     get_data(formatDate(new Date()));
   }, []);
-
-  function formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
 
   async function get_data(date) {
     try {

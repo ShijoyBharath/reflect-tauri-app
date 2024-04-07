@@ -8,18 +8,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import Database from "tauri-plugin-sql-api";
+import { formatDate } from "@/utils/utils";
 
 const CreateHabitDialog = () => {
   const [habit, setHabit] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
 
-  useEffect(()=>{
+  useEffect(() => {
     init_table();
-  }, [])
-
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -29,21 +29,14 @@ const CreateHabitDialog = () => {
       return;
     }
     const uuid = uuidv4();
-    const today = formatDate(new Date())
-    insert_data(uuid, habit, description, today)
+    const today = formatDate(new Date());
+    insert_data(uuid, habit, description, today);
     // Clear the form fields
     setHabit("");
     setDescription("");
     setError("");
-    console.log("saved habit")
+    console.log("saved habit");
   };
-
-  function formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
 
   async function init_table() {
     try {

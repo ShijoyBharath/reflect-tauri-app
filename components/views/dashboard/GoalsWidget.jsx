@@ -1,40 +1,22 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Database from "tauri-plugin-sql-api";
+import { formatDate, getCurrent12Weeks } from "@/utils/utils";
 
 const GoalsWidget = () => {
-
-  function formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  }
-
-  const getCurrent12Weeks = (startDate) => {
-    const today = new Date();
-    for (var d = new Date(startDate); d <= today; d.setDate(d.getDate() + 84)) {
-      var temp_date = new Date(d);
-      var week_start = new Date(d);
-      var week_end = new Date(temp_date.setDate(temp_date.getDate() + 83));
-
-      if (today >= week_start && today <= week_end) {
-        return [formatDate(week_start), formatDate(week_end)];
-      }
-    }
-  };
-
   function calculateDaysLeft(startDateStr, endDateStr) {
     // Convert the string dates to Date objects
     const startDate = new Date(startDateStr);
     const endDate = new Date(endDateStr);
-  
+
     // Calculate the difference in milliseconds between the end date and the start date
     const differenceInMilliseconds = endDate - startDate;
-  
+
     // Convert the difference to days
-    const daysLeft = Math.ceil(differenceInMilliseconds / (1000 * 60 * 60 * 24));
-  
+    const daysLeft = Math.ceil(
+      differenceInMilliseconds / (1000 * 60 * 60 * 24)
+    );
+
     return daysLeft;
   }
 
@@ -53,8 +35,8 @@ const GoalsWidget = () => {
       );
 
       const start_date = await db.select("SELECT * FROM appconfig");
-      var current12week = getCurrent12Weeks(start_date[0].start_date)
-      var daysleft = calculateDaysLeft(today,current12week[1])
+      var current12week = getCurrent12Weeks(start_date[0].start_date);
+      var daysleft = calculateDaysLeft(today, current12week[1]);
 
       return [select_daily[0].goal, select_weekly[0].goal, daysleft];
     } catch (error) {
