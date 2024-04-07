@@ -119,7 +119,7 @@ const WeeklyGoals = () => {
 
   return (
     <div>
-      <div className="flex flex-col gap-5 w-[500px] bg-slate-100 p-5 rounded-lg">
+      <div className="flex flex-col gap-5 m-4 w-[500px] bg-slate-100 p-5 rounded-lg">
         <div className="flex justify-between gap-3">
           <h2>Weekly Goals</h2>
           <Button onClick={() => saveWeeklygoals()}>Save</Button>

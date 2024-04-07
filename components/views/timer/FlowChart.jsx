@@ -91,7 +91,7 @@ const FlowChart = () => {
   }
 
   return (
-    <div className="app">
+    <div className="app m-4">
       <div className="row">
         <div className="mixed-chart">
           <Chart options={options} series={series} type="bar" width="500" />

@@ -128,7 +128,7 @@ const DailyGoals = () => {
 
   return (
     <div>
-      <div className="flex flex-col gap-5 w-[500px] bg-slate-100 p-5 rounded-lg">
+      <div className="flex flex-col gap-5 m-4 w-[500px] bg-slate-100 p-5 rounded-lg">
         <div className="flex justify-between gap-3">
           <h2>Daily Goals for Week 1</h2>
           <Button onClick={() => saveDailygoals()}>Save</Button>
@@ -140,8 +140,8 @@ const DailyGoals = () => {
           {Object.keys(days).map((day) => (
             <div
               key={day}
-              className={`p-2 rounded-lg ${
-                days[day][0] == today ? "bg-cyan-500" : ""
+              className={`p-2 ${
+                days[day][0] == today ? "border-l-4 border-cyan-400" : ""
               }`}
             >
               <div

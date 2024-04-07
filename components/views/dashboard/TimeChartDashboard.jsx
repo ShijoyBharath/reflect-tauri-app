@@ -96,7 +96,7 @@ const TimeChartDashboard = () => {
   }
 
   return (
-    <div className="app flex gap-4 items-center  m-4 p-9 rounded-lg bg-white">
+    <div className="app flex gap-4 justify-center items-center  m-4 p-9 rounded-lg bg-white">
       <div className="row">
         <div className="mixed-chart">
           <Chart options={options} series={series} type="area" width="500" />

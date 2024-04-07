@@ -28,18 +28,18 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex flex-col m-3 p-5 gap-3 justify-between bg-slate-200 rounded-lg">
-      <div className="flex items-center">
+    <div className="flex flex-col gap-3 mr-3 justify-between bg-slate-200 rounded-lg">
+      <div className="flex flex-col lg:flex-row gap-3">
         <div className="flex flex-col">
           <DailyQuote />
           <GoalsWidget />
         </div>
-        <div className="grow">
+        <div className="">
           <TimeChartDashboard/>
         </div>
       </div>
       {/* <ScrollArea className="whitespace-nowrap rounded-md border"> */}
-      <div className="flex flex-wrap gap-3 m-3">
+      <div className="flex flex-wrap justify-evenly gap-3 m-3">
         {habits.map((item) => {
           return (
             <HabitsCard

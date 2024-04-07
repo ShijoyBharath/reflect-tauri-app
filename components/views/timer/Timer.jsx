@@ -13,7 +13,6 @@ const Timer = () => {
 
   const [timespenttoday, setTimespenttoday] = useState(0);
 
-
   async function init_table(date) {
     try {
       const db = await Database.load("sqlite:data.db");
@@ -34,19 +33,19 @@ const Timer = () => {
   }
 
   return (
-    <div className="flex flex-col m-3 p-5 gap-3 justify-start items-start bg-slate-200 rounded-lg">
+    <div className="flex flex-col gap-3 mr-3 justify-between bg-slate-200 rounded-lg">
+      <div className="flex flex-col gap-3">
       <TimeSpentToday time={timespenttoday} />
-      <div className="flex gap-4">
-        <div className="flex flex-col"></div>
-        <div className="flex gap-4">
-          <div className="bg-white rounded-lg p-5">
-            <TimeChart />
-          </div>
-          <div className="bg-white rounded-lg p-5">
-            <FlowChart />
-          </div>
+      <div className="flex flex-wrap gap-4 m-4">
+        <div className="bg-white rounded-lg p-5">
+          <TimeChart />
+        </div>
+        <div className="bg-white rounded-lg p-5">
+          <FlowChart />
         </div>
       </div>
+      </div>
+      
     </div>
   );
 };

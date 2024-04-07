@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Database from "tauri-plugin-sql-api";
 import { formatDate, getCurrent12Weeks } from "@/utils/utils";
+import { Badge } from "@/components/ui/badge";
 
 const GoalsWidget = () => {
   function calculateDaysLeft(startDateStr, endDateStr) {
@@ -49,15 +50,15 @@ const GoalsWidget = () => {
 
   return (
     <div className="flex flex-col gap-4 m-4 p-9 justify-between bg-white rounded-lg">
-      <div>
-        <div className="flex gap-4 justify-between">
-          <p className="font-medium">Today</p>
-          <p>{data[0]}</p>
-        </div>
-        <div className="flex gap-4 justify-between">
-          <p className="font-medium">This week</p>
-          <p>{data[1]}</p>
-        </div>
+      <div className="flex flex-col gap-3">
+        <Badge className="flex gap-3 p-3 justify-between" variant="">
+          <p className="font-extrabold text-nowrap">Today</p>
+          <p className="text-nowrap">{data[0]}</p>
+        </Badge>
+        <Badge className="flex gap-3 p-3 justify-between" variant="secondary">
+          <p className="font-extrabold text-nowrap">This Week</p>
+          <p className="text-nowrap">{data[1]}</p>
+        </Badge>
       </div>
 
       <div className="flex items-end">

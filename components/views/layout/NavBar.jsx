@@ -148,7 +148,7 @@ const NavBar = ({ expiryTimestamp }) => {
   }
 
   return (
-    <div className="flex justify-between m-7">
+    <div className="flex justify-between m-5">
       <div className="flex items-center gap-3">
         <Circle />
         <h3 className="text-2xl font-semibold tracking-tight">Reflect</h3>

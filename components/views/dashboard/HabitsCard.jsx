@@ -28,76 +28,75 @@ const HabitsCard = ({ habit, description, calendarId }) => {
   var cal = new CalHeatmap();
 
   useEffect(() => {
-    get_data().then(
-      (data) =>
-        cal.paint(
-          {
-            data: {
-              source: data[0],
-              type: "json",
-              x: "date",
-              y: "value",
-              groupY: "max",
+    get_data().then((data) => {
+      cal.paint(
+        {
+          data: {
+            source: data[0],
+            type: "json",
+            x: "date",
+            y: "value",
+            groupY: "max",
+          },
+          date: { start: data[1] },
+          range: 6,
+          scale: {
+            color: {
+              type: "threshold",
+              range: ["#14432a", "#166b34", "#37a446", "#4dd05a"],
+              domain: [10, 20, 30],
             },
-            date: { start: data[1] },
-            range: 6,
-            scale: {
-              color: {
-                type: "threshold",
-                range: ["#14432a", "#166b34", "#37a446", "#4dd05a"],
-                domain: [10, 20, 30],
+          },
+          domain: {
+            type: "month",
+            gutter: 4,
+            label: { text: "MMM", textAlign: "start", position: "top" },
+          },
+          subDomain: {
+            type: "ghDay",
+            radius: 2,
+            width: 11,
+            height: 11,
+            gutter: 4,
+          },
+          itemSelector: "#" + "calendar-" + calendarId,
+        },
+        [
+          [
+            Tooltip,
+            {
+              text: function (date, value, dayjsDate) {
+                return (
+                  (value ? value : "0") +
+                  "/10 on " +
+                  dayjsDate.format("dddd, MMMM D, YYYY")
+                );
               },
             },
-            domain: {
-              type: "month",
-              gutter: 4,
-              label: { text: "MMM", textAlign: "start", position: "top" },
-            },
-            subDomain: {
-              type: "ghDay",
+          ],
+          [
+            LegendLite,
+            {
+              includeBlank: true,
+              itemSelector: "#ex-ghDay-legend",
               radius: 2,
               width: 11,
               height: 11,
               gutter: 4,
             },
-            itemSelector: "#" + "calendar-" + calendarId,
-          },
+          ],
           [
-            [
-              Tooltip,
-              {
-                text: function (date, value, dayjsDate) {
-                  return (
-                    (value ? value : "0") +
-                    "/10 on " +
-                    dayjsDate.format("dddd, MMMM D, YYYY")
-                  );
-                },
-              },
-            ],
-            [
-              LegendLite,
-              {
-                includeBlank: true,
-                itemSelector: "#ex-ghDay-legend",
-                radius: 2,
-                width: 11,
-                height: 11,
-                gutter: 4,
-              },
-            ],
-            [
-              CalendarLabel,
-              {
-                width: 30,
-                textAlign: "start",
-                text: () =>
-                  dayjs.weekdaysShort().map((d, i) => (i % 2 == 0 ? "" : d)),
-                padding: [25, 0, 0, 0],
-              },
-            ],
-          ]
-        )
+            CalendarLabel,
+            {
+              width: 30,
+              textAlign: "start",
+              text: () =>
+                dayjs.weekdaysShort().map((d, i) => (i % 2 == 0 ? "" : d)),
+              padding: [25, 0, 0, 0],
+            },
+          ],
+        ]
+      );
 
       //   cal.paint(
       //     {
@@ -147,7 +146,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
       //       ],
       //     ]
       //   )
-    );
+    });
   }, []);
 
   async function get_data() {

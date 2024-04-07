@@ -4,7 +4,7 @@ import WeeklyGoals from './WeeklyGoals'
 
 const Goals = () => {
   return (
-    <div className="flex m-3 p-5 gap-3 justify-start items-start bg-slate-200 rounded-lg">
+    <div className="flex flex-wrap mr-3 bg-slate-200 rounded-lg">
         <DailyGoals/>
         <WeeklyGoals/>
     </div>

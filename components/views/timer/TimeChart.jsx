@@ -94,7 +94,7 @@ const TimeChart = () => {
   }
 
   return (
-    <div className="app">
+    <div className="app m-4">
       <div className="row">
         <div className="mixed-chart">
           <Chart options={options} series={series} type="area" width="500" />
