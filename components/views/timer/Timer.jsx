@@ -1,7 +1,5 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import Flows from "./Flows";
-import CountdownTimer from "./CountdownTimer";
 import TimeSpentToday from "./TimeSpentToday";
 import TimeChart from "./TimeChart";
 import FlowChart from "./FlowChart";
@@ -31,7 +29,11 @@ const Timer = () => {
       const select = await db.select("SELECT * FROM timer WHERE date=?", [
         date,
       ]);
-      setTimespenttoday(select[0].timespent_in_sec)
+      if (select.length === 0) {
+        setTimespenttoday(0)
+      } else {
+        setTimespenttoday(select[0].timespent_in_sec)
+      }
     } catch (error) {
       console.log("error : ", error);
     }
@@ -42,8 +44,6 @@ const Timer = () => {
       <TimeSpentToday time={timespenttoday}/>
       <div className="flex gap-4">
         <div className="flex flex-col">
-          {/* <CountdownTimer expiryTimestamp={time}/> */}
-          {/* <Flows /> */}
         </div>
         <div className="flex gap-4">
           <div className="bg-white rounded-lg p-5">

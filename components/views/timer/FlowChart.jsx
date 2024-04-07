@@ -1,13 +1,13 @@
 "use client";
-import React, { Component } from "react";
-// import Chart from "react-apexcharts";
-import dynamic from 'next/dynamic'
-
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import React, { Component, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import Database from "tauri-plugin-sql-api";
 
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+
 const FlowChart = () => {
-  const options = {
+  const [series, setSeries] = useState([]);
+  const [options, setOptions] = useState({
     chart: {
       id: "area-chart",
       toolbar: {
@@ -18,7 +18,7 @@ const FlowChart = () => {
       enabled: false,
     },
     xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+      categories: ["0"],
       axisTicks: {
         show: false,
       },
@@ -30,28 +30,60 @@ const FlowChart = () => {
       curve: "smooth",
     },
     fill: {
-      type: "solid",
+      type: "gradient",
     },
     grid: {
       show: false,
     },
-  };
-  const series = [
-    {
-      name: "series-1",
-      data: [30, 40, 45, 50, 49, 60, 70, 91],
-    },
-  ];
+  });
 
+  useEffect(() => {
+    get_data().then((data) => {
+      var ser = data.map((item) => item.value);
+      var cat = data.map((item) => item.date);
+      setSeries([
+        {
+          name: "Overall Score",
+          data: ser,
+        },
+      ]);
+      setOptions({
+        chart: {
+          id: "area-chart",
+          toolbar: {
+            show: false,
+          },
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        xaxis: {
+          categories: cat,
+          axisTicks: {
+            show: false,
+          },
+          axisBorder: {
+            show: false,
+          },
+        },
+        stroke: {
+          curve: "smooth",
+        },
+        fill: {
+          type: "solid",
+        },
+        grid: {
+          show: false,
+        },
+      });
+    });
+  }, []);
 
-
-  async function get_data(start_date, end_date) {
+  async function get_data() {
     try {
       const db = await Database.load("sqlite:data.db");
-      const select = await db.select(
-        "SELECT * FROM timer WHERE DATE(date) BETWEEN DATE(?) AND DATE(?)",
-        [start_date, end_date]
-      );
+      const select = await db.select("SELECT date, flows AS value FROM timer");
+
       return select;
     } catch (error) {
       console.log("error : ", error);

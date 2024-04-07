@@ -1,12 +1,13 @@
 "use client";
-import React, { Component } from "react";
-// import Chart from "react-apexcharts";
-import dynamic from 'next/dynamic'
+import React, { Component, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import Database from "tauri-plugin-sql-api";
 
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const TimeChart = () => {
-  const options = {
+  const [series, setSeries] = useState([]);
+  const [options, setOptions] = useState({
     chart: {
       id: "area-chart",
       toolbar: {
@@ -17,7 +18,7 @@ const TimeChart = () => {
       enabled: false,
     },
     xaxis: {
-      categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+      categories: ["0"],
       axisTicks: {
         show: false,
       },
@@ -34,13 +35,62 @@ const TimeChart = () => {
     grid: {
       show: false,
     },
-  };
-  const series = [
-    {
-      name: "series-1",
-      data: [30, 40, 45, 50, 49, 60, 70, 91],
-    },
-  ];
+  });
+
+  useEffect(() => {
+    get_data().then((data) => {
+      var ser = data.map((item) => item.value);
+      var cat = data.map((item) => item.date);
+      setSeries([
+        {
+          name: "Overall Score",
+          data: ser,
+        },
+      ]);
+      setOptions({
+        chart: {
+          id: "area-chart",
+          toolbar: {
+            show: false,
+          },
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        xaxis: {
+          categories: cat,
+          axisTicks: {
+            show: false,
+          },
+          axisBorder: {
+            show: false,
+          },
+        },
+        stroke: {
+          curve: "smooth",
+        },
+        fill: {
+          type: "gradient",
+        },
+        grid: {
+          show: false,
+        },
+      });
+    });
+  }, []);
+
+  async function get_data() {
+    try {
+      const db = await Database.load("sqlite:data.db");
+      const select = await db.select(
+        "SELECT date, timespent_in_sec AS value FROM timer"
+      );
+
+      return select;
+    } catch (error) {
+      console.log("error : ", error);
+    }
+  }
 
   return (
     <div className="app">
