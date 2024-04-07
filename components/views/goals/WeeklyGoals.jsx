@@ -128,9 +128,9 @@ const WeeklyGoals = () => {
           {Object.keys(weeks).map((week) => (
             <div
               key={week}
-              className={`p-2 rounded-lg ${
+              className={`p-2 ${
                 curWeek[0] == weeks[week][0] && curWeek[1] == weeks[week][1]
-                  ? "bg-primary"
+                  ? "border-primary border-l-4"
                   : ""
               }`}
             >

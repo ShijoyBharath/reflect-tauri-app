@@ -36,13 +36,9 @@ const Timer = () => {
     <div className="flex flex-col gap-3 mr-3 justify-between bg-secondary rounded-lg">
       <div className="flex flex-col gap-3">
       <TimeSpentToday time={timespenttoday} />
-      <div className="flex flex-wrap gap-4 m-4">
-        <div className="bg-background rounded-lg p-5">
+      <div className="flex gap-4 m-4">
           <TimeChart />
-        </div>
-        <div className="bg-background rounded-lg p-5">
           <FlowChart />
-        </div>
       </div>
       </div>
       

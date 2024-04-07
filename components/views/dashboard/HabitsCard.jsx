@@ -167,7 +167,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
   }
 
   return (
-    <Card className="">
+    <Card className="border-0">
       <CardHeader>
         <div className="flex justify-between items-center gap-3">
           <SlideUpCard habit={habit} description={description} />
