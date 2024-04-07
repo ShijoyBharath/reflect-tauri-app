@@ -166,7 +166,7 @@ const NavBar = ({ expiryTimestamp }) => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        <div className="flex items-center border-gray-100 border-2 rounded-3xl bg-gray-100">
+        <div className="flex items-center border-secondary border-2 rounded-3xl bg-secondary">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>

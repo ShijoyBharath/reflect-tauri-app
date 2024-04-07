@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import Database from "tauri-plugin-sql-api";
 
 const inter = Inter({ subsets: ["latin"] });
+import { ThemeProvider } from "@/components/theme-provider";
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -16,7 +17,6 @@ const inter = Inter({ subsets: ["latin"] });
 // };
 
 export default function RootLayout({ children }) {
-
   async function insert(today) {
     try {
       const db = await Database.load("sqlite:data.db");
@@ -45,22 +45,27 @@ export default function RootLayout({ children }) {
     insert(today);
   }, []);
 
-
   const expiryTimestamp = new Date();
   expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 10); // 10 minutes timer
 
-
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col h-screen w-screen">
-        <NavBar expiryTimestamp={expiryTimestamp}/>
-        <div className="flex flex-1 overflow-hidden">
-          <SideBar />
-          <main className={inter.className + " grow overflow-y-auto"}>
-            {children}
-          </main>
-        </div>
-        <Toaster />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          disableTransitionOnChange
+          enableSystem
+        >
+          <NavBar expiryTimestamp={expiryTimestamp} />
+          <div className="flex flex-1 overflow-hidden">
+            <SideBar />
+            <main className={inter.className + " grow overflow-y-auto"}>
+              {children}
+            </main>
+          </div>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

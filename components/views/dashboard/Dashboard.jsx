@@ -28,7 +28,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex flex-col gap-3 mr-3 justify-between bg-slate-200 rounded-lg">
+    <div className="flex flex-col gap-3 mr-3 justify-between bg-secondary rounded-lg">
       <div className="flex flex-col lg:flex-row gap-3">
         <div className="flex flex-col">
           <DailyQuote />

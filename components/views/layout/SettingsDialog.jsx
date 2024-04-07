@@ -2,6 +2,7 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 const SettingsDialog = () => {
   return (
@@ -10,7 +11,7 @@ const SettingsDialog = () => {
       <div className="flex flex-col justitfy-around gap-4">
         <div className="flex justify-between gap-4 p-3">
           <h3>Dark Mode</h3>
-          <Switch />
+          <ThemeSwitch/>
         </div>
         <div className="flex justify-between gap-4 p-3">
           <h3>Dark Mode</h3>

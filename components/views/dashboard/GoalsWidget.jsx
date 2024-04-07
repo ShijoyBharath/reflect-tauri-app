@@ -49,7 +49,7 @@ const GoalsWidget = () => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 m-4 p-9 justify-between bg-white rounded-lg">
+    <div className="flex flex-col gap-4 m-4 p-9 justify-between bg-background rounded-lg">
       <div className="flex flex-col gap-3">
         <Badge className="flex gap-3 p-3 justify-between" variant="">
           <p className="font-extrabold text-nowrap">Today</p>
