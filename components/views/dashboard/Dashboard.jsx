@@ -12,7 +12,7 @@ const Dashboard = () => {
   const [habits, setHabits] = useState([])
 
   useEffect(()=>{
-    get_data().then((data)=> setHabits(data))
+    get_data()
   }, [])
 
   async function get_data() {
@@ -21,7 +21,7 @@ const Dashboard = () => {
       const select = await db.select(
         "SELECT * FROM habits",
       );
-      return select;
+      setHabits(select)
     } catch (error) {
       console.log("error : ", error);
     }

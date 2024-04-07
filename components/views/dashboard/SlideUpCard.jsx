@@ -21,7 +21,6 @@ const SlideUpCard = ({habit, description}) => {
     <Drawer>
       <DrawerTrigger>
         <div className="flex gap-3 items-center">
-          <Atom size={40} />
           <div className="flex flex-col items-start">
             <CardTitle>{habit}</CardTitle>
             <CardDescription>{description}</CardDescription>
