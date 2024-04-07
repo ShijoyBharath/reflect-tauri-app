@@ -9,7 +9,6 @@ import {
   Lightbulb,
   ListTodo
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import CreateHabitDialog from "@/components/views/dashboard/CreateHabitDialog";
@@ -125,12 +124,6 @@ const SideBar = () => {
           ""
         }
 
-        <Button variant="ghost">
-          <Avatar>
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </Button>
         <Dialog>
           <TooltipProvider>
             <Tooltip>

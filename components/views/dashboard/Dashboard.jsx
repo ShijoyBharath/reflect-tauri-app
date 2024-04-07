@@ -1,11 +1,11 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import DailyQuote from "./DailyQuote";
-import StatCard from "./StatCard";
 import HabitsCard from "./HabitsCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import GoalsWidget from "./GoalsWidget";
 import Database from "tauri-plugin-sql-api";
+import TimeChartDashboard from "./TimeChartDashboard";
 
 const Dashboard = () => {
 
@@ -35,7 +35,7 @@ const Dashboard = () => {
           <GoalsWidget />
         </div>
         <div className="grow">
-          <StatCard />
+          <TimeChartDashboard/>
         </div>
       </div>
       {/* <ScrollArea className="whitespace-nowrap rounded-md border"> */}
