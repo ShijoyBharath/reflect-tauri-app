@@ -55,34 +55,6 @@ const SideBar = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        {/* <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link href="/calendar">
-                <Button variant={pathname === "/calendar" ? "" : "ghost"}>
-                  <CalendarDays />
-                </Button>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              <p>Calendar</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Link href="/suggested">
-                <Button variant={pathname === "/suggested" ? "" : "ghost"}>
-                  <Lightbulb />
-                </Button>
-              </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              <p>Suggested</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider> */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>

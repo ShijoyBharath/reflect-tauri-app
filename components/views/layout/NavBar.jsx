@@ -16,6 +16,7 @@ import { formatDate } from "@/utils/utils";
 
 const NavBar = ({ expiryTimestamp }) => {
   const [remainingTime, setRemainingTime] = useState(getRemainingTime());
+  const [timer, setTimer] = useState(2700)
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -90,9 +91,9 @@ const NavBar = ({ expiryTimestamp }) => {
     autoStart: false,
     onExpire: () => {
       console.warn("Timer expired");
-      insert_data(100, formatDate(new Date()));
+      insert_data(timer, formatDate(new Date()));
       const time = new Date();
-      time.setSeconds(time.getSeconds() + 10);
+      time.setSeconds(time.getSeconds() + timer);
       restart(time, false);
     },
   });
@@ -113,6 +114,8 @@ const NavBar = ({ expiryTimestamp }) => {
       } else {
         setFlows(select[0].flows);
       }
+      const timer_data = await db.select("SELECT timer_in_sec FROM appconfig")
+      setTimer(timer_data)
     } catch (error) {
       console.log(error);
     }

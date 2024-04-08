@@ -33,14 +33,19 @@ const TimeChartDashboard = () => {
       var chart_data = data.map((item) => {
         return {
           value: item.value,
-          randomval: item.value * 4,
-          amount: item.value,
+          randomval: item.value * 0.1,
+          date: item.date,
         };
       });
       setChartdata(chart_data);
       setScore(
         ser.reduce((sum, currentValue) => sum + currentValue, 0).toFixed(1)
       );
+      // var score_data = 0;
+      // chart_data.forEach((item)=>{
+      //   score_data = score_data + item.value
+      // })
+      // setScore(score_data/chart_data.length)
     });
   }, []);
 
@@ -56,7 +61,6 @@ const TimeChartDashboard = () => {
       console.log("error : ", error);
     }
   }
-
 
   const [primaryColor, setPrimaryColor] = useState("");
 
@@ -74,7 +78,7 @@ const TimeChartDashboard = () => {
           <div className="flex flex-col">
             Progress
             <CardDescription className="font-medium">
-              Your are ahead of where you normally are.
+              See how consistent you truly are.
             </CardDescription>
           </div>
           <div className="flex flex-col">
@@ -88,7 +92,7 @@ const TimeChartDashboard = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="pb-4">
-        <div className="h-[300px] w-full">
+        <div className="h-[200px] lg:h-[425px] sm:h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
               data={chartdata}
@@ -104,21 +108,21 @@ const TimeChartDashboard = () => {
                   if (active && payload && payload.length) {
                     return (
                       <div className="rounded-lg border bg-background p-2 shadow-sm">
-                        <div className="grid grid-cols-2 gap-2">
-                          <div className="flex flex-col">
+                        <div className="grid grid-cols-1 gap-2">
+                          {/* <div className="flex flex-col">
                             <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Average
+                              Progress
                             </span>
                             <span className="font-bold text-muted-foreground">
-                              {payload[0].value}
+                              {payload[0].payload.randomval}
                             </span>
-                          </div>
+                          </div> */}
                           <div className="flex flex-col">
                             <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Today
+                            {new Date(payload[0].payload.date).toLocaleDateString('en-GB')}
                             </span>
                             <span className="font-bold">
-                              {payload[1].value}
+                              Score : {payload[0].payload.value.toFixed(1)}
                             </span>
                           </div>
                         </div>
@@ -137,16 +141,14 @@ const TimeChartDashboard = () => {
                   r: 8,
                   style: { fill: primaryColor },
                 }}
-                style={
-                  {
-                    stroke: primaryColor,
-                    // "--theme-primary": `hsl(${
-                    //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
-                    // })`,
-                  }
-                }
+                style={{
+                  stroke: primaryColor,
+                  // "--theme-primary": `hsl(${
+                  //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
+                  // })`,
+                }}
               />
-              <Line
+              {/* <Line
                 type="monotone"
                 strokeWidth={2}
                 dataKey="randomval"
@@ -154,16 +156,14 @@ const TimeChartDashboard = () => {
                   r: 6,
                   style: { fill: primaryColor, opacity: 0.25 },
                 }}
-                style={
-                  {
-                    stroke: primaryColor,
-                    opacity: 0.25,
-                    // "--theme-primary": `hsl(${
-                    //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
-                    // })`,
-                  }
-                }
-              />
+                style={{
+                  stroke: primaryColor,
+                  opacity: 0.25,
+                  // "--theme-primary": `hsl(${
+                  //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
+                  // })`,
+                }}
+              /> */}
             </LineChart>
           </ResponsiveContainer>
         </div>

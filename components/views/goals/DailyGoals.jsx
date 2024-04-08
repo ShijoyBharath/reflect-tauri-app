@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { formatDate, getCurrentWeek, getCurrent12Weeks } from "@/utils/utils";
+import { formatDate, getFormattedDate, getCurrentWeek, getCurrent12Weeks } from "@/utils/utils";
 
 import Database from "tauri-plugin-sql-api";
 import {
@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const DailyGoals = () => {
   const [dailygoals, setDailyGoals] = useState({});
@@ -75,6 +76,9 @@ const DailyGoals = () => {
     var dataArray = Object.keys(dailygoals).map((key) => dailygoals[key]);
     dataArray.forEach((item) => {
       insert_data(item.goal, item.date);
+    });
+    toast("Saved your daily goals!", {
+      description: getFormattedDate(),
     });
     console.log("saved daily data");
   };
@@ -140,7 +144,7 @@ const DailyGoals = () => {
           <div className="flex flex-col">
             Daily Goals
             <CardDescription className="font-medium">
-              These are your most impactful things that you need to get done.
+              Most impactful things that you need to get done each day.
             </CardDescription>
           </div>
           <Button onClick={() => saveDailygoals()}>Save</Button>
@@ -159,15 +163,14 @@ const DailyGoals = () => {
                 className="grid w-full max-w-sm items-center gap-1.5"
                 key={day}
               >
-                <Label htmlFor={day}>{day}</Label>
+                <Label className="flex justify-between" htmlFor={day}>
+                  {day}
+                  <div className="font-light text-xs">{new Date(days[day][0]).toLocaleDateString('en-GB')}</div>
+                </Label>
                 <Input
                   type="text"
                   id={day}
-                  placeholder={
-                    days[day][1]
-                      ? days[day][1]
-                      : "Plans for " + day + " " + days[day][0]
-                  }
+                  placeholder={days[day][1] ? days[day][1] : "Add your daily goal"}
                   onChange={handleInputChange}
                 />
               </div>

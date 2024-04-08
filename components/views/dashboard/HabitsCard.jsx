@@ -162,7 +162,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
         <div id={"calendar-" + calendarId}></div>
       </CardContent>
       <CardFooter>
-        <div className="flex gap-4">
+        {/* <div className="flex gap-4">
           <div className="flex items-center gap-2">
             <Link size={18} />
             <p>13</p>
@@ -171,7 +171,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
             <Sparkles size={18} />
             <p>57%</p>
           </div>
-        </div>
+        </div> */}
       </CardFooter>
     </Card>
   );

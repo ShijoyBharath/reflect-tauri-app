@@ -13,12 +13,13 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { hslStringToHex } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
 
 const FlowChart = () => {
   const [chartdata, setChartdata] = useState([]);
+  const [flows, setFlows] = useState([]);
   const { theme, setGlobalTheme } = useThemeStore();
 
   useEffect(() => {
@@ -29,6 +30,10 @@ const FlowChart = () => {
           amt: item.date,
         };
       });
+      var flow_data = data.map((item)=>{
+        return item.value
+      })
+      setFlows(flow_data.reduce((acc, currentValue) => acc + currentValue, 0));
       setChartdata(chart_data);
     });
   }, []);
@@ -53,14 +58,13 @@ const FlowChart = () => {
     setPrimaryColor(hslStringToHex(primaryValue));
   }, [theme]);
 
-
   return (
-    <Card className="border-0">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <Card className="border-0 w-1/3">
+      <CardHeader>
         <CardTitle>Flows</CardTitle>
+        <CardDescription>Total {flows} flows</CardDescription>
       </CardHeader>
       <CardContent>
-        <p className="text-xs text-muted-foreground">+18% from yesterday</p>
         <div className="mt-4 h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartdata}>

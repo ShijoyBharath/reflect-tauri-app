@@ -10,7 +10,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { v4 as uuidv4 } from "uuid";
 import Database from "tauri-plugin-sql-api";
-import { formatDate } from "@/utils/utils";
+import { formatDate, getFormattedDate } from "@/utils/utils";
+import { toast } from "sonner";
 
 const CreateHabitDialog = () => {
   const [habit, setHabit] = useState("");
@@ -35,6 +36,9 @@ const CreateHabitDialog = () => {
     setHabit("");
     setDescription("");
     setError("");
+    toast("You created a new habit!", {
+      description: getFormattedDate(),
+    });
     console.log("saved habit");
   };
 
@@ -82,7 +86,7 @@ const CreateHabitDialog = () => {
               <Label htmlFor="habit">Habit</Label>
               <Input
                 type="text"
-                placeholder="Your Habit name"
+                placeholder="Let's get to it!"
                 id="habit"
                 value={habit}
                 onChange={(event) => setHabit(event.target.value)}
@@ -93,7 +97,7 @@ const CreateHabitDialog = () => {
               <Label htmlFor="description">Description</Label>
               <Input
                 type="text"
-                placeholder="What will you do"
+                placeholder="What do you plan to accomplish?!"
                 id="description"
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}

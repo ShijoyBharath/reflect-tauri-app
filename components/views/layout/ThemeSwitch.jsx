@@ -54,9 +54,9 @@ export function ThemeSwitch() {
       {mounted ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button className="flex items-center gap-3" variant="outline">
               <Palette className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100" />
-              <span className="sr-only">Toggle theme</span>
+              <span className="">Change Theme</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" side="right">

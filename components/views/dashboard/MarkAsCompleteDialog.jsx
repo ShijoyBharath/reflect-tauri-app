@@ -60,13 +60,13 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
         <DialogTitle>Rate your day</DialogTitle>
         <DialogDescription>Be brutally honest with yourself.</DialogDescription>
       </DialogHeader>
-      <div className="flex gap-5 items-end">
+      <div className="flex gap-5 justify-start items-end">
         <h1 className="pt-5 scroll-m-20 text-6xl font-extrabold tracking-tight lg:text-5xl">
           {value}/10
         </h1>
         <p className="text-md text-muted-foreground">
-          <PartyPopper />
-          Perfect!
+          {value == 0 ? "" : <PartyPopper />}
+          {value > 7 ? "Perfect!" : value > 5 ? "Great Work!" : value == 0 ? "We'll get it next day." : "Still Consistent!"}
         </p>
       </div>
       <div className="p-7 m-5">

@@ -5,7 +5,12 @@ import React, { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import Database from "tauri-plugin-sql-api";
-import { formatDate, getCurrentWeek, getCurrent12Weeks } from "@/utils/utils";
+import {
+  formatDate,
+  getFormattedDate,
+  getCurrentWeek,
+  getCurrent12Weeks,
+} from "@/utils/utils";
 import {
   Card,
   CardContent,
@@ -13,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { toast } from "sonner";
 
 const WeeklyGoals = () => {
   const [weeklygoals, setWeeklyGoals] = useState({});
@@ -65,6 +71,9 @@ const WeeklyGoals = () => {
     var dataArray = Object.keys(weeklygoals).map((key) => weeklygoals[key]);
     dataArray.forEach((item) => {
       insert_data(item.goal, item.start_date, item.end_date);
+    });
+    toast("Saved your weekly goals!", {
+      description: getFormattedDate(),
     });
     console.log("saved weekly data");
   };
@@ -131,7 +140,7 @@ const WeeklyGoals = () => {
           <div className="flex flex-col">
             Weekly Goals
             <CardDescription className="font-medium">
-              Your weekly goals that will progress you to where you want.
+              Your weekly goals that will get you to where you want.
             </CardDescription>
           </div>
           <Button onClick={() => saveWeeklygoals()}>Save</Button>
@@ -152,13 +161,19 @@ const WeeklyGoals = () => {
                 className="grid w-full max-w-sm items-center gap-1.5"
                 key={week}
               >
-                <Label htmlFor={week}>{week + " " + weeks[week][0]}</Label>
+                <Label className="flex justify-between" htmlFor={week}>
+                  {week}
+                  <div className="font-light text-xs">
+                    {new Date(weeks[week][0]).toLocaleDateString("en-GB")} -{" "}
+                    {new Date(weeks[week][1]).toLocaleDateString("en-GB")}
+                  </div>
+                </Label>
                 <Input
                   type="text"
                   id={week}
                   placeholder={
                     weeks[week][2].length === 0
-                      ? "Plans for " + week
+                      ? "Add your weekly goal"
                       : weeks[week][2]
                   }
                   onChange={handleInputChange}

@@ -5,7 +5,7 @@ import NavBar from "@/components/views/layout/NavBar";
 import SideBar from "@/components/views/layout/SideBar";
 import { Toaster } from "@/components/ui/sonner";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Database from "tauri-plugin-sql-api";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,6 +17,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 // };
 
 export default function RootLayout({ children }) {
+  const [timer, setTimer] = useState(2700)
+
   async function insert(today) {
     try {
       const db = await Database.load("sqlite:data.db");
@@ -30,6 +32,8 @@ export default function RootLayout({ children }) {
           [today, "light", 2700]
         );
       }
+      const timer_data = await db.select("SELECT timer_in_sec FROM appconfig");
+      setTimer(timer_data)
     } catch (error) {
       console.log("error : ", error);
     }
@@ -58,7 +62,7 @@ export default function RootLayout({ children }) {
   }, []);
 
   const expiryTimestamp = new Date();
-  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + 10); // 10 minutes timer
+  expiryTimestamp.setSeconds(expiryTimestamp.getSeconds() + timer); // 10 minutes timer
 
   return (
     <html lang="en" suppressHydrationWarning>

@@ -1,5 +1,5 @@
 "use client";
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Database from "tauri-plugin-sql-api";
 import {
   LineChart,
@@ -18,22 +18,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { hslStringToHex } from "@/utils/utils";
+import { hslStringToHex, formatTime } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
 
 
 const TimeChart = () => {
   const [chartdata, setChartdata] = useState([]);
+  const [totalTime, setTotalTime]  = useState(0);
   const { theme, setGlobalTheme } = useThemeStore();
 
   useEffect(() => {
     get_data().then((data) => {
       var chart_data = data.map((item) => {
         return {
-          uv: item.value,
-          amount: item.value,
+          time: item.value,
+          date: item.date,
         };
       });
+      var total_time = data.map((item)=>{
+        return item.value
+      })
+      setTotalTime(total_time.reduce((acc, currentValue) => acc + currentValue, 0))
       setChartdata(chart_data);
     });
   }, []);
@@ -61,11 +66,11 @@ const TimeChart = () => {
   }, [theme]);
 
   return (
-    <Card className="border-0">
+    <Card className="border-0 w-2/3">
       <CardHeader>
         <CardTitle>Daily Time</CardTitle>
         <CardDescription>
-          Your are ahead of where you normally are.
+          Total time spent {formatTime(totalTime)}
         </CardDescription>
       </CardHeader>
       <CardContent className="pb-4">
@@ -85,21 +90,13 @@ const TimeChart = () => {
                   if (active && payload && payload.length) {
                     return (
                       <div className="rounded-lg border bg-background p-2 shadow-sm">
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="grid grid-cols-1 gap-2">
                           <div className="flex flex-col">
                             <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Average
-                            </span>
-                            <span className="font-bold text-muted-foreground">
-                              {(payload[0].value/360).toFixed(1)}
-                            </span>
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Today
+                            {new Date(payload[0].payload.date).toLocaleDateString('en-GB')}
                             </span>
                             <span className="font-bold">
-                              {payload[0].value}
+                              {formatTime(payload[0].payload.time)}
                             </span>
                           </div>
                         </div>
@@ -112,7 +109,7 @@ const TimeChart = () => {
               />
               <Line
                 type="monotone"
-                dataKey="uv"
+                dataKey="time"
                 strokeWidth={2}
                 activeDot={{
                   r: 8,
