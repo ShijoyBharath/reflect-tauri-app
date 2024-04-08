@@ -3,8 +3,12 @@ import React, { useState, useEffect } from "react";
 import Database from "tauri-plugin-sql-api";
 import { formatDate, getCurrent12Weeks } from "@/utils/utils";
 import { Badge } from "@/components/ui/badge";
+import useTodayStore from "@/components/todayStore";
 
 const GoalsWidget = () => {
+
+  const {todayGlobal} = useTodayStore();
+
   function calculateDaysLeft(startDateStr, endDateStr) {
     // Convert the string dates to Date objects
     const startDate = new Date(startDateStr);
@@ -24,7 +28,7 @@ const GoalsWidget = () => {
   const [data, setData] = useState([]);
   async function get_data() {
     try {
-      const today = formatDate(new Date());
+      const today = formatDate(todayGlobal);
       const db = await Database.load("sqlite:data.db");
       const select_daily = await db.select(
         "SELECT * FROM dailygoals WHERE date=?",
@@ -36,14 +40,14 @@ const GoalsWidget = () => {
       );
 
       const start_date = await db.select("SELECT * FROM appconfig");
-      var current12week = getCurrent12Weeks(start_date[0].start_date);
+      var current12week = getCurrent12Weeks(start_date[0].start_date, todayGlobal);
       var daysleft = calculateDaysLeft(today, current12week[1]);
 
-      if (select_daily.length === 0 || select_weekly.length === 0) {
-        return ["Nothing for today", "Nothing this week", daysleft]
-      } else {
-        return [select_daily[0].goal, select_weekly[0].goal, daysleft];
-      }
+      var daily = select_daily.length !== 0 ? select_daily[0].goal : "Nothing for today"
+      var weekly = select_weekly.length !== 0 ? select_weekly[0].goal : "Nothing this week"
+
+      return [daily, weekly, daysleft];
+      
     } catch (error) {
       console.log("error : ", error);
     }

@@ -19,12 +19,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import useTodayStore from "@/components/todayStore";
 
 const WeeklyGoals = () => {
   const [weeklygoals, setWeeklyGoals] = useState({});
   var [weeks, setWeeks] = useState({});
   var [dbGoals, setDBGoals] = useState([]);
   const [curWeek, setCurWeek] = useState([]);
+  const {todayGlobal} = useTodayStore();
 
   useEffect(() => {
     init_table();
@@ -86,11 +88,11 @@ const WeeklyGoals = () => {
       );
       const start_date = await db.select("SELECT * FROM appconfig");
 
-      var weekdates = getCurrent12Weeks(start_date[0].start_date);
+      var weekdates = getCurrent12Weeks(start_date[0].start_date, todayGlobal);
       get_data(weekdates[0], weekdates[1]).then((data) => setDBGoals(data));
 
       var data = getCurrent12WeekDates(weekdates[0], weekdates[1]);
-      setCurWeek(getCurrentWeek(weekdates[0]));
+      setCurWeek(getCurrentWeek(weekdates[0], todayGlobal));
       setWeeks(data);
     } catch (error) {
       console.log("error : ", error);

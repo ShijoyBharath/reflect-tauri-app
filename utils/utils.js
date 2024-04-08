@@ -34,10 +34,11 @@ function getFormattedDate() {
   }
 
 
-const getCurrentWeek = (startWeekDate) => {
+const getCurrentWeek = (startWeekDate, today) => {
     // startWeekDate: "2024-04-05" Start date of the current 12 week year
+    // today: new Date() - today's date for getting current week from start
     // return: ["2024-04-05", "2024-04-11"] Start and End dates of the current week in this 12 week year
-    const today = new Date();
+    // const today = new Date();
     for (
       var d = new Date(startWeekDate);
       d <= today;
@@ -55,10 +56,11 @@ const getCurrentWeek = (startWeekDate) => {
 
 
 
-  const getCurrent12Weeks = (startDate) => {
+  const getCurrent12Weeks = (startDate, today) => {
     // startDate: "2024-04-04" Start/Install date of the application. Needed to calculate the current 12 week year from the starting point.
+    // today: new Date() - current day to find the 12 weeks.
     // return: ["2024-04-05", "2024-06-13"] Start and End dates of the current 12 week year
-    const today = new Date();
+    // const today = new Date();
     for (var d = new Date(startDate); d <= today; d.setDate(d.getDate() + 84)) {
       var temp_date = new Date(d);
       var week_start = new Date(d);

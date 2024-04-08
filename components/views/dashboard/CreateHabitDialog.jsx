@@ -12,11 +12,13 @@ import { v4 as uuidv4 } from "uuid";
 import Database from "tauri-plugin-sql-api";
 import { formatDate, getFormattedDate } from "@/utils/utils";
 import { toast } from "sonner";
+import useTodayStore from "@/components/todayStore";
 
 const CreateHabitDialog = () => {
   const [habit, setHabit] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
+  const {todayGlobal} = useTodayStore()
 
   useEffect(() => {
     init_table();
@@ -30,7 +32,7 @@ const CreateHabitDialog = () => {
       return;
     }
     const uuid = uuidv4();
-    const today = formatDate(new Date());
+    const today = formatDate(todayGlobal);
     insert_data(uuid, habit, description, today);
     // Clear the form fields
     setHabit("");

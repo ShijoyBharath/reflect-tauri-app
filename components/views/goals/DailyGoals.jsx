@@ -14,13 +14,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import useTodayStore from "@/components/todayStore";
 
 const DailyGoals = () => {
   const [dailygoals, setDailyGoals] = useState({});
   var [days, setDays] = useState({});
   var [dbGoals, setDBGoals] = useState([]);
-  const today = formatDate(new Date());
-
+  const {todayGlobal} = useTodayStore();
+  
   useEffect(() => {
     init_table();
   }, [dbGoals]);
@@ -90,9 +91,9 @@ const DailyGoals = () => {
         "CREATE TABLE IF NOT EXISTS dailygoals (id INTEGER PRIMARY KEY, goal TEXT NOT NULL, date TEXT NOT NULL)"
       );
       const start_date = await db.select("SELECT * FROM appconfig");
-
-      var weekdates = getCurrent12Weeks(start_date[0].start_date);
-      var thisweek = getCurrentWeek(weekdates[0]);
+      
+      var weekdates = getCurrent12Weeks(start_date[0].start_date, todayGlobal);
+      var thisweek = getCurrentWeek(weekdates[0], todayGlobal);
       get_data(thisweek[0], thisweek[1]).then((data) => setDBGoals(data));
 
       var data = getThisWeekDates(thisweek[0], thisweek[1]);
@@ -156,7 +157,7 @@ const DailyGoals = () => {
             <div
               key={day}
               className={`p-2 ${
-                days[day][0] == today ? "border-l-4 border-primary" : ""
+                days[day][0] == formatDate(todayGlobal) ? "border-l-4 border-primary" : ""
               }`}
             >
               <div

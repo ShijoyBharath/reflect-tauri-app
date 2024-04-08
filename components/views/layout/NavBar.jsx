@@ -13,10 +13,12 @@ import { Button } from "@/components/ui/button";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import Database from "tauri-plugin-sql-api";
 import { formatDate } from "@/utils/utils";
+import useTodayStore from "@/components/todayStore";
 
 const NavBar = ({ expiryTimestamp }) => {
   const [remainingTime, setRemainingTime] = useState(getRemainingTime());
   const [timer, setTimer] = useState(2700)
+  const {todayGlobal} = useTodayStore();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -66,7 +68,7 @@ const NavBar = ({ expiryTimestamp }) => {
     "November",
     "December",
   ];
-  const now = new Date();
+  const now = todayGlobal;
   var day = now.getDate();
   var monthIndex = now.getMonth();
   var year = now.getFullYear();

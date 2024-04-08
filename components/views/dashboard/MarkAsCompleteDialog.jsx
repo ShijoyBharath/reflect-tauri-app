@@ -12,9 +12,11 @@ import { useState } from "react";
 import { PartyPopper } from "lucide-react";
 import Database from "tauri-plugin-sql-api";
 import { formatDate, getFormattedDate } from "@/utils/utils";
+import useTodayStore from "@/components/todayStore";
 
 const MarkAsCompleteDialog = ({ calendarId }) => {
   const [value, setValue] = useState(10);
+  const { todayGlobal } = useTodayStore();
 
   useEffect(() => {
     init_table();
@@ -26,6 +28,13 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
       const result = await db.execute(
         "CREATE TABLE IF NOT EXISTS habitsdata (id INTEGER PRIMARY KEY, uuid TEXT NOT NULL, value INTEGER NOT NULL, date TEXT NOT NULL)"
       );
+      const select = await db.select(
+        "SELECT * from habitsdata WHERE uuid=? AND date=?",
+        [calendarId, formatDate(todayGlobal)]
+      );
+      if (select.length !== 0) {
+        setValue(select[0].value);
+      }
     } catch (error) {
       console.log("error : ", error);
     }
@@ -66,12 +75,18 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
         </h1>
         <p className="text-md text-muted-foreground">
           {value == 0 ? "" : <PartyPopper />}
-          {value > 7 ? "Perfect!" : value > 5 ? "Great Work!" : value == 0 ? "We'll get it next day." : "Still Consistent!"}
+          {value > 7
+            ? "Perfect!"
+            : value > 5
+            ? "Great Work!"
+            : value == 0
+            ? "We'll get it next day."
+            : "Still Consistent!"}
         </p>
       </div>
       <div className="p-7 m-5">
         <Slider
-          defaultValue={[10]}
+          value={[value]}
           max={10}
           step={1}
           onValueChange={(val) => setValue(val[0])}
@@ -88,7 +103,7 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
               //   onClick: () => console.log("undo"),
               // },
             }),
-            insert_data(calendarId, value, formatDate(new Date())),
+            insert_data(calendarId, value, formatDate(todayGlobal)),
           ]}
         >
           Save Progress

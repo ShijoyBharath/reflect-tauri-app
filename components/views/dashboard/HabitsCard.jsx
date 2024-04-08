@@ -11,7 +11,13 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CalHeatmap from "cal-heatmap";
 import "cal-heatmap/cal-heatmap.css";
-import { Link, Sparkles, Check } from "lucide-react";
+import {
+  Link,
+  Sparkles,
+  Check,
+  CircleCheckBig,
+  CheckCheck,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MarkAsCompleteDialog from "./MarkAsCompleteDialog";
 import LegendLite from "cal-heatmap/plugins/LegendLite";
@@ -21,24 +27,28 @@ import CalendarLabel from "cal-heatmap/plugins/CalendarLabel";
 import dayjs from "dayjs";
 import * as localeData from "dayjs/plugin/localeData";
 import Database from "tauri-plugin-sql-api";
-import { hslStringToHex, getCurrent12Weeks } from "@/utils/utils";
+import { hslStringToHex, getCurrent12Weeks, formatDate } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
+import useTodayStore from "@/components/todayStore";
 
 dayjs.extend(localeData);
 
 const HabitsCard = ({ habit, description, calendarId }) => {
   const cal = new CalHeatmap();
 
+  const [completed, setCompleted] = useState(false);
+
   const { theme, setGlobalTheme } = useThemeStore();
+  const { todayGlobal } = useTodayStore();
 
   const root = document.documentElement;
   const classes = Array.from(root.classList); // Convert classList to an array
 
-  useEffect(()=>{
-    if (theme === classes[0] ){
+  useEffect(() => {
+    if (theme === classes[0]) {
       window.location.reload();
     }
-  },[theme])
+  }, [theme]);
 
   useEffect(() => {
     get_data().then((data) => {
@@ -127,10 +137,18 @@ const HabitsCard = ({ habit, description, calendarId }) => {
       const select = await db.select("SELECT * FROM habitsdata WHERE uuid=?", [
         calendarId,
       ]);
+      const todays_data = await db.select(
+        "SELECT * FROM habitsdata WHERE uuid=? AND date=?",
+        [calendarId, formatDate(todayGlobal)]
+      );
+
+      if (todays_data.length !== 0) {
+        setCompleted(true);
+      }
 
       const start_date = await db.select("SELECT * FROM appconfig");
 
-      var weekdates = getCurrent12Weeks(start_date[0].start_date);
+      var weekdates = getCurrent12Weeks(start_date[0].start_date, todayGlobal);
 
       return [select, weekdates[0]];
     } catch (error) {
@@ -148,9 +166,15 @@ const HabitsCard = ({ habit, description, calendarId }) => {
           </div>
           <Dialog>
             <DialogTrigger asChild>
-              <Button>
-                <Check />
-              </Button>
+              {completed ? (
+                <Button variant="secondary">
+                  <CheckCheck />
+                </Button>
+              ) : (
+                <Button>
+                  <Check />
+                </Button>
+              )}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <MarkAsCompleteDialog calendarId={calendarId} />
