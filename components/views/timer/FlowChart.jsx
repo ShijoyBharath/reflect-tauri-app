@@ -15,9 +15,11 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { hslStringToHex } from "@/utils/utils";
+import useThemeStore from "@/components/themeStore";
 
 const FlowChart = () => {
   const [chartdata, setChartdata] = useState([]);
+  const { theme, setGlobalTheme } = useThemeStore();
 
   useEffect(() => {
     get_data().then((data) => {
@@ -49,7 +51,7 @@ const FlowChart = () => {
 
     const primaryValue = rootComputedStyle.getPropertyValue("--primary").trim();
     setPrimaryColor(hslStringToHex(primaryValue));
-  }, []);
+  }, [theme]);
 
 
   return (

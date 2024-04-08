@@ -5,6 +5,8 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
+  CardDescription,
+  CardTitle,
 } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CalHeatmap from "cal-heatmap";
@@ -16,26 +18,38 @@ import LegendLite from "cal-heatmap/plugins/LegendLite";
 import Legend from "cal-heatmap/plugins/Legend";
 import Tooltip from "cal-heatmap/plugins/Tooltip";
 import CalendarLabel from "cal-heatmap/plugins/CalendarLabel";
-import SlideUpCard from "./SlideUpCard";
 import dayjs from "dayjs";
 import * as localeData from "dayjs/plugin/localeData";
 import Database from "tauri-plugin-sql-api";
 import { hslStringToHex, getCurrent12Weeks } from "@/utils/utils";
+import useThemeStore from "@/components/themeStore";
 
 dayjs.extend(localeData);
 
 const HabitsCard = ({ habit, description, calendarId }) => {
-  var cal = new CalHeatmap();
+  const cal = new CalHeatmap();
+
+  const { theme, setGlobalTheme } = useThemeStore();
+
+  const root = document.documentElement;
+  const classes = Array.from(root.classList); // Convert classList to an array
+
+  useEffect(()=>{
+    if (theme === classes[0] ){
+      window.location.reload();
+    }
+  },[theme])
 
   useEffect(() => {
-    const rootComputedStyle = window.getComputedStyle(document.documentElement);
-
-    var one = rootComputedStyle.getPropertyValue("--primary").trim();
-    var two = rootComputedStyle.getPropertyValue("--secondary").trim();
-    one = hslStringToHex(one)
-    two = hslStringToHex(two)
-
     get_data().then((data) => {
+      const rootComputedStyle = window.getComputedStyle(
+        document.documentElement
+      );
+
+      var one = rootComputedStyle.getPropertyValue("--primary").trim();
+      var two = rootComputedStyle.getPropertyValue("--secondary").trim();
+      one = hslStringToHex(one);
+      two = hslStringToHex(two);
       cal.paint(
         {
           data: {
@@ -50,7 +64,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
           scale: {
             opacity: {
               baseColor: one,
-              type: 'linear',
+              type: "linear",
               domain: [-1, 10],
             },
           },
@@ -66,7 +80,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
             height: 11,
             gutter: 4,
           },
-          itemSelector: "#" + "calendar-" + calendarId,
+          itemSelector: "#calendar-" + calendarId,
         },
         [
           [
@@ -128,7 +142,10 @@ const HabitsCard = ({ habit, description, calendarId }) => {
     <Card className="border-0">
       <CardHeader>
         <div className="flex justify-between items-center gap-3">
-          <SlideUpCard habit={habit} description={description} />
+          <div className="flex flex-col items-start">
+            <CardTitle>{habit}</CardTitle>
+            <CardDescription>{description}</CardDescription>
+          </div>
           <Dialog>
             <DialogTrigger asChild>
               <Button>

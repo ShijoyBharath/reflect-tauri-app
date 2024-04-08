@@ -20,10 +20,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { hslStringToHex } from "@/utils/utils";
+import useThemeStore from "@/components/themeStore";
 
 const TimeChartDashboard = () => {
   const [score, setScore] = useState(10);
   const [chartdata, setChartdata] = useState([]);
+  const { theme, setGlobalTheme } = useThemeStore();
 
   useEffect(() => {
     get_data().then((data) => {
@@ -63,7 +65,7 @@ const TimeChartDashboard = () => {
 
     const primaryValue = rootComputedStyle.getPropertyValue("--primary").trim();
     setPrimaryColor(hslStringToHex(primaryValue));
-  }, []);
+  }, [theme]);
 
   return (
     <Card className="border-0 m-4">

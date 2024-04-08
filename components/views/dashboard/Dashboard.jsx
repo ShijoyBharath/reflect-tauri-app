@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import DailyQuote from "./DailyQuote";
 import HabitsCard from "./HabitsCard";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import GoalsWidget from "./GoalsWidget";
 import Database from "tauri-plugin-sql-api";
 import TimeChartDashboard from "./TimeChartDashboard";

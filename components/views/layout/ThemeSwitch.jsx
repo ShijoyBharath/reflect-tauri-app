@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import useThemeStore from "@/components/themeStore";
 
 export function ThemeSwitch() {
   const [mounted, setMounted] = useState(false);
@@ -38,10 +39,13 @@ export function ThemeSwitch() {
     setMounted(true);
   }, []);
 
+  const { theme, setGlobalTheme } = useThemeStore();
+
   function setTheme(theme) {
     const root = document.documentElement;
     root.className = "";
     root.classList.add(theme);
+    setGlobalTheme(theme)
     localStorage.setItem("theme", theme);
   }
 
