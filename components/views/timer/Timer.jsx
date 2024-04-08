@@ -6,14 +6,16 @@ import FlowChart from "./FlowChart";
 import Database from "tauri-plugin-sql-api";
 import { formatDate } from "@/utils/utils";
 import useTodayStore from "@/components/todayStore";
+import useTimerStore from "@/components/timerStore";
 
 const Timer = () => {
 
   const {todayGlobal} = useTodayStore();
+  const {refreshTimer} = useTimerStore()
 
   useEffect(() => {
     init_table(formatDate(todayGlobal));
-  }, []);
+  }, [refreshTimer]);
 
   const [timespenttoday, setTimespenttoday] = useState(0);
 

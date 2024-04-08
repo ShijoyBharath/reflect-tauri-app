@@ -14,11 +14,13 @@ import { Play, Pause, RotateCcw } from "lucide-react";
 import Database from "tauri-plugin-sql-api";
 import { formatDate } from "@/utils/utils";
 import useTodayStore from "@/components/todayStore";
+import useTimerStore from "@/components/timerStore";
 
 const NavBar = ({ expiryTimestamp }) => {
   const [remainingTime, setRemainingTime] = useState(getRemainingTime());
-  const [timer, setTimer] = useState(2700)
-  const {todayGlobal} = useTodayStore();
+  const [timer, setTimer] = useState(2700);
+  const { todayGlobal } = useTodayStore();
+  const { setRefreshTimer } = useTimerStore();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -93,7 +95,7 @@ const NavBar = ({ expiryTimestamp }) => {
     autoStart: false,
     onExpire: () => {
       console.warn("Timer expired");
-      insert_data(timer, formatDate(new Date()));
+      insert_data(timer, formatDate(todayGlobal));
       const time = new Date();
       time.setSeconds(time.getSeconds() + timer);
       restart(time, false);
@@ -102,7 +104,7 @@ const NavBar = ({ expiryTimestamp }) => {
 
   const [flows, setFlows] = useState(0);
   useEffect(() => {
-    get_data(formatDate(new Date()));
+    get_data(formatDate(todayGlobal));
   }, []);
 
   async function get_data(date) {
@@ -116,8 +118,8 @@ const NavBar = ({ expiryTimestamp }) => {
       } else {
         setFlows(select[0].flows);
       }
-      const timer_data = await db.select("SELECT timer_in_sec FROM appconfig")
-      setTimer(timer_data)
+      const timer_data = await db.select("SELECT timer_in_sec FROM appconfig");
+      setTimer(timer_data);
     } catch (error) {
       console.log(error);
     }
@@ -142,6 +144,7 @@ const NavBar = ({ expiryTimestamp }) => {
         const updated_timespent = select[0].timespent_in_sec + timespent;
         const updated_flows = select[0].flows + 1;
         setFlows(updated_flows);
+        setRefreshTimer(updated_flows);
         const update = await db.execute(
           "UPDATE timer SET timespent_in_sec=?, flows=? WHERE date=?",
           [updated_timespent, updated_flows, date]

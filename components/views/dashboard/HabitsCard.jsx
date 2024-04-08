@@ -30,6 +30,7 @@ import Database from "tauri-plugin-sql-api";
 import { hslStringToHex, getCurrent12Weeks, formatDate } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
 import useTodayStore from "@/components/todayStore";
+import useDashboardStore from "@/components/dashboardStore";
 
 dayjs.extend(localeData);
 
@@ -40,15 +41,16 @@ const HabitsCard = ({ habit, description, calendarId }) => {
 
   const { theme, setGlobalTheme } = useThemeStore();
   const { todayGlobal } = useTodayStore();
+  const { refreshDashboard } = useDashboardStore();
 
   const root = document.documentElement;
   const classes = Array.from(root.classList); // Convert classList to an array
 
   useEffect(() => {
-    if (theme === classes[0]) {
+    if (theme === classes[0] || refreshDashboard) {
       window.location.reload();
     }
-  }, [theme]);
+  }, [theme, refreshDashboard]);
 
   useEffect(() => {
     get_data().then((data) => {

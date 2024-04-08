@@ -13,10 +13,12 @@ import { PartyPopper } from "lucide-react";
 import Database from "tauri-plugin-sql-api";
 import { formatDate, getFormattedDate } from "@/utils/utils";
 import useTodayStore from "@/components/todayStore";
+import useDashboardStore from "@/components/dashboardStore";
 
 const MarkAsCompleteDialog = ({ calendarId }) => {
   const [value, setValue] = useState(10);
   const { todayGlobal } = useTodayStore();
+  const {setRefreshDashboard} = useDashboardStore();
 
   useEffect(() => {
     init_table();
@@ -58,6 +60,7 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
           [value, calendarId, date]
         );
       }
+      setRefreshDashboard(value);
     } catch (error) {
       console.log("error : ", error);
     }

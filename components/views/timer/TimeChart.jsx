@@ -20,12 +20,14 @@ import {
 } from "@/components/ui/card";
 import { hslStringToHex, formatTime } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
+import useTimerStore from "@/components/timerStore";
 
 
 const TimeChart = () => {
   const [chartdata, setChartdata] = useState([]);
   const [totalTime, setTotalTime]  = useState(0);
   const { theme, setGlobalTheme } = useThemeStore();
+  const {refreshTimer} = useTimerStore()
 
   useEffect(() => {
     get_data().then((data) => {
@@ -41,7 +43,7 @@ const TimeChart = () => {
       setTotalTime(total_time.reduce((acc, currentValue) => acc + currentValue, 0))
       setChartdata(chart_data);
     });
-  }, []);
+  }, [refreshTimer]);
 
   async function get_data() {
     try {

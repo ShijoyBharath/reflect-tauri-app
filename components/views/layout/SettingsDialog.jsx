@@ -84,7 +84,7 @@ const SettingsDialog = () => {
               {
                 timerValues.map((item)=>{
                   return(
-                    <SelectItem value={item.time}>{item.name}</SelectItem>
+                    <SelectItem key={item.name} value={item.time}>{item.name}</SelectItem>
                   )
                 })
               }

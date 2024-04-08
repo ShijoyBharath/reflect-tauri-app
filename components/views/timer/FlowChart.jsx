@@ -16,11 +16,13 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { hslStringToHex } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
+import useTimerStore from "@/components/timerStore";
 
 const FlowChart = () => {
   const [chartdata, setChartdata] = useState([]);
   const [flows, setFlows] = useState([]);
   const { theme, setGlobalTheme } = useThemeStore();
+  const {refreshTimer} = useTimerStore()
 
   useEffect(() => {
     get_data().then((data) => {
@@ -36,7 +38,7 @@ const FlowChart = () => {
       setFlows(flow_data.reduce((acc, currentValue) => acc + currentValue, 0));
       setChartdata(chart_data);
     });
-  }, []);
+  }, [refreshTimer]);
 
   async function get_data() {
     try {

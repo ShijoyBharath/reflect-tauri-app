@@ -21,11 +21,13 @@ import {
 } from "@/components/ui/card";
 import { hslStringToHex } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
+import useDashboardStore from "@/components/dashboardStore";
 
 const TimeChartDashboard = () => {
   const [score, setScore] = useState(10);
   const [chartdata, setChartdata] = useState([]);
   const { theme, setGlobalTheme } = useThemeStore();
+  const {refreshDashboard} = useDashboardStore();
 
   useEffect(() => {
     get_data().then((data) => {
@@ -47,7 +49,7 @@ const TimeChartDashboard = () => {
       // })
       // setScore(score_data/chart_data.length)
     });
-  }, []);
+  }, [refreshDashboard]);
 
   async function get_data() {
     try {
