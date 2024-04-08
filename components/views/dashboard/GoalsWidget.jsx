@@ -39,7 +39,11 @@ const GoalsWidget = () => {
       var current12week = getCurrent12Weeks(start_date[0].start_date);
       var daysleft = calculateDaysLeft(today, current12week[1]);
 
-      return [select_daily[0].goal, select_weekly[0].goal, daysleft];
+      if (select_daily.length === 0 || select_weekly.length === 0) {
+        return ["Nothing for today", "Nothing this week", daysleft]
+      } else {
+        return [select_daily[0].goal, select_weekly[0].goal, daysleft];
+      }
     } catch (error) {
       console.log("error : ", error);
     }

@@ -43,6 +43,18 @@ export default function RootLayout({ children }) {
 
     const today = `${year}-${month}-${day}`;
     insert(today);
+
+    const theme = localStorage.getItem("theme");
+    if (!theme) {
+      const root = document.documentElement;
+      root.className = "";
+      root.classList.add("light");
+      localStorage.setItem("theme", "light");
+    } else {
+      const root = document.documentElement;
+      root.className = "";
+      root.classList.add(theme);
+    }
   }, []);
 
   const expiryTimestamp = new Date();
