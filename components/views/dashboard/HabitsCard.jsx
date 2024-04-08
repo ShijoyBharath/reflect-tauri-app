@@ -20,7 +20,7 @@ import SlideUpCard from "./SlideUpCard";
 import dayjs from "dayjs";
 import * as localeData from "dayjs/plugin/localeData";
 import Database from "tauri-plugin-sql-api";
-import { formatDate, getCurrent12Weeks } from "@/utils/utils";
+import { hslStringToHex, getCurrent12Weeks } from "@/utils/utils";
 
 dayjs.extend(localeData);
 
@@ -28,6 +28,13 @@ const HabitsCard = ({ habit, description, calendarId }) => {
   var cal = new CalHeatmap();
 
   useEffect(() => {
+    const rootComputedStyle = window.getComputedStyle(document.documentElement);
+
+    var one = rootComputedStyle.getPropertyValue("--primary").trim();
+    var two = rootComputedStyle.getPropertyValue("--secondary").trim();
+    one = hslStringToHex(one)
+    two = hslStringToHex(two)
+
     get_data().then((data) => {
       cal.paint(
         {
@@ -36,15 +43,15 @@ const HabitsCard = ({ habit, description, calendarId }) => {
             type: "json",
             x: "date",
             y: "value",
-            groupY: "max",
+            defaultValue: 0,
           },
           date: { start: data[1] },
           range: 6,
           scale: {
-            color: {
-              type: "threshold",
-              range: ["#14432a", "#166b34", "#37a446", "#4dd05a"],
-              domain: [10, 20, 30],
+            opacity: {
+              baseColor: one,
+              type: 'linear',
+              domain: [-1, 10],
             },
           },
           domain: {
@@ -97,55 +104,6 @@ const HabitsCard = ({ habit, description, calendarId }) => {
           ],
         ]
       );
-
-      //   cal.paint(
-      //     {
-      //       data: {
-      //         source: data,
-      //         type: "json",
-      //         x: "date",
-      //         y: "value",
-      //         // groupY: 'max',
-      //       },
-      //       date: { start: new Date(start_date) },
-      //       range: 8,
-      //       scale: {
-      //         color: {
-      //           type: "quantize",
-      //           scheme: "Oranges",
-      //           domain: [0, 1, 2, 3, 4, 5, 6, 7],
-      //         },
-      //       },
-      //       domain: {
-      //         type: "month",
-      //       },
-      //       subDomain: { type: "day", radius: 2 },
-      //       itemSelector: "#" + "calendar-" + calendarId,
-      //     },
-      //     [
-      //       [
-      //         Tooltip,
-      //         {
-      //           text: function (date, value, dayjsDate) {
-      //             return (
-      //               (value ? value + "/10" : "0/10") +
-      //               " on " +
-      //               dayjsDate.format("LL")
-      //             );
-      //           },
-      //         },
-      //       ],
-      //       [
-      //         Legend,
-      //         {
-      //           tickSize: 0,
-      //           width: 100,
-      //           itemSelector: "#ex-wind-legend",
-      //           label: "Seattle wind (km/h)",
-      //         },
-      //       ],
-      //     ]
-      //   )
     });
   }, []);
 

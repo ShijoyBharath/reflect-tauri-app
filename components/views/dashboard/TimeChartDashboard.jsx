@@ -19,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { hslStringToHex } from "@/utils/utils";
 
 const TimeChartDashboard = () => {
   const [score, setScore] = useState(10);
@@ -53,6 +54,16 @@ const TimeChartDashboard = () => {
       console.log("error : ", error);
     }
   }
+
+
+  const [primaryColor, setPrimaryColor] = useState("");
+
+  useEffect(() => {
+    const rootComputedStyle = window.getComputedStyle(document.documentElement);
+
+    const primaryValue = rootComputedStyle.getPropertyValue("--primary").trim();
+    setPrimaryColor(hslStringToHex(primaryValue));
+  }, []);
 
   return (
     <Card className="border-0 m-4">
@@ -122,16 +133,16 @@ const TimeChartDashboard = () => {
                 strokeWidth={2}
                 activeDot={{
                   r: 8,
-                  style: { fill: "var(--theme-primary)" },
+                  style: { fill: primaryColor },
                 }}
-                // style={
-                //   {
-                //     stroke: "var(--theme-primary)",
-                //     "--theme-primary": `hsl(${
-                //       theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
-                //     })`,
-                //   }
-                // }
+                style={
+                  {
+                    stroke: primaryColor,
+                    // "--theme-primary": `hsl(${
+                    //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
+                    // })`,
+                  }
+                }
               />
               <Line
                 type="monotone"
@@ -139,17 +150,17 @@ const TimeChartDashboard = () => {
                 dataKey="randomval"
                 activeDot={{
                   r: 6,
-                  style: { fill: "var(--theme-primary)", opacity: 0.25 },
+                  style: { fill: primaryColor, opacity: 0.25 },
                 }}
-                // style={
-                //   {
-                //     stroke: "var(--theme-primary)",
-                //     opacity: 0.25,
-                //     "--theme-primary": `hsl(${
-                //       theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
-                //     })`,
-                //   }
-                // }
+                style={
+                  {
+                    stroke: primaryColor,
+                    opacity: 0.25,
+                    // "--theme-primary": `hsl(${
+                    //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
+                    // })`,
+                  }
+                }
               />
             </LineChart>
           </ResponsiveContainer>

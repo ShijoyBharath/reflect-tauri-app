@@ -14,6 +14,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { hslStringToHex } from "@/utils/utils";
 
 const FlowChart = () => {
   const [chartdata, setChartdata] = useState([]);
@@ -41,6 +42,16 @@ const FlowChart = () => {
     }
   }
 
+  const [primaryColor, setPrimaryColor] = useState("");
+
+  useEffect(() => {
+    const rootComputedStyle = window.getComputedStyle(document.documentElement);
+
+    const primaryValue = rootComputedStyle.getPropertyValue("--primary").trim();
+    setPrimaryColor(hslStringToHex(primaryValue));
+  }, []);
+
+
   return (
     <Card className="border-0">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -54,12 +65,8 @@ const FlowChart = () => {
               <Bar
                 dataKey="uv"
                 style={{
-                  fill: "var(--theme-primary)",
+                  fill: primaryColor,
                   opacity: 1,
-                  // "--theme-primary": `hsl(${
-                  //   theme?.cssVars[mode === "dark" ? "dark" : "light"]
-                  //     .primary
-                  // })`,
                 }}
               />
             </BarChart>

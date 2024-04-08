@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { hslStringToHex } from "@/utils/utils";
 
 
 const TimeChart = () => {
@@ -47,6 +48,15 @@ const TimeChart = () => {
       console.log("error : ", error);
     }
   }
+
+  const [primaryColor, setPrimaryColor] = useState("");
+
+  useEffect(() => {
+    const rootComputedStyle = window.getComputedStyle(document.documentElement);
+
+    const primaryValue = rootComputedStyle.getPropertyValue("--primary").trim();
+    setPrimaryColor(hslStringToHex(primaryValue));
+  }, []);
 
   return (
     <Card className="border-0">
@@ -104,16 +114,16 @@ const TimeChart = () => {
                 strokeWidth={2}
                 activeDot={{
                   r: 8,
-                  style: { fill: "var(--theme-primary)" },
+                  style: { fill: primaryColor },
                 }}
-                // style={
-                //   {
-                //     stroke: "var(--theme-primary)",
-                //     "--theme-primary": `hsl(${
-                //       theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
-                //     })`,
-                //   }
-                // }
+                style={
+                  {
+                    stroke: primaryColor,
+                    // "--theme-primary": `hsl(${
+                    //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
+                    // })`,
+                  }
+                }
               />
             </LineChart>
           </ResponsiveContainer>
