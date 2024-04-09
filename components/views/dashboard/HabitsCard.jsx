@@ -48,6 +48,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
 
   const [completed, setCompleted] = useState(false);
   const [streak, setStreak] = useState(0);
+  const [score, setScore] = useState(0);
 
   const { theme, setGlobalTheme } = useThemeStore();
   const { todayGlobal } = useTodayStore();
@@ -184,6 +185,23 @@ const HabitsCard = ({ habit, description, calendarId }) => {
     return maxStreak;
   }
 
+  function findMaxScore(data) {
+    if (data.length === 0) {
+      return 0; // Return 0 if there are no elements in the array
+    }
+
+    // Convert each value to percentage
+    const percentages = data.map((item) => (item.value / 10) * 100);
+
+    // Calculate the sum of all percentages
+    const sum = percentages.reduce((acc, cur) => acc + cur, 0);
+
+    // Calculate the average percentage
+    const averagePercentage = sum / data.length;
+
+    return averagePercentage.toFixed(1);
+  }
+
   async function get_data() {
     try {
       const db = await Database.load("sqlite:data.db");
@@ -191,6 +209,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
         calendarId,
       ]);
       setStreak(findMaxConsecutiveStreak(select));
+      setScore(findMaxScore(select));
       const todays_data = await db.select(
         "SELECT * FROM habitsdata WHERE uuid=? AND date=?",
         [calendarId, formatDate(todayGlobal)]
@@ -241,7 +260,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <div className="flex gap-3">
-          <Badge variant="">Score : 57%</Badge>
+          <Badge variant="">Score : {score}%</Badge>
           <Badge variant="secondary">Streak : {streak}</Badge>
         </div>
         <Dialog>

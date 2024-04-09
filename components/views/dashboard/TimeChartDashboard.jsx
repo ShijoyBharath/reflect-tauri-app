@@ -27,7 +27,24 @@ const TimeChartDashboard = () => {
   const [score, setScore] = useState(10);
   const [chartdata, setChartdata] = useState([]);
   const { theme, setGlobalTheme } = useThemeStore();
-  const {refreshDashboard} = useDashboardStore();
+  const { refreshDashboard } = useDashboardStore();
+
+  function findMaxScore(data) {
+    if (data.length === 0) {
+      return 0; // Return 0 if there are no elements in the array
+    }
+
+    // Convert each value to percentage
+    const percentages = data.map((item) => (item.value / 10) * 100);
+
+    // Calculate the sum of all percentages
+    const sum = percentages.reduce((acc, cur) => acc + cur, 0);
+
+    // Calculate the average percentage
+    const averagePercentage = sum / data.length;
+
+    return averagePercentage.toFixed(1);
+  }
 
   useEffect(() => {
     get_data().then((data) => {
@@ -40,14 +57,7 @@ const TimeChartDashboard = () => {
         };
       });
       setChartdata(chart_data);
-      setScore(
-        ser.reduce((sum, currentValue) => sum + currentValue, 0).toFixed(1)
-      );
-      // var score_data = 0;
-      // chart_data.forEach((item)=>{
-      //   score_data = score_data + item.value
-      // })
-      // setScore(score_data/chart_data.length)
+      setScore(findMaxScore(data));
     });
   }, [refreshDashboard]);
 
@@ -121,7 +131,9 @@ const TimeChartDashboard = () => {
                           </div> */}
                           <div className="flex flex-col">
                             <span className="text-[0.70rem] uppercase text-muted-foreground">
-                            {new Date(payload[0].payload.date).toLocaleDateString('en-GB')}
+                              {new Date(
+                                payload[0].payload.date
+                              ).toLocaleDateString("en-GB")}
                             </span>
                             <span className="font-bold">
                               Score : {payload[0].payload.value.toFixed(1)}
