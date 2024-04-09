@@ -14,9 +14,13 @@ import {
 } from "@/components/ui/select";
 import useThemeStore from "@/components/themeStore";
 import { Palette } from "lucide-react";
+import useDashboardStore from "@/components/dashboardStore";
 
 export function ThemeSwitch() {
   const [mounted, setMounted] = useState(false);
+
+  const {refreshDashboard, setRefreshDashboard} = useDashboardStore();
+
   const themes = [
     "light",
     "green",
@@ -57,6 +61,7 @@ export function ThemeSwitch() {
     root.className = "";
     root.classList.add(theme);
     setGlobalTheme(theme);
+    setRefreshDashboard(refreshDashboard + 1);
     localStorage.setItem("theme", theme);
   }
 

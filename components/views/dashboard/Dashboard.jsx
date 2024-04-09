@@ -12,7 +12,7 @@ const Dashboard = () => {
 
   useEffect(()=>{
     get_data()
-  }, [habits])
+  }, [])
 
   async function get_data() {
     try {

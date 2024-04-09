@@ -10,6 +10,7 @@ import Database from "tauri-plugin-sql-api";
 
 const inter = Inter({ subsets: ["latin"] });
 import { ThemeProvider } from "@/components/theme-provider";
+import useThemeStore from "@/components/themeStore";
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -18,6 +19,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 export default function RootLayout({ children }) {
   const [timer, setTimer] = useState(2700)
+  var { theme, setGlobalTheme } = useThemeStore();
 
   async function insert(today) {
     try {
@@ -58,6 +60,7 @@ export default function RootLayout({ children }) {
       const root = document.documentElement;
       root.className = "";
       root.classList.add(theme);
+      setGlobalTheme(theme)
     }
   }, []);
 

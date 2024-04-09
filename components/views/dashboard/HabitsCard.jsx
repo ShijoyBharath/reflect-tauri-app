@@ -58,10 +58,10 @@ const HabitsCard = ({ habit, description, calendarId }) => {
   const classes = Array.from(root.classList); // Convert classList to an array
 
   useEffect(() => {
-    if (theme === classes[0] || refreshDashboard) {
+    if (theme !== classes[0] || refreshDashboard) {
       window.location.reload();
     }
-  }, [theme, refreshDashboard]);
+  }, [refreshDashboard]);
 
   useEffect(() => {
     get_data().then((data) => {
