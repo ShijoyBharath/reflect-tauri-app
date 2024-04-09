@@ -4,10 +4,15 @@ import Database from "tauri-plugin-sql-api";
 import { formatDate, getCurrent12Weeks } from "@/utils/utils";
 import { Badge } from "@/components/ui/badge";
 import useTodayStore from "@/components/todayStore";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const GoalsWidget = () => {
-
-  const {todayGlobal} = useTodayStore();
+  const { todayGlobal } = useTodayStore();
 
   function calculateDaysLeft(startDateStr, endDateStr) {
     // Convert the string dates to Date objects
@@ -40,14 +45,20 @@ const GoalsWidget = () => {
       );
 
       const start_date = await db.select("SELECT * FROM appconfig");
-      var current12week = getCurrent12Weeks(start_date[0].start_date, todayGlobal);
+      var current12week = getCurrent12Weeks(
+        start_date[0].start_date,
+        todayGlobal
+      );
       var daysleft = calculateDaysLeft(today, current12week[1]);
 
-      var daily = select_daily.length !== 0 ? select_daily[0].goal : "Nothing for today"
-      var weekly = select_weekly.length !== 0 ? select_weekly[0].goal : "Nothing this week"
+      var daily =
+        select_daily.length !== 0 ? select_daily[0].goal : "No goals for today. Add a daily goal!";
+      var weekly =
+        select_weekly.length !== 0
+          ? select_weekly[0].goal
+          : "No goals this week. Add a weekly goal!";
 
       return [daily, weekly, daysleft];
-      
     } catch (error) {
       console.log("error : ", error);
     }
@@ -63,16 +74,28 @@ const GoalsWidget = () => {
           <p className="font-extrabold text-nowrap">Today</p>
           <p className="text-nowrap">{data[0]}</p>
         </Badge>
-        <Badge className="flex gap-3 p-3 justify-between text-sm" variant="secondary">
+        <Badge
+          className="flex gap-3 p-3 justify-between text-sm"
+          variant="secondary"
+        >
           <p className="font-extrabold text-nowrap">This Week</p>
           <p className="text-nowrap">{data[1]}</p>
         </Badge>
       </div>
 
       <div className="flex items-end">
-        <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-          {data[2]} Days left
-        </h3>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+                {data[2]} Days left
+              </h3>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p>in this 12 Week Year</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );

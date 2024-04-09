@@ -111,9 +111,10 @@ const HabitsCard = ({ habit, description, calendarId }) => {
             Tooltip,
             {
               text: function (date, value, dayjsDate) {
-                return value
-                  ? value + "/10 on " + dayjsDate.format("dddd, MMMM D, YYYY")
-                  : "Let's make the most of this day";
+                return (
+                  (value ? value + "/10 on " : "") +
+                  dayjsDate.format("dddd, MMMM D, YYYY")
+                );
               },
             },
           ],
@@ -159,30 +160,25 @@ const HabitsCard = ({ habit, description, calendarId }) => {
   }
 
   function findMaxConsecutiveStreak(data) {
-    let maxStreak = 0;
-    let currentStreak = 0;
+    const datesSet = new Set(data.map(obj => obj.date)); // Remove duplicates
+    const sortedDates = [...datesSet].sort(); // Sort dates
 
-    for (let i = 0; i < data.length; i++) {
-      // Check if the value is greater than 0
-      if (data[i].value > 0) {
-        // If the current date is consecutive with the previous one
-        if (i > 0 && isOneDayApart(data[i - 1].date, data[i].date)) {
-          currentStreak++;
+    let maxCount = 0;
+    let currentCount = 0;
+    let previousDate = null;
+
+    sortedDates.forEach(date => {
+        const currentDate = new Date(date);
+        if (previousDate && (currentDate - previousDate) / (1000 * 60 * 60 * 24) === 1) {
+            currentCount++;
         } else {
-          currentStreak = 1; // Start a new streak
+            currentCount = 1;
         }
+        maxCount = Math.max(maxCount, currentCount);
+        previousDate = currentDate;
+    });
 
-        // Update the max streak if the current streak is greater
-        if (currentStreak > maxStreak) {
-          maxStreak = currentStreak;
-        }
-      } else {
-        // Reset the streak if the value is not greater than 0
-        currentStreak = 0;
-      }
-    }
-
-    return maxStreak;
+    return maxCount;
   }
 
   function findMaxScore(data) {

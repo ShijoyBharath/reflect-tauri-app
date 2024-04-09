@@ -47,7 +47,7 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
       const db = await Database.load("sqlite:data.db");
       const select = await db.select(
         "SELECT * FROM habitsdata WHERE uuid=? AND date=?",
-        [[calendarId, date]]
+        [calendarId, date]
       );
       if (select.length === 0) {
         const insert = await db.execute(

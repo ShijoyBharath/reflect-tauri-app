@@ -558,7 +558,7 @@
     --ring: 30 98% 53%;
   }
 
-  .lavender {
+  .berry {
     --gradient: #cc95c0;
 
     --background: -50 22.75% 5.52%;
@@ -592,7 +592,7 @@
   }
 
   .twilight {
-    --gradient: #DAE2F8;
+    --gradient: #dae2f8;
 
     --background: 238 44.2% 7.28%;
     --foreground: 238 6.800000000000001% 99.55%;
@@ -622,7 +622,74 @@
     --destructive-foreground: 238 6.800000000000001% 99.55%;
 
     --ring: 238 68% 91%;
-}
+  }
+
+  .cocoa {
+    --gradient: #b79891;
+
+    --background: 12 13.65% 5.12%;
+    --foreground: 12 2.1% 98.2%;
+
+    --muted: 12 10.5% 19.2%;
+    --muted-foreground: 12 2.1% 56.4%;
+
+    --popover: 12 60.8% 8.32%;
+    --popover-foreground: 12 2.1% 98.2%;
+
+    --card: 12 60.8% 8.32%;
+    --card-foreground: 12 2.1% 98.2%;
+
+    --border: 12 10.5% 19.2%;
+    --input: 12 10.5% 19.2%;
+
+    --primary: 12 21% 64%;
+    --primary-foreground: 12 2.1% 6.4%;
+
+    --secondary: 12 10.5% 19.2%;
+    --secondary-foreground: 12 2.1% 98.2%;
+
+    --accent: 12 10.5% 19.2%;
+    --accent-foreground: 12 2.1% 98.2%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 12 2.1% 98.2%;
+
+    --ring: 12 21% 64%;
+  }
+
+  .lavender {
+    --gradient: #1f1c2c;
+    --background: 267 96.1% 98.28%;
+    --foreground: 267 2.2% 0.56%;
+
+    --muted: 267 2.2% 91.4%;
+    --muted-foreground: 267 1.1% 41.4%;
+
+    --popover: 267 72.4% 91.4%;
+    --popover-foreground: 267 2.2% 0.7000000000000001%;
+
+    --card: 267 72.4% 91.4%;
+    --card-foreground: 267 2.2% 0.7000000000000001%;
+
+    --border: 267 7.2% 89.56%;
+    --input: 267 7.2% 89.56%;
+
+    --primary: 267 22% 14%;
+    --primary-foreground: 267 0.44% 91.4%;
+
+    --secondary: 267 1.1% 95.7%;
+    --secondary-foreground: 267 2.3200000000000003% 11.4%;
+
+    --accent: 267 1.1% 95.7%;
+    --accent-foreground: 267 2.3200000000000003% 11.4%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 267 22% 14%;
+
+    --radius: 0.5rem;
+  }
 }
 
 @layer base {

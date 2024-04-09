@@ -136,7 +136,7 @@ const TimeChartDashboard = () => {
                               ).toLocaleDateString("en-GB")}
                             </span>
                             <span className="font-bold">
-                              Score : {payload[0].payload.value.toFixed(1)}
+                              Avg Score : {payload[0].payload.value.toFixed(1)}
                             </span>
                           </div>
                         </div>

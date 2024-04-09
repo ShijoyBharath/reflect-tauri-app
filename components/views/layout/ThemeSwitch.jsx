@@ -3,14 +3,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Palette } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -21,6 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useThemeStore from "@/components/themeStore";
+import { Palette } from "lucide-react";
 
 export function ThemeSwitch() {
   const [mounted, setMounted] = useState(false);
@@ -32,11 +25,13 @@ export function ThemeSwitch() {
     "rose",
     "red",
     "blue",
-    "cobalt",
     "violet",
+    "cobalt",
+    "lavender",
     "purple",
     "tangerine",
-    "lavender",
+    "cocoa",
+    "berry",
     "twilight",
     "dark",
     "black",
@@ -68,15 +63,25 @@ export function ThemeSwitch() {
   return (
     <div className="flex gap-3">
       {mounted ? (
-        <Select value={localStorage.getItem("theme")} onValueChange={(val)=>{setTheme(val)}}>
-          <SelectTrigger className="w-[180px]">
+        <Select
+          value={localStorage.getItem("theme")}
+          onValueChange={(val) => {
+            setTheme(val);
+          }}
+        >
+          <SelectTrigger className="w-[180px] flex justify-around">
+            <Palette />
             <SelectValue placeholder="Change App Theme" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Themes</SelectLabel>
               {themes.map((color, index) => {
-                return <SelectItem key={index} value={color}>{color}</SelectItem>;
+                return (
+                  <SelectItem key={index} value={color}>
+                    {color}
+                  </SelectItem>
+                );
               })}
             </SelectGroup>
           </SelectContent>
