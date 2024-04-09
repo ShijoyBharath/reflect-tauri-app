@@ -47,6 +47,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
   const cal = new CalHeatmap();
 
   const [completed, setCompleted] = useState(false);
+  const [streak, setStreak] = useState(0);
 
   const { theme, setGlobalTheme } = useThemeStore();
   const { todayGlobal } = useTodayStore();
@@ -141,12 +142,55 @@ const HabitsCard = ({ habit, description, calendarId }) => {
     });
   }, []);
 
+  function isOneDayApart(date1String, date2String) {
+    // Convert date strings to Date objects
+    const date1 = new Date(date1String);
+    const date2 = new Date(date2String);
+
+    // Calculate the difference in milliseconds
+    const differenceInMs = Math.abs(date2 - date1);
+
+    // Convert milliseconds to days
+    const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
+
+    // Check if the difference is exactly 1 day
+    return differenceInDays === 1;
+  }
+
+  function findMaxConsecutiveStreak(data) {
+    let maxStreak = 0;
+    let currentStreak = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      // Check if the value is greater than 0
+      if (data[i].value > 0) {
+        // If the current date is consecutive with the previous one
+        if (i > 0 && isOneDayApart(data[i - 1].date, data[i].date)) {
+          currentStreak++;
+        } else {
+          currentStreak = 1; // Start a new streak
+        }
+
+        // Update the max streak if the current streak is greater
+        if (currentStreak > maxStreak) {
+          maxStreak = currentStreak;
+        }
+      } else {
+        // Reset the streak if the value is not greater than 0
+        currentStreak = 0;
+      }
+    }
+
+    return maxStreak;
+  }
+
   async function get_data() {
     try {
       const db = await Database.load("sqlite:data.db");
       const select = await db.select("SELECT * FROM habitsdata WHERE uuid=?", [
         calendarId,
       ]);
+      setStreak(findMaxConsecutiveStreak(select));
       const todays_data = await db.select(
         "SELECT * FROM habitsdata WHERE uuid=? AND date=?",
         [calendarId, formatDate(todayGlobal)]
@@ -198,7 +242,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
       <CardFooter className="flex justify-between items-center">
         <div className="flex gap-3">
           <Badge variant="">Score : 57%</Badge>
-          <Badge variant="secondary">Streak : 5</Badge>
+          <Badge variant="secondary">Streak : {streak}</Badge>
         </div>
         <Dialog>
           <TooltipProvider>
@@ -216,7 +260,11 @@ const HabitsCard = ({ habit, description, calendarId }) => {
             </Tool>
           </TooltipProvider>
           <DialogContent>
-            <EditHabitDialog calendarId={calendarId} curHabit={habit} curDescription={description} />
+            <EditHabitDialog
+              calendarId={calendarId}
+              curHabit={habit}
+              curDescription={description}
+            />
           </DialogContent>
         </Dialog>
       </CardFooter>
