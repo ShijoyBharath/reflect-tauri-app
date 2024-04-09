@@ -103,7 +103,7 @@ const TimeChartDashboard = () => {
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="pb-4">
+      <CardContent>
         <div className="h-[200px] lg:h-[425px] sm:h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
@@ -112,7 +112,7 @@ const TimeChartDashboard = () => {
                 top: 5,
                 right: 10,
                 left: 10,
-                bottom: 0,
+                bottom: 10,
               }}
             >
               <Tooltip

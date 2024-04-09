@@ -75,7 +75,7 @@ const TimeChart = () => {
           Total time spent {formatTime(totalTime)}
         </CardDescription>
       </CardHeader>
-      <CardContent className="pb-4">
+      <CardContent>
         <div className="h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart
@@ -84,7 +84,7 @@ const TimeChart = () => {
                 top: 5,
                 right: 10,
                 left: 10,
-                bottom: 0,
+                bottom: 10,
               }}
             >
               <Tooltip
