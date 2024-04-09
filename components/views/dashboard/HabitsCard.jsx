@@ -17,6 +17,7 @@ import {
   Check,
   CircleCheckBig,
   CheckCheck,
+  Bolt,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MarkAsCompleteDialog from "./MarkAsCompleteDialog";
@@ -31,6 +32,14 @@ import { hslStringToHex, getCurrent12Weeks, formatDate } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
 import useTodayStore from "@/components/todayStore";
 import useDashboardStore from "@/components/dashboardStore";
+import {
+  Tooltip as Tool,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
+import EditHabitDialog from "./EditHabitDialog";
 
 dayjs.extend(localeData);
 
@@ -69,7 +78,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
             type: "json",
             x: "date",
             y: "value",
-            groupY: 'max',
+            groupY: "max",
             defaultValue: 0,
           },
           date: { start: data[1] },
@@ -186,17 +195,30 @@ const HabitsCard = ({ habit, description, calendarId }) => {
       <CardContent>
         <div id={"calendar-" + calendarId}></div>
       </CardContent>
-      <CardFooter>
-        {/* <div className="flex gap-4">
-          <div className="flex items-center gap-2">
-            <Link size={18} />
-            <p>13</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Sparkles size={18} />
-            <p>57%</p>
-          </div>
-        </div> */}
+      <CardFooter className="flex justify-between items-center">
+        <div className="flex gap-3">
+          <Badge variant="">Score : 57%</Badge>
+          <Badge variant="secondary">Streak : 5</Badge>
+        </div>
+        <Dialog>
+          <TooltipProvider>
+            <Tool>
+              <TooltipTrigger asChild>
+                <DialogTrigger asChild>
+                  <Button className="w-5 h-5" variant="ghost" size="icon">
+                    <Bolt />
+                  </Button>
+                </DialogTrigger>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">
+                <p>Edit Habit</p>
+              </TooltipContent>
+            </Tool>
+          </TooltipProvider>
+          <DialogContent>
+            <EditHabitDialog calendarId={calendarId} curHabit={habit} curDescription={description} />
+          </DialogContent>
+        </Dialog>
       </CardFooter>
     </Card>
   );
