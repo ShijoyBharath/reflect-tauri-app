@@ -78,7 +78,7 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
         </h1>
         <p className="text-md text-muted-foreground">
           {value == 0 ? "" : <PartyPopper />}
-          {value >= 7
+          {value > 8
             ? "Perfect!"
             : value > 5
             ? "Great Work!"
