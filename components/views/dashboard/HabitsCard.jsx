@@ -11,14 +11,7 @@ import {
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import CalHeatmap from "cal-heatmap";
 import "cal-heatmap/cal-heatmap.css";
-import {
-  Link,
-  Sparkles,
-  Check,
-  CircleCheckBig,
-  CheckCheck,
-  Bolt,
-} from "lucide-react";
+import { Check, CheckCheck, Bolt } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import MarkAsCompleteDialog from "./MarkAsCompleteDialog";
 import LegendLite from "cal-heatmap/plugins/LegendLite";
@@ -144,38 +137,26 @@ const HabitsCard = ({ habit, description, calendarId }) => {
     });
   }, []);
 
-  function isOneDayApart(date1String, date2String) {
-    // Convert date strings to Date objects
-    const date1 = new Date(date1String);
-    const date2 = new Date(date2String);
-
-    // Calculate the difference in milliseconds
-    const differenceInMs = Math.abs(date2 - date1);
-
-    // Convert milliseconds to days
-    const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
-
-    // Check if the difference is exactly 1 day
-    return differenceInDays === 1;
-  }
-
   function findMaxConsecutiveStreak(data) {
-    const datesSet = new Set(data.map(obj => obj.date)); // Remove duplicates
+    const datesSet = new Set(data.map((obj) => obj.date)); // Remove duplicates
     const sortedDates = [...datesSet].sort(); // Sort dates
 
     let maxCount = 0;
     let currentCount = 0;
     let previousDate = null;
 
-    sortedDates.forEach(date => {
-        const currentDate = new Date(date);
-        if (previousDate && (currentDate - previousDate) / (1000 * 60 * 60 * 24) === 1) {
-            currentCount++;
-        } else {
-            currentCount = 1;
-        }
-        maxCount = Math.max(maxCount, currentCount);
-        previousDate = currentDate;
+    sortedDates.forEach((date) => {
+      const currentDate = new Date(date);
+      if (
+        previousDate &&
+        (currentDate - previousDate) / (1000 * 60 * 60 * 24) === 1
+      ) {
+        currentCount++;
+      } else {
+        currentCount = 1;
+      }
+      maxCount = Math.max(maxCount, currentCount);
+      previousDate = currentDate;
     });
 
     return maxCount;
