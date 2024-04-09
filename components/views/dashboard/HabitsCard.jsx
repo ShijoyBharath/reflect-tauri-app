@@ -69,6 +69,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
             type: "json",
             x: "date",
             y: "value",
+            groupY: 'max',
             defaultValue: 0,
           },
           date: { start: data[1] },
@@ -99,11 +100,9 @@ const HabitsCard = ({ habit, description, calendarId }) => {
             Tooltip,
             {
               text: function (date, value, dayjsDate) {
-                return (
-                  (value ? value : "0") +
-                  "/10 on " +
-                  dayjsDate.format("dddd, MMMM D, YYYY")
-                );
+                return value
+                  ? value + "/10 on " + dayjsDate.format("dddd, MMMM D, YYYY")
+                  : "Let's make the most of this day";
               },
             },
           ],
