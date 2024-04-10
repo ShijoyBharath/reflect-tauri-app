@@ -17,7 +17,7 @@ import useTodayStore from "@/components/todayStore";
 import useTimerStore from "@/components/timerStore";
 import useDashboardStore from "@/components/dashboardStore";
 
-const NavBar = () => {
+const NavBar = ({initTimer}) => {
   const [remainingTime, setRemainingTime] = useState(getRemainingTime());
 
   const { todayGlobal } = useTodayStore();
@@ -82,7 +82,7 @@ const NavBar = () => {
   }
 
   const [flows, setFlows] = useState(0);
-  const [timer, setTimer] = useState(parseInt(localStorage.getItem("timer_in_sec")));
+  const [timer, setTimer] = useState(initTimer);
 
   useEffect(() => {
     get_data(formatDate(todayGlobal));
@@ -161,7 +161,7 @@ const NavBar = () => {
       insert_data(timer, formatDate(todayGlobal));
       const time = new Date();
       time.setSeconds(time.getSeconds() + timer);
-      restart(time, false);
+      restart(time);
     },
   });
 

@@ -116,7 +116,7 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
           enableSystem
         >
-          <NavBar />
+          <NavBar initTimer={parseInt(localStorage.getItem("timer_in_sec"))} />
           <div className="flex flex-1 overflow-hidden">
             <SideBar />
             <main className={inter.className + " grow overflow-y-auto"}>
