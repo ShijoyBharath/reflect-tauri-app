@@ -29,22 +29,23 @@ const TimeChart = () => {
   const { theme, setGlobalTheme } = useThemeStore();
   const { refreshTimer } = useTimerStore();
 
-
   useEffect(() => {
     get_data().then((data) => {
-      var chart_data = data.map((item) => {
-        return {
-          time: item.value,
-          date: item.date,
-        };
-      });
-      var total_time = data.map((item) => {
-        return item.value;
-      });
-      setTotalTime(
-        total_time.reduce((acc, currentValue) => acc + currentValue, 0)
-      );
-      setChartdata(chart_data);
+      if (data.length !== 0) {
+        var chart_data = data.map((item) => {
+          return {
+            time: item.value,
+            date: item.date,
+          };
+        });
+        var total_time = data.map((item) => {
+          return item.value;
+        });
+        setTotalTime(
+          total_time.reduce((acc, currentValue) => acc + currentValue, 0)
+        );
+        setChartdata(chart_data);
+      }
     });
   }, [refreshTimer]);
 

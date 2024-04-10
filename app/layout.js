@@ -107,6 +107,12 @@ export default function RootLayout({ children }) {
     init_tables();
   }, []);
 
+  var initTimer = 0
+  if (typeof window !== 'undefined') {
+    // Code that uses localStorage
+    initTimer = parseInt(localStorage.getItem("timer_in_sec"))
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="flex flex-col h-screen w-screen">
@@ -116,7 +122,7 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
           enableSystem
         >
-          <NavBar initTimer={parseInt(localStorage.getItem("timer_in_sec"))} />
+          <NavBar initTimer={initTimer} />
           <div className="flex flex-1 overflow-hidden">
             <SideBar />
             <main className={inter.className + " grow overflow-y-auto"}>
