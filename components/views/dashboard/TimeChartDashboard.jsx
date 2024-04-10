@@ -22,6 +22,7 @@ import {
 import { hslStringToHex } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
 import useDashboardStore from "@/components/dashboardStore";
+import { Clover } from "lucide-react";
 
 const TimeChartDashboard = () => {
   const [score, setScore] = useState(10);
@@ -105,81 +106,91 @@ const TimeChartDashboard = () => {
       </CardHeader>
       <CardContent>
         <div className="h-[200px] lg:h-[425px] sm:h-[200px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={chartdata}
-              margin={{
-                top: 5,
-                right: 10,
-                left: 10,
-                bottom: 10,
-              }}
-            >
-              <Tooltip
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    return (
-                      <div className="rounded-lg border bg-background p-2 shadow-sm">
-                        <div className="grid grid-cols-1 gap-2">
-                          {/* <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              Progress
-                            </span>
-                            <span className="font-bold text-muted-foreground">
-                              {payload[0].payload.randomval}
-                            </span>
-                          </div> */}
-                          <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
-                              {new Date(
-                                payload[0].payload.date
-                              ).toLocaleDateString("en-GB")}
-                            </span>
-                            <span className="font-bold">
-                              Avg Score : {payload[0].payload.value.toFixed(1)}
-                            </span>
+          {chartdata.length !== 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={chartdata}
+                margin={{
+                  top: 5,
+                  right: 10,
+                  left: 10,
+                  bottom: 10,
+                }}
+              >
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="rounded-lg border bg-background p-2 shadow-sm">
+                          <div className="grid grid-cols-1 gap-2">
+                            {/* <div className="flex flex-col">
+                          <span className="text-[0.70rem] uppercase text-muted-foreground">
+                            Progress
+                          </span>
+                          <span className="font-bold text-muted-foreground">
+                            {payload[0].payload.randomval}
+                          </span>
+                        </div> */}
+                            <div className="flex flex-col">
+                              <span className="text-[0.70rem] uppercase text-muted-foreground">
+                                {new Date(
+                                  payload[0].payload.date
+                                ).toLocaleDateString("en-GB")}
+                              </span>
+                              <span className="font-bold">
+                                Avg Score :{" "}
+                                {payload[0].payload.value.toFixed(1)}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  }
+                      );
+                    }
 
-                  return null;
-                }}
-              />
-              <Line
-                type="monotone"
-                dataKey="value"
-                strokeWidth={2}
-                activeDot={{
-                  r: 8,
-                  style: { fill: primaryColor },
-                }}
-                style={{
-                  stroke: primaryColor,
-                  // "--theme-primary": `hsl(${
-                  //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
-                  // })`,
-                }}
-              />
-              {/* <Line
-                type="monotone"
-                strokeWidth={2}
-                dataKey="randomval"
-                activeDot={{
-                  r: 6,
-                  style: { fill: primaryColor, opacity: 0.25 },
-                }}
-                style={{
-                  stroke: primaryColor,
-                  opacity: 0.25,
-                  // "--theme-primary": `hsl(${
-                  //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
-                  // })`,
-                }}
-              /> */}
-            </LineChart>
-          </ResponsiveContainer>
+                    return null;
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="value"
+                  strokeWidth={2}
+                  activeDot={{
+                    r: 8,
+                    style: { fill: primaryColor },
+                  }}
+                  style={{
+                    stroke: primaryColor,
+                    // "--theme-primary": `hsl(${
+                    //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
+                    // })`,
+                  }}
+                />
+                {/* <Line
+              type="monotone"
+              strokeWidth={2}
+              dataKey="randomval"
+              activeDot={{
+                r: 6,
+                style: { fill: primaryColor, opacity: 0.25 },
+              }}
+              style={{
+                stroke: primaryColor,
+                opacity: 0.25,
+                // "--theme-primary": `hsl(${
+                //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
+                // })`,
+              }}
+            /> */}
+              </LineChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex flex-col justify-around items-center text-center">
+              <Clover size={100} />
+              <p className="text-base text-muted-foreground py-5">
+                Complete a habit to see your score!
+              </p>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

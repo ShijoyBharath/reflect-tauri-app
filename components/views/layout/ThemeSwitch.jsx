@@ -20,6 +20,7 @@ export function ThemeSwitch() {
   const [mounted, setMounted] = useState(false);
 
   const {refreshDashboard, setRefreshDashboard} = useDashboardStore();
+  const setGlobalTheme = useThemeStore((state) => state.setGlobalTheme);
 
   const themes = [
     "light",
@@ -54,7 +55,6 @@ export function ThemeSwitch() {
     setMounted(true);
   }, []);
 
-  var { theme, setGlobalTheme } = useThemeStore();
 
   function setTheme(theme) {
     const root = document.documentElement;

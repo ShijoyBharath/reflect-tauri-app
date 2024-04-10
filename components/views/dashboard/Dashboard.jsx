@@ -1,26 +1,25 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import DailyQuote from "./DailyQuote";
 import HabitsCard from "./HabitsCard";
 import GoalsWidget from "./GoalsWidget";
 import Database from "tauri-plugin-sql-api";
 import TimeChartDashboard from "./TimeChartDashboard";
+import useDashboardStore from "@/components/dashboardStore";
 
 const Dashboard = () => {
+  const [habits, setHabits] = useState([]);
+  const { refreshDashboard } = useDashboardStore();
 
-  const [habits, setHabits] = useState([])
-
-  useEffect(()=>{
-    get_data()
-  }, [])
+  useEffect(() => {
+    get_data();
+  }, [refreshDashboard]);
 
   async function get_data() {
     try {
       const db = await Database.load("sqlite:data.db");
-      const select = await db.select(
-        "SELECT * FROM habits",
-      );
-      setHabits(select)
+      const select = await db.select("SELECT * FROM habits");
+      setHabits(select);
     } catch (error) {
       console.log("error : ", error);
     }
@@ -34,21 +33,27 @@ const Dashboard = () => {
           <GoalsWidget />
         </div>
         <div className="grow">
-          <TimeChartDashboard/>
+          <TimeChartDashboard />
         </div>
       </div>
       {/* <ScrollArea className="whitespace-nowrap rounded-md border"> */}
       <div className="flex flex-wrap justify-around gap-3 m-3">
-        {habits.map((item) => {
-          return (
-            <HabitsCard
-              key={item.id}
-              habit={item.habit}
-              description={item.description}
-              calendarId={item.uuid}
-            />
-          );
-        })}
+        {habits.length !== 0 ? (
+          habits.map((item) => {
+            return (
+              <HabitsCard
+                key={item.id}
+                habit={item.habit}
+                description={item.description}
+                calendarId={item.uuid}
+              />
+            );
+          })
+        ) : (
+          <p className="text-base text-muted-foreground py-5">
+            Create habits by clicking the "+" icon on the sidebar!
+          </p>
+        )}
       </div>
       {/* <ScrollBar orientation="horizontal" />
     </ScrollArea> */}

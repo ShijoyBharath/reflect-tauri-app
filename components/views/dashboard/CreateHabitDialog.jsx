@@ -13,12 +13,14 @@ import Database from "tauri-plugin-sql-api";
 import { formatDate, getFormattedDate } from "@/utils/utils";
 import { toast } from "sonner";
 import useTodayStore from "@/components/todayStore";
+import useDashboardStore from "@/components/dashboardStore";
 
 const CreateHabitDialog = () => {
   const [habit, setHabit] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const {todayGlobal} = useTodayStore()
+  const {refreshDashboard, setRefreshDashboard} = useDashboardStore();
 
   useEffect(() => {
     init_table();
@@ -72,6 +74,7 @@ const CreateHabitDialog = () => {
           [habit, description, uuid]
         );
       }
+      setRefreshDashboard(1);
     } catch (error) {
       console.log("error : ", error);
     }

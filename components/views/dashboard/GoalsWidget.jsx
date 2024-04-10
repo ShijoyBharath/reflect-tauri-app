@@ -58,13 +58,14 @@ const GoalsWidget = () => {
           ? select_weekly[0].goal
           : "No goals this week. Add a weekly goal!";
 
-      return [daily, weekly, daysleft];
+      setData([daily, weekly, daysleft])
+
     } catch (error) {
       console.log("error : ", error);
     }
   }
   useEffect(() => {
-    get_data().then((data) => setData(data));
+    get_data()
   }, []);
 
   return (

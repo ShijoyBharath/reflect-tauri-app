@@ -13,16 +13,23 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { hslStringToHex } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
 import useTimerStore from "@/components/timerStore";
+import { Flower2 } from "lucide-react";
 
 const FlowChart = () => {
   const [chartdata, setChartdata] = useState([]);
   const [flows, setFlows] = useState([]);
   const { theme, setGlobalTheme } = useThemeStore();
-  const {refreshTimer} = useTimerStore()
+  const { refreshTimer } = useTimerStore();
 
   useEffect(() => {
     get_data().then((data) => {
@@ -32,9 +39,9 @@ const FlowChart = () => {
           amt: item.date,
         };
       });
-      var flow_data = data.map((item)=>{
-        return item.value
-      })
+      var flow_data = data.map((item) => {
+        return item.value;
+      });
       setFlows(flow_data.reduce((acc, currentValue) => acc + currentValue, 0));
       setChartdata(chart_data);
     });
@@ -68,17 +75,26 @@ const FlowChart = () => {
       </CardHeader>
       <CardContent>
         <div className="mt-4 h-[200px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartdata}>
-              <Bar
-                dataKey="uv"
-                style={{
-                  fill: primaryColor,
-                  opacity: 1,
-                }}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          {chartdata.length !== 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartdata}>
+                <Bar
+                  dataKey="uv"
+                  style={{
+                    fill: primaryColor,
+                    opacity: 1,
+                  }}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex flex-col justify-around items-center text-center">
+              <Flower2 size={90} />
+              <p className="text-base text-muted-foreground py-5">
+                Set a timer to view the number of flow sessions!
+              </p>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

@@ -18,6 +18,7 @@ const Timer = () => {
   }, [refreshTimer]);
 
   const [timespenttoday, setTimespenttoday] = useState(0);
+  console.log(timespenttoday)
 
   async function init_table(date) {
     try {

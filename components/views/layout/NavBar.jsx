@@ -119,7 +119,7 @@ const NavBar = ({ expiryTimestamp }) => {
         setFlows(select[0].flows);
       }
       const timer_data = await db.select("SELECT timer_in_sec FROM appconfig");
-      setTimer(timer_data);
+      setTimer(timer_data[0].timer_in_sec);
     } catch (error) {
       console.log(error);
     }
@@ -140,6 +140,7 @@ const NavBar = ({ expiryTimestamp }) => {
           [timespent, 1, date]
         );
         setFlows(1);
+        setRefreshTimer(timespent);
       } else {
         const updated_timespent = select[0].timespent_in_sec + timespent;
         const updated_flows = select[0].flows + 1;

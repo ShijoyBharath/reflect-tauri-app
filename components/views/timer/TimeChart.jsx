@@ -21,13 +21,14 @@ import {
 import { hslStringToHex, formatTime } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
 import useTimerStore from "@/components/timerStore";
-
+import { Sprout } from "lucide-react";
 
 const TimeChart = () => {
   const [chartdata, setChartdata] = useState([]);
-  const [totalTime, setTotalTime]  = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
   const { theme, setGlobalTheme } = useThemeStore();
-  const {refreshTimer} = useTimerStore()
+  const { refreshTimer } = useTimerStore();
+
 
   useEffect(() => {
     get_data().then((data) => {
@@ -37,10 +38,12 @@ const TimeChart = () => {
           date: item.date,
         };
       });
-      var total_time = data.map((item)=>{
-        return item.value
-      })
-      setTotalTime(total_time.reduce((acc, currentValue) => acc + currentValue, 0))
+      var total_time = data.map((item) => {
+        return item.value;
+      });
+      setTotalTime(
+        total_time.reduce((acc, currentValue) => acc + currentValue, 0)
+      );
       setChartdata(chart_data);
     });
   }, [refreshTimer]);
@@ -77,57 +80,66 @@ const TimeChart = () => {
       </CardHeader>
       <CardContent>
         <div className="h-[200px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={chartdata}
-              margin={{
-                top: 5,
-                right: 10,
-                left: 10,
-                bottom: 10,
-              }}
-            >
-              <Tooltip
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    return (
-                      <div className="rounded-lg border bg-background p-2 shadow-sm">
-                        <div className="grid grid-cols-1 gap-2">
-                          <div className="flex flex-col">
-                            <span className="text-[0.70rem] uppercase text-muted-foreground">
-                            {new Date(payload[0].payload.date).toLocaleDateString('en-GB')}
-                            </span>
-                            <span className="font-bold">
-                              {formatTime(payload[0].payload.time)}
-                            </span>
+          {chartdata.length !== 0 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={chartdata}
+                margin={{
+                  top: 5,
+                  right: 10,
+                  left: 10,
+                  bottom: 10,
+                }}
+              >
+                <Tooltip
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      return (
+                        <div className="rounded-lg border bg-background p-2 shadow-sm">
+                          <div className="grid grid-cols-1 gap-2">
+                            <div className="flex flex-col">
+                              <span className="text-[0.70rem] uppercase text-muted-foreground">
+                                {new Date(
+                                  payload[0].payload.date
+                                ).toLocaleDateString("en-GB")}
+                              </span>
+                              <span className="font-bold">
+                                {formatTime(payload[0].payload.time)}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  }
+                      );
+                    }
 
-                  return null;
-                }}
-              />
-              <Line
-                type="monotone"
-                dataKey="time"
-                strokeWidth={2}
-                activeDot={{
-                  r: 8,
-                  style: { fill: primaryColor },
-                }}
-                style={
-                  {
+                    return null;
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="time"
+                  strokeWidth={2}
+                  activeDot={{
+                    r: 8,
+                    style: { fill: primaryColor },
+                  }}
+                  style={{
                     stroke: primaryColor,
                     // "--theme-primary": `hsl(${
                     //   theme?.cssVars[mode === "dark" ? "dark" : "light"].primary
                     // })`,
-                  }
-                }
-              />
-            </LineChart>
-          </ResponsiveContainer>
+                  }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex flex-col justify-around items-center text-center">
+              <Sprout size={110} />
+              <p className="text-base text-muted-foreground py-5">
+                Set a timer to see how much time you spend!
+              </p>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

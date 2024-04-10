@@ -42,16 +42,18 @@ const HabitsCard = ({ habit, description, calendarId }) => {
   const [completed, setCompleted] = useState(false);
   const [streak, setStreak] = useState(0);
   const [score, setScore] = useState(0);
-
-  const { theme, setGlobalTheme } = useThemeStore();
+  
+  const {theme} = useThemeStore();
+  
   const { todayGlobal } = useTodayStore();
   const { refreshDashboard } = useDashboardStore();
-
+  
   const root = document.documentElement;
   const classes = Array.from(root.classList); // Convert classList to an array
+  const [themeChange, setThemeChange] = useState(classes[0])
 
   useEffect(() => {
-    if (theme !== classes[0] || refreshDashboard) {
+    if (themeChange !== classes[0] || refreshDashboard) {
       window.location.reload();
     }
   }, [refreshDashboard]);
@@ -66,6 +68,11 @@ const HabitsCard = ({ habit, description, calendarId }) => {
       var two = rootComputedStyle.getPropertyValue("--secondary").trim();
       one = hslStringToHex(one);
       two = hslStringToHex(two);
+
+      const root_el = document.documentElement;
+      const classes_root = Array.from(root_el.classList);
+      setThemeChange(classes_root[0])
+
       cal.paint(
         {
           data: {
