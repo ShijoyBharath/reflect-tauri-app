@@ -18,7 +18,6 @@ const Timer = () => {
   }, [refreshTimer]);
 
   const [timespenttoday, setTimespenttoday] = useState(0);
-  console.log(timespenttoday)
 
   async function init_table(date) {
     try {
@@ -40,7 +39,7 @@ const Timer = () => {
   }
 
   return (
-    <div className="flex flex-col gap-3 mr-3 justify-between bg-secondary rounded-lg">
+    <div className="flex flex-col gap-3 mr-3 mb-3 justify-between bg-secondary rounded-lg">
       <div className="flex flex-col gap-3">
       <TimeSpentToday time={timespenttoday} />
       <div className="flex gap-4 m-4">

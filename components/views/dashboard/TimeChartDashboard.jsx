@@ -69,6 +69,10 @@ const TimeChartDashboard = () => {
         "SELECT date, AVG(value) AS value FROM habitsdata GROUP BY date"
       );
 
+      if (select === undefined) {
+        return [];
+      }
+
       return select;
     } catch (error) {
       console.log("error : ", error);

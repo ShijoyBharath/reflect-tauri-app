@@ -12,9 +12,11 @@ import {
 } from "@/components/ui/select";
 import { Timer } from "lucide-react";
 import Database from "tauri-plugin-sql-api";
+import useDashboardStore from "@/components/dashboardStore";
 
 const SettingsDialog = () => {
   const [value, setValue] = useState(2700);
+  const {refreshDashboard, setRefreshDashboard} = useDashboardStore();
   const timerValues = [
     {
       name: "45Mins",
@@ -57,6 +59,8 @@ const SettingsDialog = () => {
         "UPDATE appconfig SET timer_in_sec=? WHERE id=1",
         [timer_in_sec]
       );
+      localStorage.setItem("timer_in_sec", timer_in_sec)
+      setRefreshDashboard(timer_in_sec)
     } catch (error) {
       console.log("error : ", error);
     }
@@ -76,7 +80,7 @@ const SettingsDialog = () => {
           <ThemeSwitch />
         </div>
         <div className="flex flex-col gap-2">
-          <p className="text-sm">Timer</p>
+          <p className="text-sm">Reset Timer</p>
           <Select
             value={value}
             onValueChange={(val) => {

@@ -15,12 +15,14 @@ import Database from "tauri-plugin-sql-api";
 import { formatDate } from "@/utils/utils";
 import useTodayStore from "@/components/todayStore";
 import useTimerStore from "@/components/timerStore";
+import useDashboardStore from "@/components/dashboardStore";
 
-const NavBar = ({ expiryTimestamp }) => {
+const NavBar = () => {
   const [remainingTime, setRemainingTime] = useState(getRemainingTime());
-  const [timer, setTimer] = useState(2700);
+
   const { todayGlobal } = useTodayStore();
   const { setRefreshTimer } = useTimerStore();
+  const { refreshDashboard, setRefreshDashboard } = useDashboardStore();
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -79,33 +81,12 @@ const NavBar = ({ expiryTimestamp }) => {
     day = "0" + day;
   }
 
-  const {
-    totalSeconds,
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
-    restart,
-  } = useTimer({
-    expiryTimestamp,
-    autoStart: false,
-    onExpire: () => {
-      console.warn("Timer expired");
-      insert_data(timer, formatDate(todayGlobal));
-      const time = new Date();
-      time.setSeconds(time.getSeconds() + timer);
-      restart(time, false);
-    },
-  });
-
   const [flows, setFlows] = useState(0);
+  const [timer, setTimer] = useState(parseInt(localStorage.getItem("timer_in_sec")));
+
   useEffect(() => {
     get_data(formatDate(todayGlobal));
-  }, []);
+  }, [refreshDashboard]);
 
   async function get_data(date) {
     try {
@@ -118,8 +99,10 @@ const NavBar = ({ expiryTimestamp }) => {
       } else {
         setFlows(select[0].flows);
       }
-      const timer_data = await db.select("SELECT timer_in_sec FROM appconfig");
-      setTimer(timer_data[0].timer_in_sec);
+      if (parseInt(localStorage.getItem("timer_in_sec")) !== timer) {
+        window.location.reload()
+      }
+
     } catch (error) {
       console.log(error);
     }
@@ -155,6 +138,33 @@ const NavBar = ({ expiryTimestamp }) => {
       console.log("error : ", error);
     }
   }
+
+  const expiryTimestamp = new Date();
+  var {
+    totalSeconds,
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    resume,
+    restart,
+  } = useTimer({
+    expiryTimestamp: expiryTimestamp.setSeconds(
+      expiryTimestamp.getSeconds() + timer
+    ),
+    autoStart: false,
+    onExpire: () => {
+      console.warn("Timer expired");
+      insert_data(timer, formatDate(todayGlobal));
+      const time = new Date();
+      time.setSeconds(time.getSeconds() + timer);
+      restart(time, false);
+    },
+  });
+
 
   return (
     <div className="flex justify-between gap-5 m-5">
@@ -222,7 +232,7 @@ const NavBar = ({ expiryTimestamp }) => {
               variant="ghost"
               onClick={() => {
                 const time = new Date();
-                time.setSeconds(time.getSeconds() + 5);
+                time.setSeconds(time.getSeconds() + timer);
                 restart(time, false);
               }}
             >
@@ -231,7 +241,9 @@ const NavBar = ({ expiryTimestamp }) => {
           </div>
         </div>
 
-        <Badge className="text-center" variant="secondary">{day + " " + monthName + " " + year}</Badge>
+        <Badge className="text-center" variant="secondary">
+          {day + " " + monthName + " " + year}
+        </Badge>
       </div>
     </div>
   );

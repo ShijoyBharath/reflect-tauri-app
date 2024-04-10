@@ -26,7 +26,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex flex-col gap-3 mr-3 justify-between bg-secondary rounded-lg">
+    <div className="flex flex-col gap-3 mr-3 mb-3 justify-between bg-secondary rounded-lg">
       <div className="flex flex-col lg:flex-row lg:items-center gap-3">
         <div className="flex flex-col lg:w-3/5">
           <DailyQuote />
