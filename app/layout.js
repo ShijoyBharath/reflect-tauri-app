@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
 
       // initialize all tables for the app.
       await db.execute(
-        "CREATE TABLE IF NOT EXISTS appconfig (id INTEGER PRIMARY KEY, start_date TEXT NOT NULL, theme TEXT NOT NULL, timer_in_sec INTEGER NOT NULL)"
+        "CREATE TABLE IF NOT EXISTS appconfig (id INTEGER PRIMARY KEY, start_date TEXT NOT NULL, theme TEXT NOT NULL, timer_in_sec INTEGER NOT NULL, activated INTEGER NOT NULL)"
       );
 
       await db.execute(
@@ -54,9 +54,10 @@ export default function RootLayout({ children }) {
       const select = await db.select("SELECT COUNT(*) AS COUNT FROM appconfig");
       if (select[0].COUNT == 0) {
         const insert = await db.execute(
-          "INSERT OR REPLACE INTO appconfig (id, start_date, theme, timer_in_sec) VALUES (1, ?, ?, ?)",
+          "INSERT OR REPLACE INTO appconfig (id, start_date, theme, timer_in_sec, activated) VALUES (1, ?, ?, ?, 0)",
           [formatDate(new Date()), "light", 2700]
         );
+        localStorage.setItem("helper", 0)
         window.location.reload();
       }
 
