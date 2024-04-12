@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/carousel";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
-import useDashboardStore from "@/components/dashboardStore";
+// import useDashboardStore from "@/components/dashboardStore";
 
 const ThankYou = () => {
-  const { refreshDashboard, setRefreshDashboard } = useDashboardStore();
+  // const { refreshDashboard, setRefreshDashboard } = useDashboardStore();
 
   return (
     <div>
@@ -66,7 +66,7 @@ const ThankYou = () => {
                 className="flex gap-2 w-full"
                 onClick={() => {
                   localStorage.setItem("helper", 1);
-                  setRefreshDashboard(1);
+                  window.location.reload();
                 }}
               >
                 <Heart />
