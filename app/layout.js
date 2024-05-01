@@ -9,7 +9,6 @@ import { useEffect, useState, useRef } from "react";
 import Database from "tauri-plugin-sql-api";
 
 const inter = Inter({ subsets: ["latin"] });
-import { ThemeProvider } from "@/components/theme-provider";
 import useThemeStore from "@/components/themeStore";
 import { formatDate } from "@/utils/utils";
 
@@ -115,14 +114,8 @@ export default function RootLayout({ children }) {
   }
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning={true}>
       <body className="flex flex-col h-screen w-screen">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          disableTransitionOnChange
-          enableSystem
-        >
           <NavBar initTimer={initTimer} />
           <div className="flex flex-1 overflow-hidden">
             <SideBar />
@@ -131,7 +124,6 @@ export default function RootLayout({ children }) {
             </main>
           </div>
           <Toaster />
-        </ThemeProvider>
       </body>
     </html>
   );
