@@ -47,8 +47,9 @@ const HabitsCard = ({ habit, description, calendarId }) => {
 
   const { todayGlobal } = useTodayStore();
 
+  const reactquerykey = "get_data_habitscard_" + calendarId;
   const { isPending, error, data } = useQuery({
-    queryKey: ["get_data_habitscard"],
+    queryKey: [reactquerykey],
     queryFn: get_data,
   });
 

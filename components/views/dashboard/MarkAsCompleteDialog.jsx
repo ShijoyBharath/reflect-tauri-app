@@ -60,7 +60,8 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
           [value, calendarId, date]
         );
       }
-      queryClient.invalidateQueries({ queryKey: ['get_data_habitscard'] })
+      const reactquerykey = "get_data_habitscard_" + calendarId;
+      queryClient.invalidateQueries({ queryKey: [reactquerykey] })
     } catch (error) {
       console.log("error : ", error);
     }
