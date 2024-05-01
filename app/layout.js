@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
 
       // initialize all tables for the app.
       await db.execute(
-        "CREATE TABLE IF NOT EXISTS appconfig (id INTEGER PRIMARY KEY, start_date TEXT NOT NULL, theme TEXT NOT NULL, timer_in_sec INTEGER NOT NULL, activated INTEGER NOT NULL)"
+        "CREATE TABLE IF NOT EXISTS appconfig (id INTEGER PRIMARY KEY, start_date TEXT NOT NULL, activated INTEGER NOT NULL)"
       );
 
       await db.execute(
@@ -60,8 +60,8 @@ export default function RootLayout({ children }) {
       const select = await db.select("SELECT COUNT(*) AS COUNT FROM appconfig");
       if (select[0].COUNT == 0) {
         const insert = await db.execute(
-          "INSERT OR REPLACE INTO appconfig (id, start_date, theme, timer_in_sec, activated) VALUES (1, ?, ?, ?, 0)",
-          [formatDate(new Date()), "light", 2700]
+          "INSERT OR REPLACE INTO appconfig (id, start_date, activated) VALUES (1, ?, 0)",
+          [formatDate(new Date())]
         );
         localStorage.setItem("helper", 0);
         window.location.reload();
@@ -75,17 +75,6 @@ export default function RootLayout({ children }) {
 
   async function insert(today) {
     try {
-      const db = await Database.load("sqlite:data.db");
-
-      // const select = await db.select("SELECT COUNT(*) AS COUNT FROM appconfig");
-      // if (select[0].COUNT == 0) {
-      //   const insert = await db.execute(
-      //     "INSERT OR REPLACE INTO appconfig (id, start_date, theme, timer_in_sec) VALUES (1, ?, ?, ?)",
-      //     [today, "light", 2700]
-      //   );
-      //   window.location.reload();
-      // }
-
       const theme_loc = localStorage.getItem("theme");
       const timer_loc = localStorage.getItem("timer_in_sec");
 
@@ -132,7 +121,7 @@ export default function RootLayout({ children }) {
             </main>
           </div>
           <Toaster />
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         </QueryClientProvider>
       </body>
     </html>

@@ -31,19 +31,19 @@ const SideBar = () => {
   const [activated, setActivated] = useState(0);
   const {refreshDashboard, setRefreshDashboard} = useDashboardStore();
 
-  useEffect(() => {
-    check_activation();
-  }, [refreshDashboard]);
+  // useEffect(() => {
+  //   check_activation();
+  // }, [refreshDashboard]);
 
-  async function check_activation() {
-    try {
-      const db = await Database.load("sqlite:data.db");
-      const activated_data = await db.select("SELECT activated from appconfig");
-      setActivated(activated_data[0].activated);
-    } catch (error) {
-      console.log("error : ", error);
-    }
-  }
+  // async function check_activation() {
+  //   try {
+  //     const db = await Database.load("sqlite:data.db");
+  //     const activated_data = await db.select("SELECT activated from appconfig");
+  //     setActivated(activated_data[0].activated);
+  //   } catch (error) {
+  //     console.log("error : ", error);
+  //   }
+  // }
 
   return (
     <div className="flex flex-col gap-10 justify-between items-center m-5">
@@ -116,7 +116,7 @@ const SideBar = () => {
           ""
         )}
 
-        {activated === 0 ? (
+        {/* {activated === 0 ? (
           <Dialog>
             <TooltipProvider>
               <Tooltip>
@@ -138,7 +138,7 @@ const SideBar = () => {
           </Dialog>
         ) : (
           ""
-        )}
+        )} */}
 
         <Dialog>
           <TooltipProvider>

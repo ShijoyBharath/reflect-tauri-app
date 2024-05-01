@@ -36,35 +36,18 @@ const SettingsDialog = () => {
     },
   ];
 
-  useEffect(() => {
-    get_data();
-  }, []);
-
-  async function get_data(date) {
-    try {
-      const db = await Database.load("sqlite:data.db");
-      const select = await db.select("SELECT * FROM appconfig");
-      if (select[0].timer_in_sec) {
-        setValue(select[0].timer_in_sec);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const setTimer = (val) => {
+    localStorage.setItem("timer_in_sec", val);
+    setRefreshDashboard(val)
   }
 
-  async function insert_data(timer_in_sec) {
-    try {
-      const db = await Database.load("sqlite:data.db");
-      const result = await db.execute(
-        "UPDATE appconfig SET timer_in_sec=? WHERE id=1",
-        [timer_in_sec]
-      );
-      localStorage.setItem("timer_in_sec", timer_in_sec)
-      setRefreshDashboard(timer_in_sec)
-    } catch (error) {
-      console.log("error : ", error);
+  useEffect(()=>{
+    if (typeof window !== "undefined") {
+      // Code that uses localStorage
+      setValue(parseInt(localStorage.getItem("timer_in_sec")))
     }
-  }
+  }, [])
+
 
   return (
     <div className="flex flex-col gap-6 justify-between">
@@ -84,8 +67,7 @@ const SettingsDialog = () => {
           <Select
             value={value}
             onValueChange={(val) => {
-              setValue(parseInt(val));
-              insert_data(val);
+              setTimer(parseInt(val))
             }}
           >
             <SelectTrigger className="w-[180px] flex justify-around">

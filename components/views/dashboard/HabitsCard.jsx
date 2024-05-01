@@ -39,16 +39,13 @@ dayjs.extend(localeData);
 const HabitsCard = ({ habit, description, calendarId }) => {
   const cal = new CalHeatmap();
 
-  const [completed, setCompleted] = useState(false);
-  const [streak, setStreak] = useState(0);
-  const [score, setScore] = useState(0);
-
   const { theme } = useThemeStore();
 
   const { todayGlobal } = useTodayStore();
 
+  const reactquerykey = "get_data_habitscard_" + calendarId;
   const { isPending, error, data } = useQuery({
-    queryKey: ["get_data_habitscard"],
+    queryKey: [reactquerykey],
     queryFn: get_data,
   });
 
@@ -189,22 +186,17 @@ const HabitsCard = ({ habit, description, calendarId }) => {
       const select = await db.select("SELECT * FROM habitsdata WHERE uuid=?", [
         calendarId,
       ]);
-      setStreak(findMaxConsecutiveStreak(select));
-      setScore(findMaxScore(select));
+
       const todays_data = await db.select(
         "SELECT * FROM habitsdata WHERE uuid=? AND date=?",
         [calendarId, formatDate(todayGlobal)]
       );
 
-      if (todays_data.length !== 0) {
-        setCompleted(true);
-      }
-
       const start_date = await db.select("SELECT * FROM appconfig");
 
       var weekdates = getCurrent12Weeks(start_date[0].start_date, todayGlobal);
 
-      return [select, weekdates[0]];
+      return [select, weekdates[0], todays_data];
     } catch (error) {
       console.log("error : ", error);
     }
@@ -220,7 +212,7 @@ const HabitsCard = ({ habit, description, calendarId }) => {
           </div>
           <Dialog>
             <DialogTrigger asChild>
-              {completed ? (
+              {data[2].length !== 0 ? (
                 <Button variant="secondary">
                   <CheckCheck />
                 </Button>
@@ -241,8 +233,8 @@ const HabitsCard = ({ habit, description, calendarId }) => {
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <div className="flex gap-3">
-          <Badge variant="">Score : {score}%</Badge>
-          <Badge variant="secondary">Streak : {streak}</Badge>
+          <Badge variant="">Score : {findMaxScore(data[0])}%</Badge>
+          <Badge variant="secondary">Streak : {findMaxConsecutiveStreak(data[0])}</Badge>
         </div>
         <Dialog>
           <TooltipProvider>
