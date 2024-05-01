@@ -14,12 +14,12 @@ import {
 } from "@/components/ui/select";
 import useThemeStore from "@/components/themeStore";
 import { Palette } from "lucide-react";
-import useDashboardStore from "@/components/dashboardStore";
+import { useQueryClient } from '@tanstack/react-query'
 
 export function ThemeSwitch() {
   const [mounted, setMounted] = useState(false);
+  const queryClient = useQueryClient()
 
-  const {refreshDashboard, setRefreshDashboard} = useDashboardStore();
   const setGlobalTheme = useThemeStore((state) => state.setGlobalTheme);
 
   const themes = [
@@ -61,8 +61,8 @@ export function ThemeSwitch() {
     root.className = "";
     root.classList.add(theme);
     setGlobalTheme(theme);
-    setRefreshDashboard(refreshDashboard + 1);
     localStorage.setItem("theme", theme);
+    queryClient.invalidateQueries({ queryKey: ['get_data_habitscard'] })
   }
 
   return (

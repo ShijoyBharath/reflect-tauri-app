@@ -22,13 +22,13 @@ import { Button } from "@/components/ui/button";
 import { formatDate, getFormattedDate } from "@/utils/utils";
 import { toast } from "sonner";
 import Database from "tauri-plugin-sql-api";
-import useDashboardStore from "@/components/dashboardStore";
+import { useQueryClient } from '@tanstack/react-query'
 
 const EditHabitDialog = ({ calendarId, curHabit, curDescription }) => {
   const [habit, setHabit] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
-  const {refreshDashboard, setRefreshDashboard} = useDashboardStore();
+  const queryClient = useQueryClient()
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -63,7 +63,7 @@ const EditHabitDialog = ({ calendarId, curHabit, curDescription }) => {
         "UPDATE habits SET habit=?, description=? WHERE uuid=?",
         [habit, description, calendarId]
       );
-      setRefreshDashboard(1)
+      queryClient.invalidateQueries({ queryKey: ['get_data_dashboard'] })
     } catch (error) {
       console.log("error : ", error);
     }
@@ -79,7 +79,7 @@ const EditHabitDialog = ({ calendarId, curHabit, curDescription }) => {
         "DELETE FROM habitsdata WHERE uuid=?",
         [calendarId]
       );
-      setRefreshDashboard(1)
+      queryClient.invalidateQueries({ queryKey: ['get_data_dashboard'] })
     } catch (error) {
       console.log("error : ", error);
     }

@@ -24,7 +24,6 @@ import Database from "tauri-plugin-sql-api";
 import { hslStringToHex, getCurrent12Weeks, formatDate } from "@/utils/utils";
 import useThemeStore from "@/components/themeStore";
 import useTodayStore from "@/components/todayStore";
-import useDashboardStore from "@/components/dashboardStore";
 import {
   Tooltip as Tool,
   TooltipContent,
@@ -33,6 +32,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
 import EditHabitDialog from "./EditHabitDialog";
+import { useQuery } from "@tanstack/react-query";
 
 dayjs.extend(localeData);
 
@@ -42,107 +42,104 @@ const HabitsCard = ({ habit, description, calendarId }) => {
   const [completed, setCompleted] = useState(false);
   const [streak, setStreak] = useState(0);
   const [score, setScore] = useState(0);
-  
-  const {theme} = useThemeStore();
-  
+
+  const { theme } = useThemeStore();
+
   const { todayGlobal } = useTodayStore();
-  const { refreshDashboard } = useDashboardStore();
-  
-  const root = document.documentElement;
-  const classes = Array.from(root.classList); // Convert classList to an array
-  const [themeChange, setThemeChange] = useState(classes[0])
 
-  useEffect(() => {
-    if (themeChange !== classes[0] || refreshDashboard) {
-      window.location.reload();
-    }
-  }, [refreshDashboard]);
+  const { isPending, error, data } = useQuery({
+    queryKey: ["get_data_habitscard"],
+    queryFn: get_data,
+  });
 
-  useEffect(() => {
-    get_data().then((data) => {
-      const rootComputedStyle = window.getComputedStyle(
-        document.documentElement
-      );
+  if (isPending) return "Loading...";
 
-      var one = rootComputedStyle.getPropertyValue("--primary").trim();
-      var two = rootComputedStyle.getPropertyValue("--secondary").trim();
-      one = hslStringToHex(one);
-      two = hslStringToHex(two);
+  if (error) return "An error has occurred: " + error.message;
 
-      const root_el = document.documentElement;
-      const classes_root = Array.from(root_el.classList);
-      setThemeChange(classes_root[0])
+  const rootComputedStyle = window.getComputedStyle(document.documentElement);
 
-      cal.paint(
-        {
-          data: {
-            source: data[0],
-            type: "json",
-            x: "date",
-            y: "value",
-            groupY: "max",
-            defaultValue: 0,
-          },
-          date: { start: data[1] },
-          range: 6,
-          scale: {
-            opacity: {
-              baseColor: one,
-              type: "linear",
-              domain: [-1, 10],
-            },
-          },
-          domain: {
-            type: "month",
-            gutter: 4,
-            label: { text: "MMM", textAlign: "start", position: "top" },
-          },
-          subDomain: {
-            type: "ghDay",
-            radius: 2,
-            width: 11,
-            height: 11,
-            gutter: 4,
-          },
-          itemSelector: "#calendar-" + calendarId,
+  var one = rootComputedStyle.getPropertyValue("--primary").trim();
+  var two = rootComputedStyle.getPropertyValue("--secondary").trim();
+  one = hslStringToHex(one);
+  two = hslStringToHex(two);
+
+  var existingCal = document.getElementById("calendar-" + calendarId);
+  if (existingCal) {
+    existingCal.innerHTML = "";
+    // var svgTag = existingCal.querySelector("svg")
+    // if (svgTag) {
+    //   existingCal.removeChild(svgTag)
+    // }
+  }
+
+  cal.paint(
+    {
+      data: {
+        source: data[0],
+        type: "json",
+        x: "date",
+        y: "value",
+        groupY: "max",
+        defaultValue: 0,
+      },
+      date: { start: data[1] },
+      range: 6,
+      scale: {
+        opacity: {
+          baseColor: one,
+          type: "linear",
+          domain: [-1, 10],
         },
-        [
-          [
-            Tooltip,
-            {
-              text: function (date, value, dayjsDate) {
-                return (
-                  (value ? value + "/10 on " : "") +
-                  dayjsDate.format("dddd, MMMM D, YYYY")
-                );
-              },
-            },
-          ],
-          [
-            LegendLite,
-            {
-              includeBlank: true,
-              itemSelector: "#ex-ghDay-legend",
-              radius: 2,
-              width: 11,
-              height: 11,
-              gutter: 4,
-            },
-          ],
-          [
-            CalendarLabel,
-            {
-              width: 30,
-              textAlign: "start",
-              text: () =>
-                dayjs.weekdaysShort().map((d, i) => (i % 2 == 0 ? "" : d)),
-              padding: [25, 0, 0, 0],
-            },
-          ],
-        ]
-      );
-    });
-  }, []);
+      },
+      domain: {
+        type: "month",
+        gutter: 4,
+        label: { text: "MMM", textAlign: "start", position: "top" },
+      },
+      subDomain: {
+        type: "ghDay",
+        radius: 2,
+        width: 11,
+        height: 11,
+        gutter: 4,
+      },
+      itemSelector: "#calendar-" + calendarId,
+    },
+    [
+      [
+        Tooltip,
+        {
+          text: function (date, value, dayjsDate) {
+            return (
+              (value ? value + "/10 on " : "") +
+              dayjsDate.format("dddd, MMMM D, YYYY")
+            );
+          },
+        },
+      ],
+      [
+        LegendLite,
+        {
+          includeBlank: true,
+          itemSelector: "#ex-ghDay-legend",
+          radius: 2,
+          width: 11,
+          height: 11,
+          gutter: 4,
+        },
+      ],
+      [
+        CalendarLabel,
+        {
+          width: 30,
+          textAlign: "start",
+          text: () =>
+            dayjs.weekdaysShort().map((d, i) => (i % 2 == 0 ? "" : d)),
+          padding: [25, 0, 0, 0],
+        },
+      ],
+    ]
+  );
 
   function findMaxConsecutiveStreak(data) {
     const datesSet = new Set(data.map((obj) => obj.date)); // Remove duplicates

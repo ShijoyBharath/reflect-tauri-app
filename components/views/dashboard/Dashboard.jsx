@@ -26,7 +26,7 @@ const Dashboard = () => {
   }
 
   const { isPending, error, data } = useQuery({
-    queryKey: ['repoData'],
+    queryKey: ['get_data_dashboard'],
     queryFn: get_data,
   })
 
