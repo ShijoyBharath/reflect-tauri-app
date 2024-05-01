@@ -121,7 +121,7 @@ export default function RootLayout({ children }) {
             </main>
           </div>
           <Toaster />
-          <ReactQueryDevtools initialIsOpen={false} />
+          {/* <ReactQueryDevtools initialIsOpen={false} /> */}
         </QueryClientProvider>
       </body>
     </html>
