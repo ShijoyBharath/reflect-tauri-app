@@ -7,23 +7,32 @@ import Database from "tauri-plugin-sql-api";
 import TimeChartDashboard from "./TimeChartDashboard";
 import useDashboardStore from "@/components/dashboardStore";
 
-const Dashboard = () => {
-  const [habits, setHabits] = useState([]);
-  const { refreshDashboard } = useDashboardStore();
+import {
+  useQuery,
+} from '@tanstack/react-query'
 
-  useEffect(() => {
-    get_data();
-  }, [refreshDashboard]);
+
+const Dashboard = () => {
+  // const { refreshDashboard } = useDashboardStore();
 
   async function get_data() {
     try {
       const db = await Database.load("sqlite:data.db");
       const select = await db.select("SELECT * FROM habits");
-      setHabits(select);
+      return select
     } catch (error) {
       console.log("error : ", error);
     }
   }
+
+  const { isPending, error, data } = useQuery({
+    queryKey: ['get_data_dashboard'],
+    queryFn: get_data,
+  })
+
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has occurred: ' + error.message
 
   return (
     <div className="flex flex-col gap-3 mr-3 mb-3 justify-between bg-secondary rounded-lg">
@@ -38,8 +47,8 @@ const Dashboard = () => {
       </div>
       {/* <ScrollArea className="whitespace-nowrap rounded-md border"> */}
       <div className="flex flex-wrap justify-around gap-3 m-3">
-        {habits.length !== 0 ? (
-          habits.map((item) => {
+        {data.length !== 0 ? (
+          data.map((item) => {
             return (
               <HabitsCard
                 key={item.id}

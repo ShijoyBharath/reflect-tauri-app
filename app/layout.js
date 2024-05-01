@@ -5,12 +5,19 @@ import NavBar from "@/components/views/layout/NavBar";
 import SideBar from "@/components/views/layout/SideBar";
 import { Toaster } from "@/components/ui/sonner";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect } from "react";
 import Database from "tauri-plugin-sql-api";
 
 const inter = Inter({ subsets: ["latin"] });
 import useThemeStore from "@/components/themeStore";
 import { formatDate } from "@/utils/utils";
+
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+const queryClient = new QueryClient()
 
 // export const metadata = {
 //   title: "Create Next App",
@@ -56,7 +63,7 @@ export default function RootLayout({ children }) {
           "INSERT OR REPLACE INTO appconfig (id, start_date, theme, timer_in_sec, activated) VALUES (1, ?, ?, ?, 0)",
           [formatDate(new Date()), "light", 2700]
         );
-        localStorage.setItem("helper", 0)
+        localStorage.setItem("helper", 0);
         window.location.reload();
       }
 
@@ -107,15 +114,16 @@ export default function RootLayout({ children }) {
     init_tables();
   }, []);
 
-  var initTimer = 0
-  if (typeof window !== 'undefined') {
+  var initTimer = 0;
+  if (typeof window !== "undefined") {
     // Code that uses localStorage
-    initTimer = parseInt(localStorage.getItem("timer_in_sec"))
+    initTimer = parseInt(localStorage.getItem("timer_in_sec"));
   }
 
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body className="flex flex-col h-screen w-screen">
+        <QueryClientProvider client={queryClient}>
           <NavBar initTimer={initTimer} />
           <div className="flex flex-1 overflow-hidden">
             <SideBar />
@@ -124,6 +132,8 @@ export default function RootLayout({ children }) {
             </main>
           </div>
           <Toaster />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
       </body>
     </html>
   );

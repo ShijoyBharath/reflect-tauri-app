@@ -13,12 +13,12 @@ import { PartyPopper } from "lucide-react";
 import Database from "tauri-plugin-sql-api";
 import { formatDate, getFormattedDate } from "@/utils/utils";
 import useTodayStore from "@/components/todayStore";
-import useDashboardStore from "@/components/dashboardStore";
+import { useQueryClient } from '@tanstack/react-query'
 
 const MarkAsCompleteDialog = ({ calendarId }) => {
   const [value, setValue] = useState(10);
   const { todayGlobal } = useTodayStore();
-  const {setRefreshDashboard} = useDashboardStore();
+  const queryClient = useQueryClient()
 
   useEffect(() => {
     init_table();
@@ -60,7 +60,7 @@ const MarkAsCompleteDialog = ({ calendarId }) => {
           [value, calendarId, date]
         );
       }
-      setRefreshDashboard(value);
+      queryClient.invalidateQueries({ queryKey: ['get_data_habitscard'] })
     } catch (error) {
       console.log("error : ", error);
     }

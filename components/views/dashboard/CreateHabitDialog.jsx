@@ -13,15 +13,15 @@ import Database from "tauri-plugin-sql-api";
 import { formatDate, getFormattedDate } from "@/utils/utils";
 import { toast } from "sonner";
 import useTodayStore from "@/components/todayStore";
-import useDashboardStore from "@/components/dashboardStore";
+import { useQueryClient } from '@tanstack/react-query'
 
 const CreateHabitDialog = () => {
   const [habit, setHabit] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
   const {todayGlobal} = useTodayStore()
-  const {refreshDashboard, setRefreshDashboard} = useDashboardStore();
-
+  const queryClient = useQueryClient()
+  
   useEffect(() => {
     init_table();
   }, []);
@@ -74,7 +74,7 @@ const CreateHabitDialog = () => {
           [habit, description, uuid]
         );
       }
-      setRefreshDashboard(1);
+      queryClient.invalidateQueries({ queryKey: ['get_data_dashboard'] })
     } catch (error) {
       console.log("error : ", error);
     }
